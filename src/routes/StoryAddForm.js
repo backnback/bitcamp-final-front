@@ -7,7 +7,7 @@ import FormFileIcon from "../components/FormFileIcon";
 import Swal from 'sweetalert2';
 
 
-const MyStoryAddForm = ({provinceId, cityId}) => {
+const MyStoryAddForm = ({ provinceId, cityId }) => {
     const [title, setTitle] = useState('');
     const [travelDate, setTravelDate] = useState('');
     const [content, setContent] = useState('');
@@ -118,16 +118,16 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
                 },
             });
             Swal.fire({
-              position: "top",
-              icon: "success",
-              title: "스토리가 추가되었습니다!",
-              showConfirmButton: false,
-              timer: 1500
+                position: "top",
+                icon: "success",
+                title: "스토리가 추가되었습니다!",
+                showConfirmButton: false,
+                timer: 1500
             }).then(() => {
-              // 3초 후 페이지 이동
-                if(provinceId === undefined && cityId === undefined){
+                // 3초 후 페이지 이동
+                if (provinceId === undefined && cityId === undefined) {
                     window.location.href = '/my-story/list';
-                }else {
+                } else {
                     window.location.href = `/map/story/${provinceId}`
                 }
             });
