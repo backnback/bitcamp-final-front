@@ -125,7 +125,6 @@ const MyStoryList = () => {
             },
             content
         });
-        //navigate("/my-story/form/add");
     };
 
     useEffect(() => {

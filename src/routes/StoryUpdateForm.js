@@ -8,7 +8,7 @@ import styles from "../assets/styles/css/StoryItem.module.css";
 import Swal from 'sweetalert2';
 
 
-const MyStoryUpdateForm = ( { storyId } ) => {
+const MyStoryUpdateForm = ({ storyId }) => {
     const [accessToken, setAccessToken] = useState(null);
 
     const [title, setTitle] = useState('');
@@ -44,7 +44,10 @@ const MyStoryUpdateForm = ( { storyId } ) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/my-story/view/${storyId}`, {
+                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                        params: {
+                            share: false
+                        },
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -167,14 +170,14 @@ const MyStoryUpdateForm = ( { storyId } ) => {
             console.log(formData.getAll('files'));
 
             Swal.fire({
-              position: "top",
-              icon: "success",
-              title: "스토리가 업데이트되었습니다!",
-              showConfirmButton: false,
-              timer: 1500
+                position: "top",
+                icon: "success",
+                title: "스토리가 업데이트되었습니다!",
+                showConfirmButton: false,
+                timer: 1500
             }).then(() => {
-              // 3초 후 페이지 이동
-              window.location.href = '/my-story/list';
+                // 3초 후 페이지 이동
+                window.location.href = '/my-story/list';
             });
         } catch (error) {
             console.error("스토리 업데이트 중 오류가 발생했습니다!", error);
