@@ -31,7 +31,10 @@ const StoryView = ({ storyId }) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/my-story/view/${storyId}`, {
+                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                        params: {
+                            share: false
+                        },
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -73,14 +76,13 @@ const StoryView = ({ storyId }) => {
 
     // 업데이트 버튼 처리
     const handleEdit = () => {
-        {/*  navigate(`/my-story/form/update/${storyId}`); */} // MyStoryUpdateForm으로 이동
         const content = <StoryUpdateForm storyId={storyId} />
         open(StoryEditModal, {
             onSubmit: () => {
                 console.log('확인 클릭');
             },
             onClose: () => {
-               console.log('취소 클릭이야 클릭');
+                console.log('취소 클릭이야 클릭');
             },
             content
         });
@@ -94,20 +96,20 @@ const StoryView = ({ storyId }) => {
 
     return (
         <div className="story-view">
-          <h2>제목 : {storyViewDTO.title}</h2>
-          <p><strong>여행 날짜:</strong> {storyViewDTO.travelDate}</p>
-          <p><strong>위치:</strong> {storyViewDTO.locationDetail}</p>
-          <PhotosProvider
-              photos={storyViewDTO.photos}
-              viewMode={true}
-              className="custom-photo-container"
-              itemClassName="custom-photo-item"
-              layout="grid"
-          />
-          <p><strong>내용:</strong> {storyViewDTO.content}</p>
-          <p><strong>공유 여부 :</strong> {storyViewDTO.share ? "예" : "아니오"}</p>
+            <h2>제목 : {storyViewDTO.title}</h2>
+            <p><strong>여행 날짜:</strong> {storyViewDTO.travelDate}</p>
+            <p><strong>위치:</strong> {storyViewDTO.locationDetail}</p>
+            <PhotosProvider
+                photos={storyViewDTO.photos}
+                viewMode={true}
+                className="custom-photo-container"
+                itemClassName="custom-photo-item"
+                layout="grid"
+            />
+            <p><strong>내용:</strong> {storyViewDTO.content}</p>
+            <p><strong>공유 여부 :</strong> {storyViewDTO.share ? "예" : "아니오"}</p>
 
-          <div className="button-group">
+            <div className="button-group">
                 <ButtonProvider>
                     <button type="button" className={`button button__primary`} onClick={handleEdit}>
                         <span className={`button__text`}>수정</span>
@@ -118,7 +120,7 @@ const StoryView = ({ storyId }) => {
                         <span className={`button__text`}>삭제</span>
                     </button>
                 </ButtonProvider>
-          </div>
+            </div>
         </div>
     );
 };

@@ -14,8 +14,11 @@ import styles from '../assets/styles/css/StoryItemList.module.css';
 
 const fetchStoryList = async (accessToken, searchQuery, setStoryList) => {
     try {
-        const response = await axios.get('http://localhost:8080/share-story/list', {
-            params: { title: searchQuery },
+        const response = await axios.get('http://localhost:8080/story/list', {
+            params: {
+                title: searchQuery,
+                share: true
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -174,7 +177,10 @@ const ShareStoryList = () => {
         if (accessToken) {
             const fetchList = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/share-story/list', {
+                    const response = await axios.get('http://localhost:8080/story/list', {
+                        params: {
+                            share: true
+                        },
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }

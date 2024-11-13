@@ -22,7 +22,10 @@ const ShareStoryView = ({ storyId }) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/share-story/view/${storyId}`, {
+                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                        params: {
+                            share: true
+                        },
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -49,11 +52,11 @@ const ShareStoryView = ({ storyId }) => {
             <p><strong>여행 날짜:</strong> {storyViewDTO.travelDate}</p>
             <p><strong>위치:</strong> {storyViewDTO.locationDetail}</p>
             <PhotosProvider
-              photos={storyViewDTO.photos}
-              viewMode={true}
-              className="custom-photo-container"
-              itemClassName="custom-photo-item"
-              layout="grid"
+                photos={storyViewDTO.photos}
+                viewMode={true}
+                className="custom-photo-container"
+                itemClassName="custom-photo-item"
+                layout="grid"
             />
             <p><strong>내용:</strong> {storyViewDTO.content}</p>
             <p><strong>공유 여부 :</strong> {storyViewDTO.share ? "예" : "아니오"}</p>
