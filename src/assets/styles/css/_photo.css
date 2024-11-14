@@ -1,31 +1,46 @@
 .photo__photos {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 50px;
     justify-content: center;
     /* 사진들이 중앙에 정렬되도록 설정 */
 }
 
 /* viewMode가 false일 때 메인 사진을 숨기는 스타일 */
 .photo__photos__noMain {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     /* 작은 사진들이 나열되는 레이아웃 */
 }
 
-/* custom layout 스타일을 위한 클래스 */
+
+.photo__layout2 {}
+
+
 .photo__layout {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    /* 중앙 정렬 */
+    margin-left: 15px;
+    gap: 20px;
+    position: relative;
 }
 
-/* layout이 custom일 경우 */
-.photo__layout__custom {
-    flex-direction: row;
-    justify-content: center;
+
+.photo__layout__custom {}
+
+
+.flicking-viewport {
+    width: 530px;
+    /* 슬라이드 영역 너비 */
+    height: 200px;
+    /* 슬라이드 영역 높이 */
+    overflow: hidden;
+    /* 슬라이드 영역 밖으로 콘텐츠가 나가지 않도록 설정 */
+}
+
+.flicking-camera {
+    left: -185px;
 }
 
 /* 사진 아이템의 기본 스타일 */
@@ -37,13 +52,11 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    margin-right: 10px;
 }
 
-/* custom 스타일을 적용했을 때 사진 아이템 스타일 */
-.photo__photoItem__custom {
-    width: 200px;
-    /* custom 스타일 적용 시 크기 조정 */
-}
+/* custom 스타일을 적용했을 때 */
+.photo__photoItem__custom {}
 
 /* 사진 이미지 기본 스타일 */
 .story-photo {
@@ -57,17 +70,40 @@
 .main-photo {
     border: 2px solid #ff5c5c;
     /* 메인 사진을 강조 */
+    justify-content: center;
 }
 
 /* 'main' 텍스트 레이블 스타일 */
+.main-onelabel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(30, 144, 255, 0.9);
+    color: white;
+    font-size: 10px;
+    padding: 6px 8.5px;
+    border-radius: 3px;
+}
+
 .main-label {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    top: 0px;
+    left: 0px;
+    background-color: rgba(30, 144, 255, 0.9);
     color: white;
-    font-size: 12px;
-    padding: 2px 5px;
+    font-size: 10px;
+    padding: 0px 5px;
+    border-radius: 3px;
+}
+
+.sub-label {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(241, 246, 252, 0.6);
+    color: black;
+    font-size: 10px;
+    padding: 0px 5px;
     border-radius: 3px;
 }
 
@@ -75,6 +111,7 @@
 .photo__photos.custom-class {
     padding: 20px;
     background-color: #f4f4f4;
+
 }
 
 /* photo__mainPhoto를 두 개의 사진 크기만큼 크게 하고, 가운데 정렬 */
@@ -87,4 +124,44 @@
     margin: 0 auto;
     /* 가운데 정렬 */
     margin-bottom: 20px;
+}
+
+/* 버튼의 기본 스타일을 지정 */
+.slider__button {
+    display: flex;
+    justify-content: center;
+}
+
+.slider__button .right {
+    position: absolute;
+    top: 0px;
+    /* 버튼이 사진 중앙에 위치하도록 설정 */
+    left: 504px;
+    /* 중앙 기준으로 위치 */
+    z-index: 10;
+}
+
+.slider__button .left {
+    position: absolute;
+    top: 0px;
+    /* 버튼이 사진 중앙에 위치하도록 설정 */
+    left: 0px;
+    /* 중앙 기준으로 위치 */
+    z-index: 10;
+}
+
+
+.slider__button button {
+    padding: 77px 5.5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: rgba(6, 231, 251, 0.6);
+    color: black;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.slider__button button:hover {
+    background-color: #b3005a;
 }

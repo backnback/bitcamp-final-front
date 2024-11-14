@@ -4,7 +4,7 @@ import useModals from '../../useModals';
 import { modals } from '../../components/Modals';
 import { StoryAddContext } from "../StoryItem";
 
-function MapNorthChungcheoung() {
+const MapNorthChungcheoung = () => {
     const { openModal } = useModals();
 
     const handleClick = () => {

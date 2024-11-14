@@ -4,11 +4,12 @@ import axios from 'axios';
 import { InputProvider } from '../components/InputProvider';
 import { SelectProvider } from '../components/SelectProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
+import { PhotosProvider } from '../components/PhotosProvider';
 import styles from "../assets/styles/css/StoryItem.module.css";
 import Swal from 'sweetalert2';
 
 
-const MyStoryUpdateForm = ( { storyId } ) => {
+const MyStoryUpdateForm = ({ storyId }) => {
     const [accessToken, setAccessToken] = useState(null);
 
     const [title, setTitle] = useState('');
@@ -44,7 +45,10 @@ const MyStoryUpdateForm = ( { storyId } ) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/my-story/view/${storyId}`, {
+                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                        params: {
+                            share: false
+                        },
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -167,14 +171,14 @@ const MyStoryUpdateForm = ( { storyId } ) => {
             console.log(formData.getAll('files'));
 
             Swal.fire({
-              position: "top",
-              icon: "success",
-              title: "스토리가 업데이트되었습니다!",
-              showConfirmButton: false,
-              timer: 1500
+                position: "top",
+                icon: "success",
+                title: "스토리가 업데이트되었습니다!",
+                showConfirmButton: false,
+                timer: 1500
             }).then(() => {
-              // 3초 후 페이지 이동
-              window.location.href = '/my-story/list';
+                // 3초 후 페이지 이동
+                window.location.href = '/my-story/list';
             });
         } catch (error) {
             console.error("스토리 업데이트 중 오류가 발생했습니다!", error);
@@ -183,6 +187,7 @@ const MyStoryUpdateForm = ( { storyId } ) => {
 
 
     const handleButtonClick = () => {
+        console.log("제출버튼 실행됨");
         handleSubmit(new Event('submit', { cancelable: true }));
     };
 
@@ -297,29 +302,24 @@ const MyStoryUpdateForm = ( { storyId } ) => {
                 multiple
                 onChange={handleFileChange}
             />
+
             <h3>현재 사진들:</h3>
-            <div className="existing-photos">
-                {Array.isArray(files) && files.length > 0 ? (
-                    files.map((file, index) => (
-                        <div key={index} className={styles.middle}>
-                            {file.preview ? (
-                                <img src={file.preview} alt={`New Photo ${index + 1}`} className={styles.thumnail} />
-                            ) : (
-                                <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${file.path}`} alt={`Existing Photo ${index + 1}`} />
-                            )}
-                            <span>{file.mainPhoto ? 'main' : ''}</span>
-                        </div>
-                    ))
-                ) : (
-                    <p>사진이 없습니다.</p> // 사진이 없을 경우 메시지
-                )}
-            </div>
+
+            <PhotosProvider
+                photos={files}
+                viewMode={false}
+                className="custom-photo-container"
+            />
+
+
 
             <ButtonProvider>
                 <button type="button" id="submit-button" className={`button button__primary`} onClick={handleButtonClick}>
                     <span className={`button__text`}>수정</span>
                 </button>
             </ButtonProvider>
+
+
         </form>
     );
 };

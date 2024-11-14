@@ -1,4 +1,4 @@
-function MapJeju() {
+const MapJeju = () => {
     return (
         <div className={`city__wrap`}>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="800" viewBox="0 0 800 1036" strokeLinecap="round" strokeLinejoin="round" id="제주특별자치도_시군구" className={`city__list`}>

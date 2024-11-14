@@ -5,6 +5,10 @@
     background-color: var(--color-mypage-box);
 }
 
+.profile__wrap {
+    padding: 23px 20px;
+}
+
 .title__wrap {
     padding: 0 20px;
 }

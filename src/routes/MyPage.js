@@ -21,6 +21,75 @@ const MyPage = () => {
     const [accessToken, setAccessToken] = useState(null);
     const { openModal } = useModals();
 
+    // 로컬 스토리지에서 accessToken을 가져오는 함수
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            setAccessToken(token);
+        } else {
+            console.warn("Access token이 없습니다.");
+        }
+    }, [accessToken]);
+
+
+    // accessToken이 설정된 경우에만 호출
+    useEffect(() => {
+        if (accessToken) {
+            const fetchStoryList = async () => {
+                try {
+                    const response = await axios.get('http://localhost:8080/like/list/my-stories', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    }); // API 요청
+                    setStoryList(response.data);
+                } catch (error) {
+                    console.error("좋아요한 스토리 불러오기 실패!", error);
+                }
+            };
+            fetchStoryList();
+        }
+    }, [accessToken]);
+
+
+    // 로그인한 사용자 정보를 불러올수도 있고 아닐수도 있고 그럴수도 있고
+    useEffect(() => {
+        if (accessToken) {
+            const fetchUser = async () => {
+                try {
+                    const response = await axios.get('http://localhost:8080/user/finduser', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    }); // API 요청
+                    setUser(response.data);
+                } catch (error) {
+                    console.error("사용자 정보 불러오기 실패", error);
+                }
+            };
+            fetchUser();
+        }
+    }, [accessToken]);
+
+    // 로그인한 사용자의 스토리에 좋아요를 누른 유저의 리스트 불러오기
+    useEffect(() => {
+        if (accessToken) {
+            const fetchAlarmListDTOs = async () => {
+                try {
+                    const response2 = await axios.get('http://localhost:8080/like/list/users', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    setAlarmListDTOs(response2.data);
+                } catch (error) {
+                    console.error("오류가 발생했습니다!", error);
+                }
+            };
+            fetchAlarmListDTOs();
+        }
+    }, [accessToken]);
+
     // StoryItemList에서 모아둔 like 변경 사항을 저장하는 함수
     const handleBatchedLikesChange = (newBatchedLikes) => {
         setBatchedLikes(newBatchedLikes);

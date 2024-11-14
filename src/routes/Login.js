@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { InputProvider } from "../components/InputProvider";
 import { ButtonProvider } from "../components/ButtonProvider";
-import styles from "../assets/styles/css/Login.module.css"
+import styles from "../assets/styles/css/Login.module.css";
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -36,21 +36,27 @@ function Login() {
             });
 
             if (response.data) {
-                const { accessToken } = response.data;
+                const { accessToken, refreshToken } = response.data;
 
                 // 토큰을 로컬 스토리지에 저장
                 localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
 
                 // 토큰 디코딩하여 유저 정보 추출
                 const userInfo = jwtDecode(accessToken);
-
                 if (rememberEmail) {
                     localStorage.setItem('lastLoginEmail', email);
                 } else {
                     localStorage.removeItem('lastLoginEmail'); // 체크 해제 시 이메일 삭제
                 }
+
+                if(userInfo.auth == "ROLE_USER"){
                 navigate('/map');
                 window.location.reload();
+                }else{
+                    navigate('/admin');  
+                    window.location.reload();
+                }
             } else {
                 alert("로그인 실패: 이메일 또는 비밀번호를 확인해주세요.");
             }

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+
 import MapSeoul from "../components/map/MapSeoul";
 import MapBusan from "../components/map/MapBusan";
 import MapDaegu from "../components/map/MapDaegu";
@@ -21,17 +22,40 @@ import MapNorthChungcheoung from "../components/map/MapNorthChungcheoung";
 import StoryAddForm from "./StoryAddForm";
 import useModals from "../useModals";
 import {modals} from "../components/Modals";
+import MapStoryList from "../components/MapStoryList";
 
 function MapLocation() {
-    const { locationId } = useParams(); // URL에서 ID 파라미터를 가져옴
+    const {locationId} = useParams(); // URL에서 ID 파라미터를 가져옴
     // const navigate = useNavigate(); // 페이지 이동을 위한 네비게이션 훅
     const [accessToken, setAccessToken] = useState(null);
+    const [storyPhotoList, setStoryPhotoList] = useState(null);
     const [id, setId] = useState(null);
-    const { openModal } = useModals();
+    const [storyList, setStoryList] = useState(null);
+    const {openModal} = useModals();
 
-    const [isOpenModalRequested, setIsOpenModalRequested] = useState(false);
+    const mapComponents = {
+        11: <MapSeoul/>,
+        26: <MapBusan/>,
+        27: <MapDaegu/>,
+        28: <MapIncheon/>,
+        29: <MapGwangju/>,
+        30: <MapDaejeon/>,
+        31: <MapUlsan/>,
+        36: <MapSejong/>,
+        41: <MapGyeonggi/>,
+        51: <MapGwangwon/>,
+        43: <MapNorthChungcheoung/>,
+        44: <MapSouthChungcheong/>,
+        52: <MapNorthJeolla/>,
+        46: <MapSouthJeolla/>,
+        47: <MapNorthGyeongsang/>,
+        48: <MapSouthGyeongsan/>,
+        50: <MapJeju/>
+    };
 
-    // 로컬 스토리지에서 accessToken을 가져오는 함수
+    const RenderComponent = mapComponents[locationId] || null;
+    // console.log(RenderComponent)
+
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token) {
@@ -39,7 +63,6 @@ function MapLocation() {
         } else {
             console.warn("Access token이 없습니다.");
         }
-
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
@@ -48,7 +71,7 @@ function MapLocation() {
                             'Authorization': `Bearer ${accessToken}`
                         }
                     });
-                    // console.log(response.data)
+                    setStoryPhotoList(response.data);
                 } catch (error) {
                     console.error("스토리를 가져오는 중 오류가 발생했습니다!", error);
                 }
@@ -58,68 +81,67 @@ function MapLocation() {
     }, [accessToken]);
 
     useEffect(() => {
-        if (isOpenModalRequested && id !== null) {
-            openAddModal();
-            setIsOpenModalRequested(false)
+        if (id !== null && accessToken !== null) {
+            const getList = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:8080/map/story/${locationId}/${id}/list`, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    setStoryList(response.data)
+                } catch (error) {
+                    console.error("LocationID 가져오는 중 오류", error);
+                }
+            };
+            getList();
         }
-    },[isOpenModalRequested])
+
+    }, [id]);
+
+    useEffect(() => {
+        if (storyList !== null) {
+            if (storyList.length > 0) {
+                openListModal();
+                setId(null);
+            } else {
+                openAddModal();
+                setId(null);
+            }
+        }
+    }, [storyList])
 
     const openAddModal = () => {
         const content = <StoryAddForm provinceId={locationId} cityId={id}/>
         openModal(modals.storyEditModal, {
-            onSubmit: () => {
-                console.log('비지니스 로직 처리...2');
-            },
             content
         });
-        //navigate("/my-story/form/add");
     };
+
+    const openListModal = () => {
+        const content = <MapStoryList
+            storyList={storyList}
+            onAddStory={openAddModal}
+            locationId={locationId}
+            cityId={id}
+        />
+        openModal(modals.storyEditModal, {
+            content
+        });
+    }
 
     const handleClick = (event) => {
         setId(event.target.id);  // 클릭한 요소의 id를 가져옴
-        setIsOpenModalRequested(true)
     };
 
-    // 삭제 버튼 처리
-    // const handleDelete = async () => {
-    //     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-    //     if (confirmDelete) {
-    //         try {
-    //             await axios.delete(`http://localhost:8080/my-story/delete/${storyId}`, {
-    //                 headers: {
-    //                     'Authorization': `Bearer ${accessToken}`
-    //                 }
-    //             });
-    //             alert("스토리가 삭제되었습니다.");
-    //             navigate('/my-story/list'); // 삭제 후 목록 페이지로 이동
-    //         } catch (error) {
-    //             console.error("스토리 삭제 중 오류가 발생했습니다!", error);
-    //             alert("스토리 삭제에 실패했습니다.");
-    //         }
-    //     }
-    // };
-
     return (
-        <>
-            <a onClick={handleClick} id="110">test</a>
-            <MapSeoul/>
-            <MapBusan/>
-            <MapDaegu/>
-            <MapDaejeon/>
-            <MapGwangju/>
-            <MapGwangwon/>
-            <MapGyeonggi/>
-            <MapIncheon/>
-            <MapJeju/>
-            <MapNorthChungcheoung/>
-            <MapNorthGyeongsang/>
-            <MapNorthJeolla/>
-            <MapSejong/>
-            <MapSouthChungcheong/>
-            <MapSouthGyeongsan/>
-            <MapSouthJeolla/>
-            <MapUlsan/>
-        </>
+        <div>
+            {RenderComponent ? (
+                React.cloneElement(RenderComponent, {storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal})
+            ) : (
+                <div>Loading...</div>
+            )}
+        </div>
     )
 }
 

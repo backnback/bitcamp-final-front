@@ -28,7 +28,7 @@
 
 .form__textarea {
     resize: none;
-    min-height: 80px;
+    height: 150px;
     padding: 12px 16px;
 }
 
