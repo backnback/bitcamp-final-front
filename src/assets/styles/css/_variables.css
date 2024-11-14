@@ -23,6 +23,7 @@
     --color-primary: #1E90FF;
     --color-blue-1a: #1a73e8;
     --color-blue-83: #83CDFB;
+    --color-blue-83-70: rgba(131, 205, 251, 0.7);
     --color-blue-83-20: rgba(131, 205, 251, 0.2);
     --color-blue-b0: #B0ECF880;
     --color-blue-b0-50: #b0ecf880;
@@ -49,6 +50,9 @@
 
     --color-primary-button-hover: rgba(26, 115, 232, 0.9);
     --color-blue-83-button-hover: rgba(123, 192, 236, 0.9);
+
+    --color-profile-border: var(--color-blue-83-20);
+    --color-mypage-box: #83CDFB12;
 
     /* padding, margin */
     --padding-rl: 12px;

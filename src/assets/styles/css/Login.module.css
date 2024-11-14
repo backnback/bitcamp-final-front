@@ -6,7 +6,7 @@
     justify-content: end;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1440px;
     min-height: 100%;
     padding: 76px;
 }
@@ -111,4 +111,10 @@
 
 .user__account__link:hover {
     text-decoration: underline;
+}
+
+@media all and (max-width: 670px) {
+    .container {
+        overflow-x: hidden;
+    }
 }

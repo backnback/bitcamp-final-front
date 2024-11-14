@@ -35,7 +35,6 @@ function StoryItemList({ storyPage, storyList, onAddStory, onBatchedLikesChange,
     };
 
     useEffect(() => {
-        console.log('share ====> ', storyList)
         if (batchedLikes.length > 0) {
             onBatchedLikesChange(batchedLikes);
         }

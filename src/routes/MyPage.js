@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import styles from '../assets/styles/css/MyPage.module.css';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
 // import './ShareStoryList.css'; // 스타일 파일 임포트
 import axios from 'axios'; // axios를 import하여 API 요청 사용
@@ -19,77 +20,6 @@ const MyPage = () => {
     const [batchedLocks, setBatchedLocks] = useState([]);
     const [accessToken, setAccessToken] = useState(null);
     const { openModal } = useModals();
-
-
-
-    // 로컬 스토리지에서 accessToken을 가져오는 함수
-    useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            setAccessToken(token);
-        } else {
-            console.warn("Access token이 없습니다.");
-        }
-    }, [accessToken]);
-
-
-    // accessToken이 설정된 경우에만 호출
-    useEffect(() => {
-        if (accessToken) {
-            const fetchStoryList = async () => {
-                try {
-                    const response = await axios.get('http://localhost:8080/like/list/my-stories', {
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    }); // API 요청
-                    setStoryList(response.data);
-                } catch (error) {
-                    console.error("좋아요한 스토리 불러오기 실패!", error);
-                }
-            };
-            fetchStoryList();
-        }
-    }, [accessToken]);
-
-
-    // 로그인한 사용자 정보를 불러올수도 있고 아닐수도 있고 그럴수도 있고
-    useEffect(() => {
-        if (accessToken) {
-            const fetchUser = async () => {
-                try {
-                    const response = await axios.get('http://localhost:8080/user/finduser', {
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    }); // API 요청
-                    setUser(response.data);
-                } catch (error) {
-                    console.error("사용자 정보 불러오기 실패", error);
-                }
-            };
-            fetchUser();
-        }
-    }, [accessToken]);
-
-    // 로그인한 사용자의 스토리에 좋아요를 누른 유저의 리스트 불러오기
-    useEffect(() => {
-        if (accessToken) {
-            const fetchAlarmListDTOs = async () => {
-                try {
-                    const response2 = await axios.get('http://localhost:8080/like/list/users', {
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    });
-                    setAlarmListDTOs(response2.data);
-                } catch (error) {
-                    console.error("오류가 발생했습니다!", error);
-                }
-            };
-            fetchAlarmListDTOs();
-        }
-    }, [accessToken]);
 
     // StoryItemList에서 모아둔 like 변경 사항을 저장하는 함수
     const handleBatchedLikesChange = (newBatchedLikes) => {
@@ -113,21 +43,6 @@ const MyPage = () => {
         }
     };
 
-    useEffect(() => {
-        // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLikes);
-
-        // 페이지 이동 시 전송
-        const unlisten = navigate((location) => {
-            handleSubmitLikes();
-        });
-        return () => {
-            window.removeEventListener('beforeunload', handleSubmitLikes);
-            handleSubmitLikes(); // 컴포넌트 언마운트 시에도 전송
-        };
-    }, [batchedLikes]);
-
-
     // StoryItemList에서 모아둔 Lock 변경 사항을 저장하는 함수
     const handleBatchedLocksChange = (newBatchedLocks) => {
         setBatchedLocks(newBatchedLocks);
@@ -149,21 +64,6 @@ const MyPage = () => {
             console.error("공유 변경 사항 전송 중 에러 발생", error);
         }
     };
-
-    useEffect(() => {
-        // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLocks);
-
-        // 페이지 이동 시 전송
-        const unlisten = navigate((location) => {
-            handleSubmitLocks();
-        });
-        return () => {
-            window.removeEventListener('beforeunload', handleSubmitLocks);
-            handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
-        };
-    }, [batchedLocks]);
-
 
     const confirmView = async (storyId, otherUserId) => {
         try {
@@ -198,25 +98,127 @@ const MyPage = () => {
         });
     };
 
+    useEffect(() => {
+        // 로컬 스토리지에서 accessToken을 가져오는 함수
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            setAccessToken(token);
+        } else {
+            console.warn("Access token이 없습니다.");
+        }
+
+        // accessToken이 설정된 경우에만 호출
+        if (accessToken) {
+            const fetchStoryList = async () => {
+                try {
+                    const response = await axios.get('http://localhost:8080/like/list/my-stories', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    }); // API 요청
+                    setStoryList(response.data);
+                } catch (error) {
+                    console.error("좋아요한 스토리 불러오기 실패!", error);
+                }
+            };
+            fetchStoryList();
+        }
+
+        // 로그인한 사용자 정보를 불러올수도 있고 아닐수도 있고 그럴수도 있고
+        if (accessToken) {
+            const fetchUser = async () => {
+                try {
+                    const response = await axios.get('http://localhost:8080/user/finduser', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    }); // API 요청
+                    setUser(response.data);
+                } catch (error) {
+                    console.error("사용자 정보 불러오기 실패", error);
+                }
+            };
+            fetchUser();
+        }
+
+        // 로그인한 사용자의 스토리에 좋아요를 누른 유저의 리스트 불러오기
+        if (accessToken) {
+            const fetchAlarmListDTOs = async () => {
+                try {
+                    const response2 = await axios.get('http://localhost:8080/like/list/users', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    setAlarmListDTOs(response2.data);
+                } catch (error) {
+                    console.error("오류가 발생했습니다!", error);
+                }
+            };
+            fetchAlarmListDTOs();
+        }
+    }, [accessToken]);
+
+    useEffect(() => {
+        // 페이지 새로고침 시 전송
+        window.addEventListener('beforeunload', handleSubmitLikes);
+
+        // 페이지 이동 시 전송
+        const unlisten = navigate((location) => {
+            handleSubmitLikes();
+        });
+        return () => {
+            window.removeEventListener('beforeunload', handleSubmitLikes);
+            handleSubmitLikes(); // 컴포넌트 언마운트 시에도 전송
+        };
+    }, [batchedLikes]);
+
+    useEffect(() => {
+        // 페이지 새로고침 시 전송
+        window.addEventListener('beforeunload', handleSubmitLocks);
+
+        // 페이지 이동 시 전송
+        const unlisten = navigate((location) => {
+            handleSubmitLocks();
+        });
+        return () => {
+            window.removeEventListener('beforeunload', handleSubmitLocks);
+            handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
+        };
+    }, [batchedLocks]);
 
     return (
-        <>
-            <h1>프로필</h1>
-            <Profile loginUser={user} />
-            <h2>좋아요한 스토리</h2>
-            <StoryItemList
-                storyList={storyList}
-                onBatchedLikesChange={handleBatchedLikesChange}
-                onBatchedLocksChange={handleBatchedLocksChange}
-                handleModal={openStoryModal}
-            />
+        <div className={`${styles.container}`}>
+            <div className={`${styles.profile__wrap} ${styles.box__wrap}`}>
+                <Profile loginUser={user} />
+            </div>
+            <div className={`${styles.box__wrap}`}>
+                <div className={`${styles.title__wrap}`}>
+                    <h3 className={`${styles.title}`}>좋아요한 스토리({storyList.length})</h3>
+                </div>
+                <div className={`${styles.content__wrap}`}>
+                    <StoryItemList
+                        storyPage={'like-story'}
+                        storyList={storyList}
+                        onBatchedLikesChange={handleBatchedLikesChange}
+                        onBatchedLocksChange={handleBatchedLocksChange}
+                        handleModal={openStoryModal}
+                    />
+                </div>
+            </div>
 
-            <h3>알림</h3>
-            <AlarmCardList
-                alarmListDTOs={alarmListDTOs}
-                confirmView={confirmView}
-            />
-        </>
+            <div className={`${styles.box__wrap}`}>
+                <div className={`${styles.title__wrap}`}>
+                    <h3 className={`${styles.title}`}>알림({alarmListDTOs.length})</h3>
+                </div>
+                <div className={`${styles.content__wrap} ${styles.alarm__wrap}`}>
+                    <AlarmCardList
+                        alarmListDTOs={alarmListDTOs}
+                        confirmView={confirmView}
+                    />
+                </div>
+            </div>
+        </div>
     );
 };
 
