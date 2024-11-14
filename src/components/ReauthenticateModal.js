@@ -4,6 +4,7 @@ import UserEdit from './UserEdit';
 import Reauthenticate from './Reauthenticate';
 import { ButtonProvider } from './ButtonProvider';
 import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = true }) => {
@@ -13,6 +14,7 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
     const [accessToken, setAccessToken] = useState(null);
     const [currentUser, setCurrentUser] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
+    const navigate = useNavigate();
 
 
     const handleClickSubmit = async (e) => {
@@ -67,6 +69,37 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
         } 
     };
 
+    const deleteUser = async (e) => {
+        e.preventDefault();
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            try {
+                const response = await axios.delete('http://localhost:8080/user/delete', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                });
+                if (response.data) {
+                    alert("계정을 삭제하였습니다");
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    if(localStorage.getItem('lastLoginEmail') != null && localStorage.getItem('lastLoginEmail') != undefined){
+                        localStorage.removeItem('lastLoginEmail');
+                    }
+                    navigate("/");
+                    window.location.reload();
+                } else {
+                    alert("삭제 실패...");
+                }
+            } catch (error) {
+                console.error("회원정보 삭제 중 오류 발생:", error);
+                alert("회원정보 삭제 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+            }
+        } else {
+            alert("삭제를 취소합니다");
+        }
+    };
+    
+
     const handleClickCancel = () => {
         onClose();
     };
@@ -110,6 +143,11 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
                             <ButtonProvider>
                                 <button type="button" className={`button button__primary`} onClick={handleClickEditSubmit}>
                                     <span className={`button__text`}>수정하기</span>
+                                </button>
+                            </ButtonProvider>
+                            <ButtonProvider>
+                                <button type="button" className={`button button__whiteRed`} onClick={deleteUser}>
+                                    <span className={`button__text`}>탈퇴하기</span>
                                 </button>
                             </ButtonProvider>
                         </div>

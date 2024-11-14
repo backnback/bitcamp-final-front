@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { InputProvider } from "./InputProvider";
 import axios from 'axios';
-import FormFileIcon from "../components/FormFileIcon";
 
 const UserEditContext = createContext();
 
@@ -9,10 +8,6 @@ export const useStoryAddEditContext = () => useContext(UserEditContext);
 
 const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, setProfileImage, accessToken }) => {
     const [filename, setFilename] = useState('');
-
-    const handleImageChange = (e) => {
-        setProfileImage(e.target.files[0]);
-      };
 
     useEffect(() => {
         const authenticateUser = async () => {
@@ -45,20 +40,37 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
         }
     }, [accessToken, setNickname, setProfileImage]);
 
+    const handleImageChange = (e) => {
+        setProfileImage(e.target.files[0]);
+      };
+
+      const handleImageClick = () => {
+        document.getElementById('file01').click(); // 파일 선택 input을 클릭
+    };
+
     return (
         <div>
-             <label>프로필 사진</label>
-                <img
+            <div
+            style={{
+            display: 'flex',
+            justifyContent: 'center',  
+            alignItems: 'center',   
+            height: '100%' }} 
+            >
+             <img
                 src={profileImage ? URL.createObjectURL(profileImage) : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${filename}`}
-                style={{ width: '200px', height: '200px', borderRadius: '50%', objectFit: 'cover' }}
-                />
-            <InputProvider>
-                <label htmlFor="file01" className="form__label form__label__file">
-                    <input type="file" className="blind" id="file01" onChange={handleImageChange} />
-                    <FormFileIcon />
-                </label>
-            </InputProvider>
-
+                style={{ width: '200px', height: '200px', borderRadius: '50%', objectFit: 'cover', cursor: 'pointer',  border: '2px solid black' }}
+                onClick={handleImageClick} // 이미지 클릭 시 파일 선택창 열리도록 처리
+                alt="프로필 사진"
+            />
+            <input
+                type="file"
+                className="blind"
+                id="file01"
+                onChange={handleImageChange} 
+                style={{ display: 'none' }}
+            />
+            </div>
             <label>닉네임</label>
             <InputProvider>
                 <input 

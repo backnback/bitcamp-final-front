@@ -53,38 +53,38 @@ function App() {
     let token = localStorage.getItem('accessToken');
 
     const checkTokenExpiration = async () => {
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            const expirationTime = decodedToken.exp * 1000; // 초 단위의 만료 시간을 밀리초로 변환
-
-            const remainTime = expirationTime - Date.now();
-
-            if (remainTime <= 1000 * 60 * 5) {
-                // 토큰이 만료되었으면, 재인증 작업 시작
-                const refreshToken = localStorage.getItem('refreshToken');
-                try {
-                    const response = await axios.post('http://localhost:8080/user/refreshtoken', {
-                      refreshToken: refreshToken
-                    }, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                    });
-                    const newAccessToken = response.data.accessToken;
-                    localStorage.setItem('accessToken', newAccessToken);
-            
-                    setAccessToken(newAccessToken);
-                } catch (error) {
-                    console.error("회원 정보를 가져오던 중 오류 발생:", error);
-                }
-            } else {
-                // 토큰이 유효하다면, 사용자 정보를 상태로 설정
-                setAccessToken(token);
-                setUser(decodedToken);
-            }
-        }else{
+        if (token === null || token === undefined) {
           console.log("토큰이 없음");
+        }else{
+          const decodedToken = jwtDecode(token);
+          const expirationTime = decodedToken.exp * 1000; // 초 단위의 만료 시간을 밀리초로 변환
+
+          const remainTime = expirationTime - Date.now();
+
+          if (remainTime <= 1000 * 60 * 5) {
+              // 토큰이 만료되었으면, 재인증 작업 시작
+              const refreshToken = localStorage.getItem('refreshToken');
+              try {
+                  const response = await axios.post('http://localhost:8080/user/refreshtoken', {
+                    refreshToken: refreshToken
+                  }, {
+                      headers: {
+                          'Authorization': `Bearer ${token}`,
+                          'Content-Type': 'application/json'
+                      },
+                  });
+                  const newAccessToken = response.data.accessToken;
+                  localStorage.setItem('accessToken', newAccessToken);
+          
+                  setAccessToken(newAccessToken);
+              } catch (error) {
+                  console.error("회원 정보를 가져오던 중 오류 발생:", error);
+              }
+          } else {
+              // 토큰이 유효하다면, 사용자 정보를 상태로 설정
+              setAccessToken(token);
+              setUser(decodedToken);
+          }
         }
     };
 
