@@ -52,6 +52,32 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
         moveToSlide(newIndex); // 슬라이드 이동
     };
 
+
+    // photo(기존 사진)과 file(추가 사진) 구분 처리
+    const renderPhoto = (photo) => {
+        if (photo instanceof File) {
+            // File 객체일 경우 URL.createObjectURL로 처리
+            const objectURL = URL.createObjectURL(photo);
+            return (
+                <img
+                    src={objectURL}
+                    alt="추가된 사진들"
+                    className="story-photo"
+                />
+            );
+        } else {
+            // 기존 photo 객체일 경우 기존 URL 사용
+            return (
+                <img
+                    src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
+                    alt={`Photo ${photo.id}`}
+                    className={`story-photo ${photo.mainPhoto ? 'main-photo' : ''}`}
+                />
+            );
+        }
+    };
+
+
     return (
         <div className={`photo__photos ${viewMode ? `` : `photo__photos__noMain`} ${className != null ? className : ``}`}>
             {validPhotos.length > 0 ? (
@@ -79,11 +105,17 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
                             {validPhotos.map((photo, index) => (
                                 <div className={`photo__photoItem ${itemClassName ? `photo__photoItem__custom` : ``}`}
                                     key={`${photo.id}-${index}`} >
+
+                                    {renderPhoto(photo)}
+
                                     <img
                                         src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
                                         alt={`Photo ${photo.id}`}
                                         className={`story-photo ${photo.mainPhoto ? 'main-photo' : ''}`}
                                     />
+
+
+
                                     {viewMode ? (
                                         photo.mainPhoto && <span className="main-onelabel">대표</span>  // viewMode가 true일 때 대표 이미지만 표시
                                     ) : (
