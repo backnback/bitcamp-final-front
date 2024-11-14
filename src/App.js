@@ -16,6 +16,7 @@ import FormStyles from "./routes/FormStyles";
 import FindEmail from "./routes/FindEmail";
 import FindPassword from "./routes/FindPassword";
 import NewPassword from "./routes/NewPassword";
+import AdminPage from "./routes/AdminPage.js";
 
 import MapSeoul from "./components/map/MapSeoul";
 import MapBusan from "./components/map/MapBusan";
@@ -160,7 +161,7 @@ function App() {
                 <Routes>
                   <Route path={user == null ? "/" : "/map"} element={user == null ? <Login /> : <StoryMap />} />
 
-
+                  <Route path="/admin" element={<AdminPage />} />
                   <Route path="/form/test" element={<FormStyles />} />
                   <Route path="/slide/test" element={<SlideTest />} />
                   {/* 라우터 경로 설정 */}
