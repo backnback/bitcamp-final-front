@@ -4,10 +4,20 @@ import "@egjs/react-flicking/dist/flicking.css";
 import { InputProvider } from '../components/InputProvider';
 
 
-export const PhotosProvider = ({ photos, viewMode, className, itemClassName, layout }) => {
+export const PhotosProvider = ({ photos, viewMode, className, itemClassName, layout, onSelectMainPhoto }) => {
+    const validPhotos = Array.isArray(photos) ? photos : [];
     const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 진행 중 상태
+
+
+    const handleSelectMainPhoto = (index) => {
+        if (onSelectMainPhoto) {
+            console.log("선택된 사진 index : ", index);
+            onSelectMainPhoto(index); // 상위 컴포넌트로 선택한 대표 이미지 ID 전달
+        }
+    };
+
 
     // 슬라이드를 이동하는 함수
     const moveToSlide = (index) => {
@@ -37,16 +47,16 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
     const moveRight = (event) => {
         if (isAnimating) return; // 애니메이션 진행 중일 때 이동 차단
         event.stopPropagation();
-        const newIndex = Math.min(currentIndex + 1, photos.length - 3); // 최대 인덱스를 초과하지 않도록 설정
+        const newIndex = Math.min(currentIndex + 1, validPhotos.length - 3); // 최대 인덱스를 초과하지 않도록 설정
         setCurrentIndex(newIndex); // 인덱스 업데이트
         moveToSlide(newIndex); // 슬라이드 이동
     };
 
     return (
         <div className={`photo__photos ${viewMode ? `` : `photo__photos__noMain`} ${className != null ? className : ``}`}>
-            {photos.length > 0 ? (
+            {validPhotos.length > 0 ? (
                 <div>
-                    {viewMode && photos.map(photo => (
+                    {viewMode && validPhotos.map(photo => (
                         photo.mainPhoto && (
                             <div key={photo.id} className="photo__mainPhoto">
                                 <img
@@ -64,10 +74,11 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
                             circular={false}  // 순환 슬라이드 여부
                             duration={500}    // 애니메이션 지속 시간
                             drag={false}
-                            touch={false}
+                            touch={viewMode ? undefined : false}
                         >
-                            {photos.map(photo => (
-                                <div className={`photo__photoItem ${itemClassName ? `photo__photoItem__custom` : ``}`} key={photo.id}>
+                            {validPhotos.map((photo, index) => (
+                                <div className={`photo__photoItem ${itemClassName ? `photo__photoItem__custom` : ``}`}
+                                    key={`${photo.id}-${index}`} >
                                     <img
                                         src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
                                         alt={`Photo ${photo.id}`}
@@ -83,8 +94,9 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
                                                         <input
                                                             type='radio'
                                                             className={`form__input`}
-                                                            id='radio02'
-                                                            name='라디오' />
+                                                            id='radio01'
+                                                            name='라디오1'
+                                                            onChange={() => handleSelectMainPhoto(index)} />
                                                         <span className={`input__text`}>대표이미지</span>
                                                     </label>
                                                 </InputProvider>
@@ -97,7 +109,8 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
                                                             type='radio'
                                                             className={`form__input`}
                                                             id='radio02'
-                                                            name='라디오' />
+                                                            name='라디오2'
+                                                            onChange={() => handleSelectMainPhoto(index)} />
                                                         <span className={`input__text`}>대표이미지</span>
                                                     </label>
                                                 </InputProvider>
@@ -110,7 +123,7 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
                         {/* 버튼을 추가하여 슬라이드를 이동 */}
                         <div className="slider__button">
                             {currentIndex > 0 && <button type="button" className="left" onClick={moveLeft}>◀</button>}
-                            {currentIndex < photos.length - 3 && <button type="button" className="right" onClick={moveRight}>▶</button>}
+                            {currentIndex < validPhotos.length - 3 && <button type="button" className="right" onClick={moveRight}>▶</button>}
                         </div>
                     </div>
                 </div>
