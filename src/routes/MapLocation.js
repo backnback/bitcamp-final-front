@@ -80,7 +80,6 @@ function MapLocation() {
         }
     }, [accessToken]);
 
-
     useEffect(() => {
         if (id !== null && accessToken !== null) {
             const getList = async () => {
@@ -137,13 +136,11 @@ function MapLocation() {
 
     return (
         <div>
-            <a onClick={handleClick} id="110">
-                {RenderComponent ? (
-                    React.cloneElement(RenderComponent, {storyPhotoList: storyPhotoList})
-                ) : (
-                    <div>Loading...</div>
-                )}
-            </a>
+            {RenderComponent ? (
+                React.cloneElement(RenderComponent, {storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal})
+            ) : (
+                <div>Loading...</div>
+            )}
         </div>
     )
 }
