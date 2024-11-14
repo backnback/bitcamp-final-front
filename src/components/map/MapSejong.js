@@ -1,4 +1,4 @@
-function MapSejong() {
+const MapSejong = () => {
     return (
         <div className={`city__wrap`}>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="800" viewBox="0 0 800 1151" strokeLinecap="round" strokeLinejoin="round" id="세종특별자치시_시군구" className={`city__list`}>

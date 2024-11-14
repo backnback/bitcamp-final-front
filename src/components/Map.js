@@ -11,7 +11,7 @@ const Map = ({ storyList }) => {
             storyList.forEach(story => {
                 const id = Math.trunc(story.id / 1000)
                 const element = document.querySelector('#id-' + id);
-                console.log(element)
+                // console.log(element)
                 if (element) {
                     if (story.count > 5) {
                         element.setAttribute("data-count", 5);

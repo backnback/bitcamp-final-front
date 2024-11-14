@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { InputProvider } from '../components/InputProvider';
-import { useNavigate } from 'react-router-dom';
-import { Modals } from '../components/Modals';
 import StoryUpdateForm from './StoryUpdateForm';
 import StoryEditModal from '../components/StoryEditModal';
 import { ModalsDispatchContext } from '../components/ModalContext';
@@ -12,7 +9,6 @@ import { PhotosProvider } from '../components/PhotosProvider';
 const StoryView = ({ storyId }) => {
     const [accessToken, setAccessToken] = useState(null);
     const [storyViewDTO, setStoryViewDTO] = useState(null);
-    const navigate = useNavigate();
     const { open } = useContext(ModalsDispatchContext);
 
     // 로컬 스토리지에서 accessToken을 가져오는 함수
@@ -52,8 +48,6 @@ const StoryView = ({ storyId }) => {
         return <div>로딩 중...</div>;
     }
 
-
-
     // 삭제 버튼 처리
     const handleDelete = async () => {
         const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
@@ -91,8 +85,6 @@ const StoryView = ({ storyId }) => {
     if (!storyViewDTO) {
         return <div>로딩 중...</div>;
     }
-
-    const photos = storyViewDTO.photos || [];
 
     return (
         <div className="story-view">
