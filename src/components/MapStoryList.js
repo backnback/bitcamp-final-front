@@ -15,24 +15,6 @@ const MapStoryList = ({ storyPage, storyList, onAddStory, onBatchedLikesChange, 
 
     console.log(storyList)
 
-    const handleLikeChange = (storyId, action) => {
-        console.log(`Story ID: ${storyId}, Action: ${action}`);
-        setBatchedLikes((prev) => [...prev, { storyId, action }]);
-        onBatchedLikesChange(batchedLikes);  // 즉시 변경 사항 전달
-        return batchedLikes;
-    };
-
-    const handleLockChange = (storyId, action) => {
-        console.log(`Story ID: ${storyId}, Action: ${action}`);
-        setBatchedLocks((prev) => [...prev, { storyId, action }]);
-        onBatchedLocksChange(batchedLocks);  // 즉시 변경 사항 전달
-        return batchedLocks;
-    };
-
-    const handleModalWithStoryId = (storyId) => {
-        handleModal(storyId);
-    };
-
     const openAddModal = () => {
         const content = <StoryAddForm provinceId={locationId} cityId={cityId}/>
         openModal(modals.storyEditModal, {
