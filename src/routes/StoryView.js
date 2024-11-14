@@ -103,8 +103,6 @@ const StoryView = ({ storyId }) => {
                 photos={storyViewDTO.photos}
                 viewMode={true}
                 className="custom-photo-container"
-                itemClassName="custom-photo-item"
-                layout="grid"
             />
             <p><strong>내용:</strong> {storyViewDTO.content}</p>
             <p><strong>공유 여부 :</strong> {storyViewDTO.share ? "예" : "아니오"}</p>

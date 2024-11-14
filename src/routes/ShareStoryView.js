@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PhotosProvider } from '../components/PhotosProvider';
+import Carousel from '../components/Carousel';
 
 
 const ShareStoryView = ({ storyId }) => {
