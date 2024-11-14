@@ -12,12 +12,13 @@ import { StoryTitleProvider } from '../components/TitleProvider.js';
 import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
 
-const fetchStoryList = async (accessToken, option, searchQuery, setStoryList) => {
+const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList) => {
     try {
         const response = await axios.get('http://localhost:8080/story/list', {
             params: {
                 [option]: searchQuery,
-                share: true
+                share: true,
+                sortBy: sortByOption
             },
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -39,6 +40,17 @@ const ShareStoryList = () => {
     const { openModal } = useModals();
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("title");
+    const [sortBy, setSortBy] = useState("");
+
+
+    // 정렬 옵션 변경
+    const handleSortByChange = (event) => {
+        const sortByOption = event.target.value === "1" ? "과거순" : "";
+        setSortBy(sortByOption);
+        if (accessToken) {
+            fetchStoryList(accessToken, sortByOption, searchOption, searchQuery, setStoryList);
+        }
+    }
 
 
     // 검색 옵션 변경
@@ -60,7 +72,7 @@ const ShareStoryList = () => {
     const handleSearchSubmit = (event) => {
         event.preventDefault();
         if (accessToken) {
-            fetchStoryList(accessToken, searchOption, searchQuery, setStoryList);
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
         }
     };
 
@@ -184,30 +196,14 @@ const ShareStoryList = () => {
         }
 
         if (accessToken) {
-            const fetchList = async () => {
-                try {
-                    const response = await axios.get('http://localhost:8080/story/list', {
-                        params: {
-                            share: true
-                        },
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    });
-                    response.data.map((story, index) => {
-                        if (story.mainPhoto.path == null) {
-                            console.log("test")
-                        }
-                        console.log(`Content: ${story.mainPhoto.path}`);
-                    })
-                    console.log(response.data)
-                    setStoryList(response.data);
-                } catch (error) {
-                    console.error("공유 스토리 목록 가져오기 실패 !", error);
-                }
-            };
-            fetchList();
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
         }
+
+        // 페이지 새로고침 시 전송
+        const handleBeforeUnload = () => {
+            handleSubmitLikes();  // 좋아요 변경 사항 전송
+            handleSubmitLocks();  // 공유 변경 사항 전송
+        };
 
         // 페이지 새로고침 시 전송
         window.addEventListener('beforeunload', handleSubmitLocks, handleSubmitLikes);
@@ -277,7 +273,8 @@ const ShareStoryList = () => {
                 title={'공유 스토리'}
                 selectChildren={
                     <SelectProvider>
-                        <select id="select01" name="스토리 정렬" className={`form__select`} title='스토리 정렬 방식 선택'>
+                        <select id="select01" name="스토리 정렬" className={`form__select`}
+                            title='스토리 정렬 방식 선택' onChange={handleSortByChange}>
                             <option value={'0'}>최신순</option>
                             <option value={'1'}>과거순</option>
                             <option value={'2'}>좋아요순</option>

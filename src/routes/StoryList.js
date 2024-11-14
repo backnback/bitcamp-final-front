@@ -14,12 +14,13 @@ import { StoryTitleProvider } from '../components/TitleProvider.js';
 import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
 
-const fetchStoryList = async (accessToken, searchQuery, setStoryList) => {
+const fetchStoryList = async (accessToken, sortByOption, searchQuery, setStoryList) => {
     try {
         const response = await axios.get('http://localhost:8080/story/list', {
             params: {
                 title: searchQuery,
-                share: false
+                share: false,
+                sortBy: sortByOption
             },
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -39,6 +40,18 @@ const MyStoryList = () => {
     const [batchedLocks, setBatchedLocks] = useState([]);
     const { openModal } = useModals();
     const [searchQuery, setSearchQuery] = useState("");
+    const [sortBy, setSortBy] = useState("");
+
+
+    // 정렬 옵션 변경
+    const handleSortByChange = (event) => {
+        const sortByOption = event.target.value === "1" ? "과거순" : "";
+        setSortBy(sortByOption);
+        if (accessToken) {
+            fetchStoryList(accessToken, sortByOption, searchQuery, setStoryList);
+        }
+    }
+
 
     // 검색 값 변경
     const handleSearchChange = (event) => {
@@ -52,7 +65,7 @@ const MyStoryList = () => {
     const handleSearchSubmit = (event) => {
         event.preventDefault();
         if (accessToken) {
-            fetchStoryList(accessToken, searchQuery, setStoryList);
+            fetchStoryList(accessToken, sortBy, searchQuery, setStoryList);
         }
     };
 
@@ -142,7 +155,8 @@ const MyStoryList = () => {
                 try {
                     const response = await axios.get('http://localhost:8080/story/list', {
                         params: {
-                            share: false
+                            share: false,
+                            sortBy: sortBy
                         },
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
@@ -222,7 +236,8 @@ const MyStoryList = () => {
                 title={'내 스토리'}
                 selectChildren={
                     <SelectProvider>
-                        <select id="select01" name="스토리 정렬" className={`form__select`} title='스토리 정렬 방식 선택'>
+                        <select id="select01" name="스토리 정렬" className={`form__select`}
+                            title='스토리 정렬 방식 선택' onChange={handleSortByChange}>
                             <option value={'0'}>최신순</option>
                             <option value={'1'}>과거순</option>
                             <option value={'2'}>좋아요순</option>
