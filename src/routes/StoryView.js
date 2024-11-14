@@ -5,6 +5,7 @@ import StoryEditModal from '../components/StoryEditModal';
 import { ModalsDispatchContext } from '../components/ModalContext';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { PhotosProvider } from '../components/PhotosProvider';
+import Swal from 'sweetalert2';
 
 const StoryView = ({ storyId }) => {
     const [accessToken, setAccessToken] = useState(null);
@@ -48,24 +49,44 @@ const StoryView = ({ storyId }) => {
         return <div>로딩 중...</div>;
     }
 
+
     // 삭제 버튼 처리
     const handleDelete = async () => {
-        const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-        if (confirmDelete) {
-            try {
-                await axios.delete(`http://localhost:8080/my-story/delete/${storyId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                alert("스토리가 삭제되었습니다.");
-                window.location.reload();
-            } catch (error) {
-                console.error("스토리 삭제 중 오류가 발생했습니다!", error);
-                alert("스토리 삭제에 실패했습니다.");
+        Swal.fire({
+            title: "정말 삭제하시겠습니까?",
+            text: "삭제한 스토리는 복원할 수 없습니다!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete !"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`http://localhost:8080/my-story/delete/${storyId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    Swal.fire({
+                        title: "삭제 완료 !",
+                        text: "스토리가 삭제되었습니다",
+                        icon: "success"
+                    }).then(() => {
+                        window.location.reload(); // 삭제 후 페이지 새로고침
+                    });
+                } catch (error) {
+                    console.error("스토리 삭제 중 오류가 발생했습니다!", error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "스토리 삭제에 실패했습니다.",
+                        icon: "error"
+                    });
+                }
             }
-        }
+        });
     };
+
 
 
     // 업데이트 버튼 처리

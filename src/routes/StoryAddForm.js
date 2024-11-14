@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {ButtonProvider} from '../components/ButtonProvider';
-import {InputProvider} from '../components/InputProvider';
-import {SelectProvider} from '../components/SelectProvider';
+import { ButtonProvider } from '../components/ButtonProvider';
+import { InputProvider } from '../components/InputProvider';
+import { SelectProvider } from '../components/SelectProvider';
+import { PhotosProvider } from '../components/PhotosProvider';
 import FormFileIcon from "../components/FormFileIcon";
 import Swal from 'sweetalert2';
 import styles from '../assets/styles/css/StoryAddForm.module.css';
 
 
-const MyStoryAddForm = ({provinceId, cityId}) => {
+const MyStoryAddForm = ({ provinceId, cityId }) => {
     const [title, setTitle] = useState('');
     const [travelDate, setTravelDate] = useState('');
     const [content, setContent] = useState('');
@@ -23,6 +24,8 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 월은 0부터 시작
     const [selectedDay, setSelectedDay] = useState(new Date().getDate());
     const [checkedShare, setCheckedShare] = useState(false);
+    const [mainPhotoIndex, setMainPhotoIndex] = useState(null);
+
 
     // 로컬 스토리지에서 accessToken을 가져오는 함수
     useEffect(() => {
@@ -56,6 +59,7 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
             }
         };
         fetchFirstNames();
+        console.log(mainPhotoIndex);
     }, []);
 
 
@@ -72,6 +76,8 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
                 setSecondNames([]);
             }
         };
+
+
         fetchSecondNames();
     }, [selectedFirstName]);
 
@@ -82,7 +88,7 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
 
 
     const handleFileChange = (event) => {
-        setFiles(event.target.files);
+        setFiles(Array.from(event.target.files));
     };
 
     const handleSubmit = async (event) => {
@@ -106,11 +112,16 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
         formData.append('content', content);
         formData.append('firstName', selectedFirstName);
         formData.append('secondName', selectedSecondName);
-        formData.append("share", checkedShare);
+        formData.append('share', checkedShare);
+        formData.append('mainPhotoIndex', mainPhotoIndex);
 
         for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
         }
+
+        // mainPhoto 값 확인
+        console.log("전송할 mainPhoto 인덱스:", mainPhotoIndex);
+
 
         try {
             await axios.post('http://localhost:8080/my-story/add', formData, {
@@ -139,7 +150,7 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
     };
 
     const handleButtonClick = () => {
-        handleSubmit(new Event('submit', {cancelable: true}));
+        handleSubmit(new Event('submit', { cancelable: true }));
     };
 
     const handleCheckboxChange = (event) => {
@@ -147,6 +158,13 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
         setCheckedShare(checked);
         console.log("Checkbox is checked:", checked);
     };
+
+
+    const handleMainPhotoSelect = (index) => {
+        setMainPhotoIndex(index); // Main 이미지
+    };
+
+
 
     return (
         <div className={styles.container}>
@@ -162,7 +180,7 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
                             required
                             id='text01'
                             name='텍수투'
-                            placeholder="title"/>
+                            placeholder="title" />
                     </InputProvider>
                 </div>
                 <div>
@@ -213,7 +231,7 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
                     <div className={styles.location__picker__box}>
                         <SelectProvider className={styles.location__picker__province}>
                             <select id="select04" name="selectFirstName" className={`form__select`}
-                                    onChange={(e) => setSelectedFirstName(e.target.value)} value={selectedFirstName}>
+                                onChange={(e) => setSelectedFirstName(e.target.value)} value={selectedFirstName}>
                                 <option value={'0'}>지역 선택</option>
                                 {firstNames.map((firstName) => (
                                     <option key={firstName} value={firstName}>
@@ -224,8 +242,8 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
                         </SelectProvider>
                         <SelectProvider>
                             <select id="select05" name="selectSecondName" className={`form__select`}
-                                    onChange={(e) => setSelectedSecondName(e.target.value)} value={selectedSecondName}
-                                    disabled={!selectedFirstName}>
+                                onChange={(e) => setSelectedSecondName(e.target.value)} value={selectedSecondName}
+                                disabled={!selectedFirstName}>
                                 <option value={'0'}>세부 지역 선택</option>
                                 {secondNames.map((location) => (
                                     <option key={location.id} value={location.secondName}>
@@ -244,40 +262,37 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
                             required
                             id='text02'
                             name='텍수투'
-                            placeholder="지역 상세정보 입력"/>
+                            placeholder="지역 상세정보 입력" />
                     </InputProvider>
                 </div>
                 <div className={styles.photo__box}>
-                    <InputProvider>
-                        <label htmlFor="file01" className={`form__label form__label__file`}>
-                            <input type='file' className={`blind`} id="file01"
-                                   multiple onChange={handleFileChange}/>
-                            <FormFileIcon/>
-                        </label>
-                    </InputProvider>
-
-                    {files.length > 0 && (
-                        <div className="file-list">
-                            <h4>선택된 파일:</h4>
-                            <ul>
-                                {Array.from(files).map((file, index) => (
-                                    <li key={index}>{file.name}</li>
-                                ))}
-                            </ul>
-                        </div>
+                    {files.length === 0 ? (
+                        <InputProvider>
+                            <label htmlFor="file01" className="form__label form__label__file">
+                                <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} />
+                                <FormFileIcon />
+                            </label>
+                        </InputProvider>
+                    ) : (
+                        <PhotosProvider
+                            photos={files}
+                            viewMode={false}
+                            className="custom-photo-container"
+                            onSelectMainPhoto={handleMainPhotoSelect}
+                        />
                     )}
                 </div>
                 <div className={styles.content__box}>
                     <h5>내용</h5>
                     <InputProvider className={styles.content__inputBox}>
-                <textarea
-                    id='textarea01'
-                    placeholder='내용 입력'
-                    className={`form__textarea`}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    required
-                ></textarea>
+                        <textarea
+                            id='textarea01'
+                            placeholder='내용 입력'
+                            className={`form__textarea`}
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            required
+                        ></textarea>
                     </InputProvider>
                 </div>
 
@@ -297,7 +312,7 @@ const MyStoryAddForm = ({provinceId, cityId}) => {
 
                 <ButtonProvider className={styles.save__button__box}>
                     <button type="button" id="submit-button" className={`button button__primary`}
-                            onClick={handleButtonClick}>
+                        onClick={handleButtonClick}>
                         <span className={`button__text`}>등록</span>
                     </button>
                 </ButtonProvider>
