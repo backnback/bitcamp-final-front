@@ -25,7 +25,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 월은 0부터 시작
     const [selectedDay, setSelectedDay] = useState(new Date().getDate());
     const [loading, setLoading] = useState(true);
-
+    const [mainPhotoIndex, setMainPhotoIndex] = useState(null);
 
 
 
@@ -152,6 +152,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
         formData.append('secondName', selectedSecondName);
         formData.append('oldStoryId', storyId);
         formData.append('share', false);
+        formData.append('mainPhotoIndex', mainPhotoIndex);
 
         files.forEach(file => {
             if (file instanceof File) {
@@ -189,6 +190,11 @@ const MyStoryUpdateForm = ({ storyId }) => {
     const handleButtonClick = () => {
         console.log("제출버튼 실행됨");
         handleSubmit(new Event('submit', { cancelable: true }));
+    };
+
+
+    const handleMainPhotoSelect = (index) => {
+        setMainPhotoIndex(index); // Main 이미지
     };
 
 
@@ -303,12 +309,11 @@ const MyStoryUpdateForm = ({ storyId }) => {
                 onChange={handleFileChange}
             />
 
-            <h3>현재 사진들:</h3>
-
             <PhotosProvider
                 photos={files}
                 viewMode={false}
                 className="custom-photo-container"
+                onSelectMainPhoto={handleMainPhotoSelect}
             />
 
 

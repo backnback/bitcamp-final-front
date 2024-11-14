@@ -161,7 +161,7 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
 
 
     const handleMainPhotoSelect = (index) => {
-        setMainPhotoIndex(index); // 대표 이미지 ID를 관리
+        setMainPhotoIndex(index); // Main 이미지
     };
 
 
@@ -266,15 +266,14 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
                     </InputProvider>
                 </div>
                 <div className={styles.photo__box}>
-                    <InputProvider>
-                        <label htmlFor="file01" className={`form__label form__label__file`}>
-                            <input type='file' className={`blind`} id="file01"
-                                multiple onChange={handleFileChange} />
-                            <FormFileIcon />
-                        </label>
-                    </InputProvider>
-
-                    {files.length > 0 && (
+                    {files.length === 0 ? (
+                        <InputProvider>
+                            <label htmlFor="file01" className="form__label form__label__file">
+                                <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} />
+                                <FormFileIcon />
+                            </label>
+                        </InputProvider>
+                    ) : (
                         <PhotosProvider
                             photos={files}
                             viewMode={false}
