@@ -71,7 +71,7 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
 
     const deleteUser = async (e) => {
         e.preventDefault();
-        if (confirm("정말로 삭제하시겠습니까?")) {
+        if (window.confirm("정말로 삭제하시겠습니까?")) {
             try {
                 const response = await axios.delete('http://localhost:8080/user/delete', {
                     headers: {
