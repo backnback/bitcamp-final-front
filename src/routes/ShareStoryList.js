@@ -185,7 +185,6 @@ const ShareStoryList = () => {
                         }
                         console.log(`Content: ${story.mainPhoto.path}`);
                     })
-                    console.log(response.data)
                     setStoryList(response.data);
                 } catch (error) {
                     console.error("공유 스토리 목록 가져오기 실패 !", error);

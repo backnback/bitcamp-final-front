@@ -1,0 +1,25 @@
+.box__wrap {
+    border-radius: var(--border-radius);
+    padding: 23px 0;
+    margin: 15px auto;
+    background-color: var(--color-mypage-box);
+}
+
+.title__wrap {
+    padding: 0 20px;
+}
+
+.title {
+    font-size: var(--font-size-h4);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.content__wrap {
+    padding: 20px;
+}
+
+.alarm__wrap {
+    overflow: auto;
+    height: 400px;
+}

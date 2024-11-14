@@ -2,25 +2,31 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/styles/css/AlarmCard.module.css";
 import Bin from "../components/Bin";
+import { ButtonProvider } from "./ButtonProvider";
 
 const AlarmCard = ({ userImg, userName, content, toggleBin }) => {
     const [liked, setLiked] = useState(false);
 
     return (
         <div className={styles.card}>
-            <div className={styles.img}>
-                <img 
-                    src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${userImg}`}
-                    style={{ width: '100%', height: '100%', borderRadius: '10px' }}
-                />
+            <div className={`${styles.img__wrap} ${userImg || styles.img__wrap__default}`}>
+                {
+                    userImg != null ?
+                        <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${userImg}`} alt='내 프로필 사진' className={`${styles.img}`} /> :
+                        <span className={`${styles.img__default} line1`}>{userImg ? userName : "Guest"}</span>
+                }
             </div>
-            <div className={styles.textBox}>
-                <div className={styles.textContent}>
-                    <h1 className={styles.h1}>{userName}</h1>
-                </div>
-                <p className={styles.p}>{content}</p>
+            <div className={styles.info__wrap}>
+                <span className={styles.name}>{userName}</span>
+                <p className={`${styles.text}`}>{content}</p>
             </div>
-            <Bin onClick={toggleBin} />
+            <ButtonProvider width={'icon'}>
+                <button type="button" className={`button button__icon ${styles.button__icon__bin}`} onClick={toggleBin}>
+                    <i data-button="icon" className={`icon icon__trash__gray`}></i>
+                    <span className={`blind`}>닫기</span>
+                </button>
+            </ButtonProvider>
+            {/* <Bin onClick={toggleBin} /> */}
         </div>
     );
 };
