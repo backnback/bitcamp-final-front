@@ -4,12 +4,12 @@
     gap: 50px;
     justify-content: center;
     /* 사진들이 중앙에 정렬되도록 설정 */
-    position: relative;
 }
 
 /* viewMode가 false일 때 메인 사진을 숨기는 스타일 */
 .photo__photos__noMain {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     /* 작은 사진들이 나열되는 레이아웃 */
 }
@@ -21,7 +21,9 @@
 .photo__layout {
     display: flex;
     flex-wrap: wrap;
+    margin-left: 15px;
     gap: 20px;
+    position: relative;
 }
 
 
@@ -72,14 +74,36 @@
 }
 
 /* 'main' 텍스트 레이블 스타일 */
+.main-onelabel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(30, 144, 255, 0.9);
+    color: white;
+    font-size: 10px;
+    padding: 6px 8.5px;
+    border-radius: 3px;
+}
+
 .main-label {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    top: 0px;
+    left: 0px;
+    background-color: rgba(30, 144, 255, 0.9);
     color: white;
-    font-size: 12px;
-    padding: 2px 5px;
+    font-size: 10px;
+    padding: 0px 5px;
+    border-radius: 3px;
+}
+
+.sub-label {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(241, 246, 252, 0.6);
+    color: black;
+    font-size: 10px;
+    padding: 0px 5px;
     border-radius: 3px;
 }
 
@@ -110,18 +134,18 @@
 
 .slider__button .right {
     position: absolute;
-    top: 362px;
+    top: 0px;
     /* 버튼이 사진 중앙에 위치하도록 설정 */
-    left: 535px;
+    left: 504px;
     /* 중앙 기준으로 위치 */
     z-index: 10;
 }
 
 .slider__button .left {
     position: absolute;
-    top: 362px;
+    top: 0px;
     /* 버튼이 사진 중앙에 위치하도록 설정 */
-    left: 29px;
+    left: 0px;
     /* 중앙 기준으로 위치 */
     z-index: 10;
 }
@@ -131,7 +155,7 @@
     padding: 77px 5.5px;
     font-size: 16px;
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(6, 231, 251, 0.6);
     color: black;
     border: none;
     border-radius: 5px;
