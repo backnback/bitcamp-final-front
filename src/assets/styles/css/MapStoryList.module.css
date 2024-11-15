@@ -1,1 +1,17 @@
-.
+.add__button__box {
+    justify-self: center;
+    width: 250px;
+    padding-bottom: 25px;
+}
+
+.line {
+    border-bottom: var(--color-black-30) solid 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.list__box {
+    border-bottom: var(--color-black-30) solid 1px;
+    margin: 10px;
+    padding: 25px 10px 25px 10px;
+}

@@ -5,6 +5,7 @@ import StoryEditModal from '../components/StoryEditModal';
 import { ModalsDispatchContext } from '../components/ModalContext';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { PhotosProvider } from '../components/PhotosProvider';
+import styles from "../assets/styles/css/StoryView.module.css"
 
 const StoryView = ({ storyId }) => {
     const [accessToken, setAccessToken] = useState(null);
@@ -88,8 +89,11 @@ const StoryView = ({ storyId }) => {
 
     return (
         <div className="story-view">
-            <h2>제목 : {storyViewDTO.title}</h2>
-            <p><strong>여행 날짜:</strong> {storyViewDTO.travelDate}</p>
+            <h1 className={styles.title__text}>제목 : {storyViewDTO.title}</h1>
+            <div>
+                
+            </div>
+            <p>{storyViewDTO.travelDate}</p>
             <p><strong>위치:</strong> {storyViewDTO.locationDetail}</p>
             <PhotosProvider
                 photos={storyViewDTO.photos}

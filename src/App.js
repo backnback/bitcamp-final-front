@@ -38,6 +38,7 @@ import Map from "./components/Map";
 import {jwtDecode} from "jwt-decode";
 import MapLocation from "./routes/MapLocation";
 import SlideTest from "./routes/SlideTest";
+import MapNorthChungcheoungTest from "./components/map/MapNorthChungcheoungTest";
 
 function App() {
     // UserProvider 내부에서 useUser 훅을 호출하여 사용자 정보 가져오기
@@ -181,6 +182,7 @@ function App() {
                                     <Route path="/map/story/southGyeongsan" element={<MapSouthGyeongsan/>}/>
                                     <Route path="/map/story/southJeolla" element={<MapSouthJeolla/>}/>
                                     <Route path="/map/story/ulsan" element={<MapUlsan/>}/>
+                                    <Route path="/map/story/northChungcheoung/test" element={<MapNorthChungcheoungTest/>}/>
 
                                     <Route path="/viewuser/:id" element={<ViewUser/>}/> {/* 특정 사용자 보기 */}
                                     <Route path="/share-story/list" element={<ShareStoryList/>}/> {/* 스토리 목록 페이지 */}
