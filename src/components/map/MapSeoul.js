@@ -1,10 +1,11 @@
-import {useEffect} from "react";
+import {createElement, useEffect} from "react";
 import {createPath} from "react-router-dom";
+import * as d3 from 'd3';
 
 const MapSeoul = ({storyPhotoList, eventClick, openListModal, openAddModal}) => {
 
     const mapPaths = {
-        680: "M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z",
+        // 680: "M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z",
         740: "M 725.57 452.18 675.6 425.08 683.76 398.85 656.25 387.72 668 354.62 683.06 338.28 711.64 326.36 733.53 326.42 768.14 300.85 784.37 297.76 797.57 344.79 799 380.39 760.89 383.67 742.17 411.21 725.57 452.18 Z",
         305: "M 527.92 174.06 541.75 189.48 517.27 217.55 488.27 220.63 461.9 202.97 455.39 189.69 414.88 159.41 412.54 110.38 434.52 84.7 432.34 55.95 462.9 42.39 477.4 68.12 469.82 121.14 509.18 147.55 527.92 174.06 Z",
         500: "M 160.76 315.2 185.17 336.67 212.55 353.39 212.81 373.07 176.77 381.88 180.12 417.73 134.54 425.46 120.42 387.91 99.09 390.62 59.8 385.36 1 371.16 4.11 348.4 44.24 283.33 58.85 274.55 52.22 257.23 62.34 233.46 160.76 315.2 Z",
@@ -32,45 +33,84 @@ const MapSeoul = ({storyPhotoList, eventClick, openListModal, openAddModal}) => 
     }
 
     useEffect(() => {
-        if(storyPhotoList !== null){
-            storyPhotoList.map((story) => {
-                if (story.mainPhotoPath !== null) {
+        const test = d3.select("#서울특별시_시군구_경계")
+        Object.entries(mapPaths).map(([key, path]) => {
+            const test2 = test.append("g").attr("id", "g" + key)
+                .append("path")
+                .attr("d", path)
+                .attr("id", key)
+                .attr("fill", "https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png")
+                .attr("stroke", "black")
+                // .on("click", eventClick)
 
-                }
-            })
-        }
+            // test2.append("defs")
+            //     .append("clip-path").attr("id", key + "_clipPath")
+            //     .append("path").attr("id", "p" + key).attr("d", "M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z")
+            //     .
+            // test2.append("image").attr("clip-path", "url(#" + key + "_clipPath)").attr("id", "img" + key).attr("href", "https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png")
+            // test2.append("use").attr("href", "#" + key).attr("fill", "url(#img"+ key +")")
+            // console.log(key)
+        })
 
-        console.log(storyPhotoList)
-    }, [storyPhotoList])
+
+    }, []);
+
+    // useEffect(() => {
+    //     // const svg = document.getElementById('서울특별시_시군구');
+    //     // const buttons = svg.querySelectorAll('g[role=button]');
+    //
+    //     // console.dir(svg);
+    //     // for (const button of buttons) {
+    //         // console.dir(button);
+    //         const path = document.querySelector("#p680");
+    //         const image = document.querySelector('#img680');
+    //         const pathBox = path.getBBox();
+    //
+    //         // console.log(pathBox, image.style.x )
+    //
+    //         if (image.style.width > image.style.height) {
+    //             image.style.width = 'auto';
+    //             image.style.height = pathBox.height;
+    //             image.style.x = pathBox.x - ((pathBox.width / 2) / 2);
+    //             image.style.y = pathBox.y;
+    //         } else if (image.style.width < image.style.height) {
+    //             image.style.width = pathBox.width;
+    //             image.style.height = 'auto';
+    //             image.style.y = pathBox.y - ((pathBox.height / 2) / 2);
+    //             image.style.x = pathBox.x;
+    //         } else {
+    //             image.style.width = 'auto';
+    //             image.style.height = pathBox.height;
+    //             image.style.x = pathBox.x;
+    //             image.style.y = pathBox.y;
+    //         }
+    //     // }
+    // }, []);
 
     return (
         <div className={`city__wrap`}>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="800" viewBox="0 0 800 667"
                  strokeLinecap="round" strokeLinejoin="round" id="서울특별시_시군구" className={`city__list`}>
-
                 <g id="서울특별시_시군구_경계">
-                    {Object.entries(mapPaths).map(([key, value]) => (
-                        <path key={key} d={value} id={key} onClick={eventClick}/>
-                    ))}
+                    {/*폴리곤*/}
+                    {/*<polygon*/}
+                    {/*    points="553.2,423.42 554.4,425.2 575.01,432.66 577.2,458.2 579.3,485.93 605.4,492.4 629.82,501.86 641.1,510.2 653.08,519.63 670.2,544.2 684.54,574.67 678.1,578.4 671.43,585.15 655.8,585.1 645.91,585.11 636.2,590.1 628.14,599.12 623.1,588.8 618.95,572.87 605.1,561.4 592.77,553.08 582.6,560.2 570.56,566.86 556.6,570.2 542.27,571.45 533.1,549.2 524.33,528.33 517.6,529.4 509.72,530.38 495.2,500.4 485.27,465.09 481.6,452.4 478.6,438.95 469.4,434.2 460.71,429.63 469.4,419.2 478.01,409.22 500.2,406.2 522.57,405.01 537.2,414.2 553.2,423.42"*/}
+                    {/*    fill="red" stroke="black"/>*/}
 
-                    {/*    <g className={`province`} role="button" tabIndex="0" onClick={eventClick}>*/}
-                    {/*        <defs>*/}
-                    {/*            <clipPath id="강남구_clipPath">*/}
-                    {/*                <path*/}
-                    {/*                    d="M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z"*/}
-                    {/*                    id="680" test-id="강남구" fill="url(#pattern-image)"/>*/}
-                    {/*            </clipPath>*/}
-                    {/*        </defs>*/}
-                    {/*        <image*/}
-                    {/*            href="https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/04b4f0b1-793c-422f-b0df-d5c8512b96ee"*/}
-                    {/*            clipPath="url(#강남구_clipPath)" id="680"/>*/}
-                    {/*        <use href="#680" fill="url(#680)"/>*/}
-                    {/*    </g>*/}
-                    {/*    <a onClick={eventClick}>*/}
-                    {/*<path*/}
-                    {/*    d="M 725.57 452.18 675.6 425.08 683.76 398.85 656.25 387.72 668 354.62 683.06 338.28 711.64 326.36 733.53 326.42 768.14 300.85 784.37 297.76 797.57 344.79 799 380.39 760.89 383.67 742.17 411.21 725.57 452.18 Z"*/}
-                    {/*    id="740" test-id="강동구"></path>*/}
-                    {/*    </a>*/}
+                    {/*패쓰*/}
+                    {/*<g id="680" className={`province`} role="button" tabIndex="0" onClick={eventClick}>*/}
+                    {/*    <defs>*/}
+                    {/*        <clipPath id="680_clipPath">*/}
+                    {/*            <path*/}
+                    {/*                d="M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z"*/}
+                    {/*                id="p680"/>*/}
+                    {/*        </clipPath>*/}
+                    {/*    </defs>*/}
+                    {/*    <image*/}
+                    {/*        href="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"*/}
+                    {/*        clipPath="url(#680_clipPath)" id="img680"/>*/}
+                    {/*    <use href="#p680" fill="url(#img680)"/>*/}
+                    {/*</g>*/}
                 </g>
             </svg>
         </div>
