@@ -2,36 +2,17 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import StoryItem, {StoryAddContext} from "./StoryItem";
 import StoryView from "../routes/StoryView";
-import styles from "../assets/styles/css/StoryItemList.module.css";
 import {modals} from "./Modals";
 import StoryAddForm from "../routes/StoryAddForm";
 import useModals from "../useModals";
+import {ButtonProvider} from "./ButtonProvider";
+import styles from '../assets/styles/css/MapStoryList.module.css';
 
-const MapStoryList = ({ storyPage, storyList, onAddStory, onBatchedLikesChange, onBatchedLocksChange, handleModal, locationId, cityId }) => {
-    const [batchedLikes, setBatchedLikes] = useState([]);
-    const [batchedLocks, setBatchedLocks] = useState([]);
+const MapStoryList = ({storyList, onAddStory, locationId, cityId}) => {
 
-    const { openModal } = useModals();
+    const {openModal} = useModals();
 
     console.log(storyList)
-
-    const handleLikeChange = (storyId, action) => {
-        console.log(`Story ID: ${storyId}, Action: ${action}`);
-        setBatchedLikes((prev) => [...prev, { storyId, action }]);
-        onBatchedLikesChange(batchedLikes);  // 즉시 변경 사항 전달
-        return batchedLikes;
-    };
-
-    const handleLockChange = (storyId, action) => {
-        console.log(`Story ID: ${storyId}, Action: ${action}`);
-        setBatchedLocks((prev) => [...prev, { storyId, action }]);
-        onBatchedLocksChange(batchedLocks);  // 즉시 변경 사항 전달
-        return batchedLocks;
-    };
-
-    const handleModalWithStoryId = (storyId) => {
-        handleModal(storyId);
-    };
 
     const openAddModal = () => {
         const content = <StoryAddForm provinceId={locationId} cityId={cityId}/>
@@ -45,18 +26,22 @@ const MapStoryList = ({ storyPage, storyList, onAddStory, onBatchedLikesChange, 
         <div>
             <ul>
                 {/* 스토리 추가 버튼 */}
-                {onAddStory && (
-                    <li>
-                        등록
-                    </li>
-                )}
-                 스토리 아이템 목록
+                <li className={styles.add__button__box}>
+                    <ButtonProvider>
+                        <button type="button" className={`button button__primary`} onClick={openAddModal}>
+                            <span className={`button__text`}>새 스토리 등록</span>
+                        </button>
+                    </ButtonProvider>
+                </li>
+                <div className={styles.line}></div>
                 {Array.isArray(storyList) && storyList.map((storyListDTO) => (
                     <li>
-                        <StoryView
-                            // storyPage={storyPage}
-                            storyId={storyListDTO.storyId}
-                        />
+                        <div className={styles.list__box}>
+                            <StoryView
+                                // storyPage={storyPage}
+                                storyId={storyListDTO.storyId}
+                            />
+                        </div>
                     </li>
                 ))}
             </ul>
