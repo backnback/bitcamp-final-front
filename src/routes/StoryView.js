@@ -23,6 +23,14 @@ const StoryView = ({ storyId }) => {
     }, []);
 
 
+
+    useEffect(() => {
+        if (storyViewDTO) {
+            console.log("Updated storyViewDTO:", storyViewDTO);
+        }
+    }, [storyViewDTO]);
+
+
     // accessToken이 설정된 경우에만 fetchList 호출
     useEffect(() => {
         if (accessToken) {
@@ -112,10 +120,12 @@ const StoryView = ({ storyId }) => {
             <h2>제목 : {storyViewDTO.title}</h2>
             <p><strong>여행 날짜:</strong> {storyViewDTO.travelDate}</p>
             <p><strong>위치:</strong> {storyViewDTO.locationDetail}</p>
+
             <PhotosProvider
                 photos={storyViewDTO.photos}
                 viewMode={true}
                 className="custom-photo-container"
+                mainPhotoIndex={storyViewDTO.mainPhotoIndex}
             />
             <p><strong>내용:</strong> {storyViewDTO.content}</p>
             <p><strong>공유 여부 :</strong> {storyViewDTO.share ? "예" : "아니오"}</p>

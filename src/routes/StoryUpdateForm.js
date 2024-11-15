@@ -25,7 +25,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 월은 0부터 시작
     const [selectedDay, setSelectedDay] = useState(new Date().getDate());
     const [loading, setLoading] = useState(true);
-    const [mainPhotoIndex, setMainPhotoIndex] = useState(null);
+    const [mainPhotoIndex, setMainPhotoIndex] = useState('');
 
 
 
@@ -60,6 +60,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
                     setLocationDetail(story.locationDetail);
                     setSelectedFirstName(story.locationFirstName);
                     setSelectedSecondName(story.locationSecondName);
+                    setMainPhotoIndex(story.mainPhotoIndex);
                     setFiles(story.photos || []);
                     setLoading(false);  // 데이터를 불러온 후 로딩 상태를 false로 설정
                 } catch (error) {
@@ -313,6 +314,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
                 photos={files}
                 viewMode={false}
                 className="custom-photo-container"
+                mainPhotoIndex={mainPhotoIndex}
                 onSelectMainPhoto={handleMainPhotoSelect}
             />
 

@@ -24,7 +24,7 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 월은 0부터 시작
     const [selectedDay, setSelectedDay] = useState(new Date().getDate());
     const [checkedShare, setCheckedShare] = useState(false);
-    const [mainPhotoIndex, setMainPhotoIndex] = useState(null);
+    const [mainPhotoIndex, setMainPhotoIndex] = useState('');
 
 
     // 로컬 스토리지에서 accessToken을 가져오는 함수
@@ -278,6 +278,7 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
                             photos={files}
                             viewMode={false}
                             className="custom-photo-container"
+                            mainPhotoIndex={mainPhotoIndex}
                             onSelectMainPhoto={handleMainPhotoSelect}
                         />
                     )}
