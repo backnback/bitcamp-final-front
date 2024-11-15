@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { PhotosProvider } from '../components/PhotosProvider';
-import Carousel from '../components/Carousel';
+import StoryItemView from '../components/StoryItemView';
 
 
 const ShareStoryView = ({ storyId }) => {
@@ -41,26 +40,13 @@ const ShareStoryView = ({ storyId }) => {
     }, [accessToken, storyId]);
 
 
-    if (!storyViewDTO) {
-        return <div>로딩 중...</div>;
-    }
-
-    const photos = storyViewDTO.photos || [];
 
     return (
-        <div className="story-view">
-            <h2>제목 : {storyViewDTO.title}</h2>
-            <p><strong>여행 날짜:</strong> {storyViewDTO.travelDate}</p>
-            <p><strong>위치:</strong> {storyViewDTO.locationDetail}</p>
-            <PhotosProvider
-                photos={storyViewDTO.photos}
-                viewMode={true}
-                className="custom-photo-container"
-            />
-            <p><strong>내용:</strong> {storyViewDTO.content}</p>
-            <p><strong>공유 여부 :</strong> {storyViewDTO.share ? "예" : "아니오"}</p>
+        <StoryItemView
+            storyViewDTO={storyViewDTO}
+            share={true}
+        />
 
-        </div>
     );
 };
 
