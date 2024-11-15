@@ -131,10 +131,11 @@ function MapLocation() {
     }
 
     const handleClick = (event) => {
-        setId(event.target.id);  // 클릭한 요소의 id를 가져옴
+        setId(event.currentTarget.id);  // 클릭한 요소의 id를 가져옴
     };
 
     return (
+
         <div>
             {RenderComponent ? (
                 React.cloneElement(RenderComponent, {storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal})
