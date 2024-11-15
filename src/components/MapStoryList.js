@@ -23,12 +23,12 @@ const MapStoryList = ({storyList, onAddStory, locationId, cityId}) => {
     };
 
     return (
-        <div className={styles.container}>
+        <div>
             <ul>
                 {/* 스토리 추가 버튼 */}
                 <li className={styles.add__button__box}>
-                    <ButtonProvider >
-                        <button type="button" className={`button button__primary`}>
+                    <ButtonProvider>
+                        <button type="button" className={`button button__primary`} onClick={openAddModal}>
                             <span className={`button__text`}>새 스토리 등록</span>
                         </button>
                     </ButtonProvider>

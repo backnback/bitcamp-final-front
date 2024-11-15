@@ -184,6 +184,7 @@ function FormStyles() {
                 </button>
             </ButtonProvider>
 
+
             <ButtonProvider width={'icon'}>
                 <button type="button" className={`button button__icon`}>
                     <i data-button="icon" className={`icon icon__trash__red`}></i>
