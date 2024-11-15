@@ -9,30 +9,35 @@ const Profile = ({ loginUser }) => {
   const { openModal } = useModals();
 
   const handleClick = () => {
-      openModal(modals.reauthenticateModal, {
-          onSubmit: () => {
-              console.log('비지니스 로직 처리...2');
-          },
-      });
+    openModal(modals.reauthenticateModal, {
+      onSubmit: () => {
+        console.log('비지니스 로직 처리...2');
+      },
+    });
   };
 
   return (
-    <div className={styles.card}>
-      <div className={styles.img}>
-        <img
-          src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${loginUser.path}`}
-          style={{ width: '100%', height: '100%', borderRadius: '50%' }}
-        />
+    <div className={styles.box}>
+      <div className={`${styles.img__wrap} ${loginUser || styles.img__wrap__default}`}>
+        {
+          loginUser != null ?
+            <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${loginUser.path}`} alt='내 프로필 사진' className={`${styles.img}`} /> :
+            <span className={`${styles.img__default} line1`}>{loginUser ? loginUser.nickname : "Guest"}</span>
+        }
       </div>
-      <div className={styles.text}>
-        <span className={styles.heading}>닉네임 : {loginUser.nickname}</span>
-        <p className={styles.info}>이메일 : {loginUser.email}</p>
+      <div className={styles.info}>
+        <p className={`${styles.name} ${styles.info__text}`}>닉네임 : {loginUser.nickname}</p>
+        <p className={`${styles.email} ${styles.info__text}`}>이메일 : {loginUser.email}</p>
       </div>
-      <ButtonProvider width={'icon'}>
-        <button type="button" onClick={handleClick} className={`button button__icon`}>
-            <i data-button="icon" className={`icon icon__edit__white`}></i>
-        </button>
-      </ButtonProvider>
+
+      <div className={`${styles.button__item}`}>
+        <ButtonProvider width={'icon'}>
+          <button type="button" onClick={handleClick} className={`button button__icon`}>
+            <i data-button="icon" className={`icon icon__edit__black`}></i>
+            <span className='blind'>내 프로필 수정</span>
+          </button>
+        </ButtonProvider>
+      </div>
     </div>
   );
 };

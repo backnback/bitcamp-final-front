@@ -18,6 +18,7 @@
 }
 
 .body__login {
+    overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,4 +54,10 @@
 
 .title__story__wrap .form__item {
     flex: 0 105px;
+}
+
+@media all and (max-width: 670px) {
+    .body__login {
+        overflow-x: auto;
+    }
 }
