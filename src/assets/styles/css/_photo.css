@@ -25,9 +25,7 @@
     position: relative;
 }
 
-.photo__layout__custom {
-
-}
+.photo__layout__custom {}
 
 
 .flicking-viewport {
@@ -68,7 +66,7 @@
 
 /* main photo일 때 표시되는 스타일 */
 .main-photo {
-    border: 2px solid #ff5c5c;
+    border: 2px solid white;
     /* 메인 사진을 강조 */
     justify-content: center;
 }
