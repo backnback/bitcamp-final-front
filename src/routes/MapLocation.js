@@ -135,6 +135,7 @@ function MapLocation() {
     };
 
     return (
+
         <div>
             {RenderComponent ? (
                 React.cloneElement(RenderComponent, {storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal})
