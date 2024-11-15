@@ -24,6 +24,14 @@ const StoryView = ({storyId}) => {
     }, []);
 
 
+
+    useEffect(() => {
+        if (storyViewDTO) {
+            console.log("Updated storyViewDTO:", storyViewDTO);
+        }
+    }, [storyViewDTO]);
+
+
     // accessToken이 설정된 경우에만 fetchList 호출
     useEffect(() => {
         if (accessToken) {
@@ -89,6 +97,7 @@ const StoryView = ({storyId}) => {
     };
 
 
+
     // 업데이트 버튼 처리
     const handleEdit = () => {
         const content = <StoryUpdateForm storyId={storyId}/>
@@ -126,6 +135,8 @@ const StoryView = ({storyId}) => {
             <PhotosProvider
                 photos={storyViewDTO.photos}
                 viewMode={true}
+                className="custom-photo-container"
+                mainPhotoIndex={storyViewDTO.mainPhotoIndex}
             />
             <p className={styles.content__box}>{storyViewDTO.content}</p>
 

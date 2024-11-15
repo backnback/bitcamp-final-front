@@ -1,14 +1,15 @@
-import { createContext, useContext, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Flicking from "@egjs/react-flicking";
 import "@egjs/react-flicking/dist/flicking.css";
 import { InputProvider } from '../components/InputProvider';
 
 
-export const PhotosProvider = ({ photos, viewMode, className, itemClassName, layout, onSelectMainPhoto }) => {
+export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, itemClassName, layout, onSelectMainPhoto }) => {
     const validPhotos = Array.isArray(photos) ? photos : [];
     const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 진행 중 상태
+    const [mainPhotoIdx, setMainPhotoIdx] = useState(mainPhotoIndex);
 
 
     const handleSelectMainPhoto = (index) => {
@@ -16,6 +17,7 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
             console.log("선택된 사진 index : ", index);
             onSelectMainPhoto(index); // 상위 컴포넌트로 선택한 대표 이미지 ID 전달
         }
+        setMainPhotoIdx(index);
     };
 
 
@@ -27,6 +29,7 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
         flickingRef.current.moveTo(index)
             .then(() => {
                 setIsAnimating(false); // 애니메이션이 끝나면 상태를 원래대로 복원
+                setCurrentIndex(index);
             })
             .catch((error) => {
                 setIsAnimating(false); // 애니메이션 도중 오류 발생 시 상태 복원
@@ -78,6 +81,25 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
     };
 
 
+    useEffect(() => {
+        // mainPhotoIdx가 변경될 때마다 슬라이드를 해당 인덱스로 이동시킴
+        if (flickingRef.current) {
+            let targetIndex = mainPhotoIdx;
+
+            // mainPhotoIdx가 마지막 인덱스일 경우, 그 인덱스에서 -2로 이동
+            if (mainPhotoIdx === validPhotos.length - 1) {
+                targetIndex = mainPhotoIdx - 2; // 마지막 인덱스에서 -2
+            }
+            // mainPhotoIdx가 마지막 직전 인덱스일 경우, 그 인덱스에서 -1로 이동
+            else if (mainPhotoIdx === validPhotos.length - 2) {
+                targetIndex = mainPhotoIdx - 1; // 마지막 직전 인덱스에서 -1
+            }
+
+            moveToSlide(targetIndex); // 최종적으로 결정된 인덱스로 이동
+        }
+    }, [mainPhotoIdx]);
+
+
     return (
         <div className={`photo__photos ${viewMode ? `` : `photo__photos__noMain`} ${className != null ? className : ``}`}>
             {validPhotos.length > 0 ? (
@@ -108,46 +130,23 @@ export const PhotosProvider = ({ photos, viewMode, className, itemClassName, lay
 
                                     {renderPhoto(photo)}
 
-                                    <img
-                                        src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
-                                        alt={`Photo ${photo.id}`}
-                                        className={`story-photo ${photo.mainPhoto ? 'main-photo' : ''}`}
-                                    />
-
-
-
                                     {viewMode ? (
                                         photo.mainPhoto && <span className="main-onelabel">대표</span>  // viewMode가 true일 때 대표 이미지만 표시
                                     ) : (
-                                        photo.mainPhoto ? (
-                                            <div className="main-label">
-                                                <InputProvider>
-                                                    <label htmlFor="radio02" className={`form__label form__label__radio`}>
-                                                        <input
-                                                            type='radio'
-                                                            className={`form__input`}
-                                                            id='radio01'
-                                                            name='라디오1'
-                                                            onChange={() => handleSelectMainPhoto(index)} />
-                                                        <span className={`input__text`}>대표이미지</span>
-                                                    </label>
-                                                </InputProvider>
-                                            </div>
-                                        ) : (
-                                            <div className="sub-label">
-                                                <InputProvider>
-                                                    <label htmlFor="radio02" className={`form__label form__label__radio`}>
-                                                        <input
-                                                            type='radio'
-                                                            className={`form__input`}
-                                                            id='radio02'
-                                                            name='라디오2'
-                                                            onChange={() => handleSelectMainPhoto(index)} />
-                                                        <span className={`input__text`}>대표이미지</span>
-                                                    </label>
-                                                </InputProvider>
-                                            </div>
-                                        )
+                                        <div className={index === mainPhotoIdx ? "main-label" : "sub-label"}>
+                                            <InputProvider>
+                                                <label htmlFor={`radio-${index}`} className={`form__label form__label__radio`}>
+                                                    <input
+                                                        type='radio'
+                                                        className={`form__input`}
+                                                        id={`radio-${index}`}
+                                                        name='라디오1'
+                                                        checked={index === mainPhotoIdx}  // 선택된 상태 반영
+                                                        onChange={() => handleSelectMainPhoto(index)} />
+                                                    <span className={`input__text`}>대표이미지</span>
+                                                </label>
+                                            </InputProvider>
+                                        </div>
                                     )}
                                 </div>
                             ))}
