@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
-import axios from 'axios'; // axios를 import하여 API 요청 사용
+import axiosInstance from '../components/AxiosInstance.js';
 import { StoryAddContext } from '../components/StoryItem';
 import StoryItemList from '../components/StoryItemList';
 import StoryAddForm from './StoryAddForm';
@@ -16,7 +16,7 @@ import styles from '../assets/styles/css/StoryItemList.module.css';
 
 const fetchStoryList = async (accessToken, sortByOption, searchQuery, setStoryList) => {
     try {
-        const response = await axios.get('http://localhost:8080/story/list', {
+        const response = await axiosInstance.get('/story/list', {
             params: {
                 title: searchQuery,
                 share: false,
@@ -85,7 +85,7 @@ const MyStoryList = () => {
 
         try {
             console.log(batchedLikes);
-            await axios.post('http://localhost:8080/like/batch-update', batchedLikes, {
+            await axiosInstance.post('/like/batch-update', batchedLikes, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -107,7 +107,7 @@ const MyStoryList = () => {
 
         try {
             console.log(batchedLocks);
-            await axios.post('http://localhost:8080/story/batch-update', batchedLocks, {
+            await axiosInstance.post('/story/batch-update', batchedLocks, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -153,7 +153,7 @@ const MyStoryList = () => {
         if (accessToken) {
             const fetchStoryList = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/story/list', {
+                    const response = await axiosInstance.get('/story/list', {
                         params: {
                             share: false,
                             sortBy: sortBy

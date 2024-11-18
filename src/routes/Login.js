@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
 import { useNavigate, Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { InputProvider } from "../components/InputProvider";
@@ -26,7 +26,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:8080/sign/in', {
+            const response = await axiosInstance.post('/sign/in', {
                 email: email,
                 password: password
             }, {
@@ -50,11 +50,11 @@ function Login() {
                     localStorage.removeItem('lastLoginEmail'); // 체크 해제 시 이메일 삭제
                 }
 
-                if(userInfo.auth == "ROLE_USER"){
-                navigate('/map');
-                window.location.reload();
-                }else{
-                    navigate('/admin');  
+                if (userInfo.auth == "ROLE_USER") {
+                    navigate('/map');
+                    window.location.reload();
+                } else {
+                    navigate('/admin');
                     window.location.reload();
                 }
             } else {

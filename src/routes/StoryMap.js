@@ -1,7 +1,7 @@
 import Map from '../components/Map';
 import styles from '../assets/styles/css/Map.css';
-import {useEffect, useState} from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axiosInstance from '../components/AxiosInstance';
 
 function StoryMap() {
     useEffect(() => {
@@ -13,7 +13,7 @@ function StoryMap() {
         if (accessToken) {
             const mapProvince = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/map', {
+                    const response = await axiosInstance.get('/map', {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -39,7 +39,7 @@ function StoryMap() {
 
     return (
         <div className={`map__container`}>
-            <Map storyList={mapStoryList}/>
+            <Map storyList={mapStoryList} />
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
 import StoryUpdateForm from './StoryUpdateForm';
 import Swal from 'sweetalert2';
 import StoryItemView from '../components/StoryItemView';
@@ -36,7 +36,7 @@ const StoryView = ({ storyId }) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                    const response = await axiosInstance.get(`/story/view/${storyId}`, {
                         params: {
                             share: false
                         },
@@ -71,7 +71,7 @@ const StoryView = ({ storyId }) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:8080/my-story/delete/${storyId}`, {
+                    await axiosInstance.delete(`/my-story/delete/${storyId}`, {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
