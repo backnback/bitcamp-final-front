@@ -11,20 +11,23 @@ import { ButtonProvider } from '../components/ButtonProvider';
 import { StoryTitleProvider } from '../components/TitleProvider.js';
 import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
+import UseScrollAlert from './UseScrollAlert.js';
 
-const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList) => {
+const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList, limit, setHasMore) => {
     try {
         const response = await axios.get('http://localhost:8080/story/list', {
             params: {
                 [option]: searchQuery,
                 share: true,
-                sortBy: sortByOption
+                sortBy: sortByOption,
+                limit
             },
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-        setStoryList(response.data);
+        setStoryList(response.data.stories);
+        setHasMore(response.data.hasMore);
     } catch (error) {
         console.error("There was an error", error);
     }
@@ -41,10 +44,24 @@ const ShareStoryList = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("title");
     const [sortBy, setSortBy] = useState("");
+    const [limit, setLimit] = useState(6);
+    const [hasMore, setHasMore] = useState(true);
 
+    const handleScrollEnd = () => {
+        if(hasMore){
+        setLimit((prevLimit) => prevLimit + 6);
+        }else{
+            alert("현재 가지고 올 수 있는 데이터를 모두 가지고 왔습니다.");
+        }
+    };
+    
+    UseScrollAlert(handleScrollEnd);
 
     // 정렬 옵션 변경
     const handleSortByChange = (event) => {
+        if(hasMore == false){
+            setHasMore(true);
+        }
         const sortByOption = event.target.value === "1" ? "과거순" : "";
         setSortBy(sortByOption);
         if (accessToken) {
@@ -70,6 +87,9 @@ const ShareStoryList = () => {
 
     // 검색 제출 버튼
     const handleSearchSubmit = (event) => {
+        if(hasMore == false){
+            setHasMore(true);
+        }
         event.preventDefault();
         if (accessToken) {
             fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
@@ -219,6 +239,12 @@ const ShareStoryList = () => {
             handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
         };
     }, [accessToken, batchedLikes, batchedLocks]);
+
+    useEffect(() => {
+        if (accessToken) {
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
+        }
+    }, [accessToken, limit]); // limit 변경 시 fetch 호출
 
     return (
         <div className={styles.list__content__wrap}>
