@@ -4,7 +4,7 @@ import "@egjs/react-flicking/dist/flicking.css";
 import { InputProvider } from '../components/InputProvider';
 
 
-export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, itemClassName, layout, onSelectMainPhoto }) => {
+export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, itemClassName, layout, onSelectMainPhoto, onAddPhoto }) => {
     const validPhotos = Array.isArray(photos) ? photos : [];
     const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -50,7 +50,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
     const moveRight = (event) => {
         if (isAnimating) return; // 애니메이션 진행 중일 때 이동 차단
         event.stopPropagation();
-        const newIndex = Math.min(currentIndex + 1, validPhotos.length - 3); // 최대 인덱스를 초과하지 않도록 설정
+        const newIndex = Math.min(currentIndex + 1, validPhotos.length - 2); // 최대 인덱스를 초과하지 않도록 설정
         setCurrentIndex(newIndex); // 인덱스 업데이트
         moveToSlide(newIndex); // 슬라이드 이동
     };
@@ -81,6 +81,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
     };
 
 
+
     useEffect(() => {
         // mainPhotoIdx가 변경될 때마다 슬라이드를 해당 인덱스로 이동시킴
         if (flickingRef.current) {
@@ -88,11 +89,11 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
 
             // mainPhotoIdx가 마지막 인덱스일 경우, 그 인덱스에서 -2로 이동
             if (mainPhotoIdx === validPhotos.length - 1) {
-                targetIndex = mainPhotoIdx - 2; // 마지막 인덱스에서 -2
+                targetIndex = mainPhotoIdx - 1; // 마지막 인덱스에서 -2
             }
             // mainPhotoIdx가 마지막 직전 인덱스일 경우, 그 인덱스에서 -1로 이동
             else if (mainPhotoIdx === validPhotos.length - 2) {
-                targetIndex = mainPhotoIdx - 1; // 마지막 직전 인덱스에서 -1
+                targetIndex = mainPhotoIdx; // 마지막 직전 인덱스에서 -1
             }
 
             moveToSlide(targetIndex); // 최종적으로 결정된 인덱스로 이동
@@ -150,11 +151,17 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                                     )}
                                 </div>
                             ))}
+                            <div className="photo__photoItem">
+                                <button type="button" className={`button button__story__add`} onClick={onAddPhoto}>
+                                    <span className={`blind`}>사진 등록</span>
+                                    <i className={`icon icon__plus__white`}></i>
+                                </button>
+                            </div>
                         </Flicking>
                         {/* 버튼을 추가하여 슬라이드를 이동 */}
                         <div className="slider__button">
                             {currentIndex > 0 && <button type="button" className="left" onClick={moveLeft}>◀</button>}
-                            {currentIndex < validPhotos.length - 3 && <button type="button" className="right" onClick={moveRight}>▶</button>}
+                            {currentIndex < validPhotos.length - 2 && <button type="button" className="right" onClick={moveRight}>▶</button>}
                         </div>
                     </div>
                 </div>

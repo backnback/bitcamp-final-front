@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from './components/AxiosInstance';
 import SignUp from "./routes/SignUp";
 import ViewUser from "./routes/ViewUser"; // ViewUser 컴포넌트 import
 import Login from "./routes/Login"; // Login 컴포넌트 import
@@ -12,6 +12,8 @@ import StoryAddForm from "./routes/StoryAddForm";
 import StoryUpdateForm from "./routes/StoryUpdateForm";
 import { UserProvider, useUser } from './UserContext'; // UserContext import
 
+
+
 function App() {
   // UserProvider 내부에서 useUser 훅을 호출하여 사용자 정보 가져오기
   const { user, logout } = useUser();
@@ -20,7 +22,7 @@ function App() {
   // 사용자 목록 가져오기 함수
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/user/list');
+      const response = await axiosInstance.get('/user/list');
       setUsers(response.data); // 사용자 목록 상태 업데이트
     } catch (error) {
       console.error("There was an error fetching the user!", error);

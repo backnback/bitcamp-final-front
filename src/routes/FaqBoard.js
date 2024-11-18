@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../assets/styles/css/Faq.module.css'; // 스타일 파일 임포트
-import axios from 'axios'; // axios를 import하여 API 요청 사용
+import axiosInstance from '../components/AxiosInstance';
+
 
 const FaqBoard = () => {
     const [faqs, setFaqs] = useState([]); // FAQ 목록 상태
@@ -25,7 +26,7 @@ const FaqBoard = () => {
         const fetchFaqs = async () => {
             if (accessToken) {
                 try {
-                    const response = await axios.get('http://localhost:8080/faqs', {
+                    const response = await axiosInstance.get('/faqs', {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }

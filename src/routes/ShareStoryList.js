@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
 // import './ShareStoryList.css'; // 스타일 파일 임포트
-import axios from 'axios'; // axios를 import하여 API 요청 사용
 import StoryItemList from "../components/StoryItemList";
 import ShareStoryView from './ShareStoryView.js';
 import useModals from '../useModals';
@@ -11,20 +10,24 @@ import { ButtonProvider } from '../components/ButtonProvider';
 import { StoryTitleProvider } from '../components/TitleProvider.js';
 import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
+import axiosInstance from '../components/AxiosInstance.js';
+import UseScrollAlert from './UseScrollAlert.js';
 
-const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList) => {
+const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList, limit, setHasMore) => {
     try {
-        const response = await axios.get('http://localhost:8080/story/list', {
+        const response = await axiosInstance.get('/story/list', {
             params: {
                 [option]: searchQuery,
                 share: true,
-                sortBy: sortByOption
+                sortBy: sortByOption,
+                limit
             },
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-        setStoryList(response.data);
+        setStoryList(response.data.stories);
+        setHasMore(response.data.hasMore);
     } catch (error) {
         console.error("There was an error", error);
     }
@@ -41,10 +44,24 @@ const ShareStoryList = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("title");
     const [sortBy, setSortBy] = useState("");
+    const [limit, setLimit] = useState(6);
+    const [hasMore, setHasMore] = useState(true);
 
+    const handleScrollEnd = () => {
+        if(hasMore){
+        setLimit((prevLimit) => prevLimit + 6);
+        }else{
+            alert("현재 가지고 올 수 있는 데이터를 모두 가지고 왔습니다.");
+        }
+    };
+    
+    UseScrollAlert(handleScrollEnd);
 
     // 정렬 옵션 변경
     const handleSortByChange = (event) => {
+        if(hasMore == false){
+            setHasMore(true);
+        }
         const sortByOption = event.target.value === "1" ? "과거순" : "";
         setSortBy(sortByOption);
         if (accessToken) {
@@ -70,6 +87,9 @@ const ShareStoryList = () => {
 
     // 검색 제출 버튼
     const handleSearchSubmit = (event) => {
+        if(hasMore == false){
+            setHasMore(true);
+        }
         event.preventDefault();
         if (accessToken) {
             fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
@@ -92,7 +112,7 @@ const ShareStoryList = () => {
 
         try {
             console.log(batchedLikes);
-            await axios.post('http://localhost:8080/like/batch-update', batchedLikes, {
+            await axiosInstance.post('/like/batch-update', batchedLikes, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -114,7 +134,7 @@ const ShareStoryList = () => {
 
         try {
             console.log(batchedLocks);
-            await axios.post('http://localhost:8080/story/batch-update', batchedLocks, {
+            await axiosInstance.post('/story/batch-update', batchedLocks, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -219,6 +239,12 @@ const ShareStoryList = () => {
             handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
         };
     }, [accessToken, batchedLikes, batchedLocks]);
+
+    useEffect(() => {
+        if (accessToken) {
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
+        }
+    }, [accessToken, limit]); // limit 변경 시 fetch 호출
 
     return (
         <div className={styles.list__content__wrap}>

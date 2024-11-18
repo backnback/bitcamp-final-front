@@ -3,7 +3,8 @@ import styles from '../assets/styles/css/FindEmail.module.css';
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
+
 
 const NewPassword = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const NewPassword = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/sign/newpassword', { email, password }, {
+            const response = await axiosInstance.post('/sign/newpassword', { email, password }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
