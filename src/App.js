@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from './components/AxiosInstance.js';
+
 import Header from "./components/Header";
 import SignUp from "./routes/SignUp";
 import ViewUser from "./routes/ViewUser"; // ViewUser 컴포넌트 import
@@ -66,7 +67,7 @@ function App() {
                     // 토큰이 만료되었으면, 재인증 작업 시작
                     const refreshToken = localStorage.getItem('refreshToken');
                     try {
-                        const response = await axios.post('http://localhost:8080/user/refreshtoken', {
+                        const response = await axiosInstance.post('/user/refreshtoken', {
                             refreshToken: refreshToken
                         }, {
                             headers: {

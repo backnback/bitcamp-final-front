@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { useNavigate } from 'react-router-dom';  // navigate 사용을 위해 추가
 
@@ -17,7 +17,7 @@ function AdminPage() {
                     throw new Error('토큰이 없습니다. 로그인 후 다시 시도해주세요.');
                 }
 
-                const response = await axios.get('http://localhost:8080/user/list', {
+                const response = await axiosInstance.get('/user/list', {
                     headers: {
                         'Authorization': `Bearer ${token}`,  // 헤더에 토큰 추가
                     },
@@ -36,7 +36,7 @@ function AdminPage() {
         console.log(userId);
         if (window.confirm("정말로 삭제하시겠습니까?")) {
             try {
-                const response = await axios.post('http://localhost:8080/user/admindelete', {
+                const response = await axiosInstance.post('/user/admindelete', {
                     userId: userId
                 }, {
                     headers: {

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styles from '../assets/styles/css/FindEmail.module.css';
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
+
 
 const FindEmail = () => {
     const [email, setEmail] = useState('');
@@ -10,14 +11,14 @@ const FindEmail = () => {
 
     const getUserEmail = async (e) => {
         e.preventDefault();
-      
+
         if (!email) {
             alert("이메일을 입력해주세요");
             return;
         }
-      
+
         try {
-            const response = await axios.post('http://localhost:8080/sign/findemail', { email }, {
+            const response = await axiosInstance.post('/sign/findemail', { email }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

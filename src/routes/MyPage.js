@@ -6,7 +6,7 @@ import likeStoryStyles from "../assets/styles/css/StoryItemList.module.css";
 import styles from '../assets/styles/css/MyPage.module.css';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
 // import './ShareStoryList.css'; // 스타일 파일 임포트
-import axios from 'axios'; // axios를 import하여 API 요청 사용
+import axiosInstance from '../components/AxiosInstance.js';
 import StoryItemList from "../components/StoryItemList";
 import AlarmCardList from "../components/AlarmCardList";
 import Profile from "../components/Profile";
@@ -41,7 +41,7 @@ const MyPage = () => {
 
         try {
             console.log(batchedLikes);
-            await axios.post('http://localhost:8080/like/batch-update', batchedLikes, {
+            await axiosInstance.post('/like/batch-update', batchedLikes, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -63,7 +63,7 @@ const MyPage = () => {
 
         try {
             console.log(batchedLocks);
-            await axios.post('http://localhost:8080/story/batch-update', batchedLocks, {
+            await axiosInstance.post('/story/batch-update', batchedLocks, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -77,14 +77,14 @@ const MyPage = () => {
     const confirmView = async (storyId, otherUserId) => {
         try {
             // storyId와 otherUserId를 URL 파라미터로 포함하여 GET 요청
-            await axios.get(`http://localhost:8080/like/confirm/${storyId}/${otherUserId}`, {
+            await axiosInstance.get(`/like/confirm/${storyId}/${otherUserId}`, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
 
             // 알림 목록을 다시 불러옵니다.
-            const response = await axios.get('http://localhost:8080/like/list/users', {
+            const response = await axiosInstance.get('/like/list/users', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -120,7 +120,7 @@ const MyPage = () => {
         if (accessToken) {
             const fetchStoryList = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/like/list/my-stories', {
+                    const response = await axiosInstance.get('/like/list/my-stories', {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -137,7 +137,7 @@ const MyPage = () => {
         if (accessToken) {
             const fetchUser = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/user/finduser', {
+                    const response = await axiosInstance.get('/user/finduser', {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -154,7 +154,7 @@ const MyPage = () => {
         if (accessToken) {
             const fetchAlarmListDTOs = async () => {
                 try {
-                    const response2 = await axios.get('http://localhost:8080/like/list/users', {
+                    const response2 = await axiosInstance.get('/like/list/users', {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }

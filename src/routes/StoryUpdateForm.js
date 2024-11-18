@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
+
 // import './StoryUpdateForm.css';
 import { InputProvider } from '../components/InputProvider';
 import { SelectProvider } from '../components/SelectProvider';
@@ -45,7 +46,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                    const response = await axiosInstance.get(`/story/view/${storyId}`, {
                         params: {
                             share: false
                         },
@@ -75,7 +76,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
     useEffect(() => {
         const fetchFirstNames = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/location/list');
+                const response = await axiosInstance.get('/location/list');
                 setFirstNames(response.data);
             } catch (error) {
                 console.error("로케이션 가져오는 중 오류가 발생했습니다!", error);
@@ -88,7 +89,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
         const fetchSecondNames = async () => {
             if (selectedFirstName) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/location/list/${selectedFirstName}`);
+                    const response = await axiosInstance.get(`/location/list/${selectedFirstName}`);
                     setSecondNames(response.data);
                 } catch (error) {
                     console.error("두 번째 이름 가져오는 중 오류가 발생했습니다!", error);
@@ -163,7 +164,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
 
         try {
             console.log(formData);
-            const response = await axios.post('http://localhost:8080/my-story/update', formData, {
+            const response = await axiosInstance.post('/my-story/update', formData, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'multipart/form-data',

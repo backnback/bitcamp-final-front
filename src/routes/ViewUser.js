@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
+
 
 function ViewUser() {
   const { id } = useParams();
@@ -15,7 +16,7 @@ function ViewUser() {
   // 사용자 정보 가져오기
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/user/finduser?id=${id}`);
+      const response = await axiosInstance.get(`/user/finduser?id=${id}`);
       setUser(response.data); // 사용자 정보를 가져오기 (배열이 아니라 객체일 경우)
     } catch (error) {
       console.error("사용자 정보를 가져오는 중 오류 발생:", error);
@@ -27,7 +28,7 @@ function ViewUser() {
     return <div>Loading...</div>; // 또는 다른 대체 UI
   }
 
-const handleUpdate = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault(); // 폼 기본 동작 방지
 
     // FormData 객체 생성
@@ -41,27 +42,27 @@ const handleUpdate = async (e) => {
     // 프로필 이미지 파일 추가
     const fileInput = e.target.profileImage; // 파일 input의 name 속성 확인
     if (fileInput && fileInput.files[0]) {
-        formData.append("file", fileInput.files[0]);
+      formData.append("file", fileInput.files[0]);
     }
 
     try {
-        // 사용자 정보 업데이트 요청
-        await axios.post(`http://localhost:8080/user/update`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
+      // 사용자 정보 업데이트 요청
+      await axiosInstance.post(`/user/update`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-        // 업데이트 후 app.js 페이지로 리다이렉트
-        window.location.replace('/'); // app.js 페이지로 이동
+      // 업데이트 후 app.js 페이지로 리다이렉트
+      window.location.replace('/'); // app.js 페이지로 이동
     } catch (error) {
-        console.error("사용자 정보를 업데이트하는 중 오류 발생:", error);
+      console.error("사용자 정보를 업데이트하는 중 오류 발생:", error);
     }
-};
+  };
 
   // 삭제하기 핸들러
   const handleDelete = async () => {
     try {
       // 사용자 삭제 요청 (DELETE 방식)
-      await axios.delete(`http://localhost:8080/user/delete/${user.id}`);
+      await axiosInstance.delete(`/user/delete/${user.id}`);
       // 삭제 후 app.js 페이지로 리다이렉트
       window.location.replace('/'); // app.js 페이지로 이동
     } catch (error) {

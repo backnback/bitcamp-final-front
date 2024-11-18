@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
 import StoryItemView from '../components/StoryItemView';
 
 
@@ -22,7 +22,7 @@ const ShareStoryView = ({ storyId }) => {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/story/view/${storyId}`, {
+                    const response = await axiosInstance.get(`/story/view/${storyId}`, {
                         params: {
                             share: true
                         },

@@ -1,5 +1,5 @@
 import ReactModal from 'react-modal';
-import axios from 'axios';
+import axiosInstance from './AxiosInstance';
 import UserEdit from './UserEdit';
 import Reauthenticate from './Reauthenticate';
 import { ButtonProvider } from './ButtonProvider';
@@ -21,7 +21,7 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:8080/user/userauthentication', {
+            const response = await axiosInstance.post('/user/userauthentication', {
                 password: password
             }, {
                 headers: {
@@ -50,7 +50,7 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
         formData.append('nickname', nickname);
         formData.append('profileImage', profileImage);
         try {
-            const response = await axios.post('http://localhost:8080/user/update', formData, {
+            const response = await axiosInstance.post('/user/update', formData, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 },
@@ -73,7 +73,7 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
         e.preventDefault();
         if (window.confirm("정말로 삭제하시겠습니까?")) {
             try {
-                const response = await axios.delete('http://localhost:8080/user/delete', {
+                const response = await axiosInstance.delete('/user/delete', {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                     },
