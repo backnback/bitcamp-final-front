@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import axiosInstance from '../components/AxiosInstance';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import MapSeoul from "../components/map/MapSeoul";
 import MapBusan from "../components/map/MapBusan";
@@ -21,36 +21,36 @@ import MapUlsan from "../components/map/MapUlsan";
 import MapNorthChungcheoung from "../components/map/MapNorthChungcheoung";
 import StoryAddForm from "./StoryAddForm";
 import useModals from "../useModals";
-import {modals} from "../components/Modals";
+import { modals } from "../components/Modals";
 import MapStoryList from "../components/MapStoryList";
 
 function MapLocation() {
-    const {locationId} = useParams(); // URL에서 ID 파라미터를 가져옴
+    const { locationId } = useParams(); // URL에서 ID 파라미터를 가져옴
     // const navigate = useNavigate(); // 페이지 이동을 위한 네비게이션 훅
     const [accessToken, setAccessToken] = useState(null);
     const [storyPhotoList, setStoryPhotoList] = useState(null);
     const [id, setId] = useState(null);
     const [storyList, setStoryList] = useState(null);
-    const {openModal} = useModals();
+    const { openModal } = useModals();
 
     const mapComponents = {
-        11: <MapSeoul/>,
-        26: <MapBusan/>,
-        27: <MapDaegu/>,
-        28: <MapIncheon/>,
-        29: <MapGwangju/>,
-        30: <MapDaejeon/>,
-        31: <MapUlsan/>,
-        36: <MapSejong/>,
-        41: <MapGyeonggi/>,
-        51: <MapGwangwon/>,
-        43: <MapNorthChungcheoung/>,
-        44: <MapSouthChungcheong/>,
-        52: <MapNorthJeolla/>,
-        46: <MapSouthJeolla/>,
-        47: <MapNorthGyeongsang/>,
-        48: <MapSouthGyeongsan/>,
-        50: <MapJeju/>
+        11: <MapSeoul />,
+        26: <MapBusan />,
+        27: <MapDaegu />,
+        28: <MapIncheon />,
+        29: <MapGwangju />,
+        30: <MapDaejeon />,
+        31: <MapUlsan />,
+        36: <MapSejong />,
+        41: <MapGyeonggi />,
+        51: <MapGwangwon />,
+        43: <MapNorthChungcheoung />,
+        44: <MapSouthChungcheong />,
+        52: <MapNorthJeolla />,
+        46: <MapSouthJeolla />,
+        47: <MapNorthGyeongsang />,
+        48: <MapSouthGyeongsan />,
+        50: <MapJeju />
     };
 
     const RenderComponent = mapComponents[locationId] || null;
@@ -66,7 +66,7 @@ function MapLocation() {
         if (accessToken) {
             const fetchStoryViewDTO = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/map/story/${locationId}`, {
+                    const response = await axiosInstance.get(`/map/story/${locationId}`, {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -84,7 +84,7 @@ function MapLocation() {
         if (id !== null && accessToken !== null) {
             const getList = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/map/story/${locationId}/${id}/list`, {
+                    const response = await axiosInstance.get(`/map/story/${locationId}/${id}/list`, {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
@@ -112,7 +112,7 @@ function MapLocation() {
     }, [storyList])
 
     const openAddModal = () => {
-        const content = <StoryAddForm provinceId={locationId} cityId={id}/>
+        const content = <StoryAddForm provinceId={locationId} cityId={id} />
         openModal(modals.storyEditModal, {
             content
         });
@@ -138,7 +138,7 @@ function MapLocation() {
 
         <div>
             {RenderComponent ? (
-                React.cloneElement(RenderComponent, {storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal})
+                React.cloneElement(RenderComponent, { storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal })
             ) : (
                 <div>Loading...</div>
             )}

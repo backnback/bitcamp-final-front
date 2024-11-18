@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
 // import './ShareStoryList.css'; // 스타일 파일 임포트
-import axios from 'axios'; // axios를 import하여 API 요청 사용
 import StoryItemList from "../components/StoryItemList";
 import ShareStoryView from './ShareStoryView.js';
 import useModals from '../useModals';
@@ -11,11 +10,12 @@ import { ButtonProvider } from '../components/ButtonProvider';
 import { StoryTitleProvider } from '../components/TitleProvider.js';
 import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
+import axiosInstance from '../components/AxiosInstance.js';
 import UseScrollAlert from './UseScrollAlert.js';
 
 const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList, limit, setHasMore) => {
     try {
-        const response = await axios.get('http://localhost:8080/story/list', {
+        const response = await axiosInstance.get('/story/list', {
             params: {
                 [option]: searchQuery,
                 share: true,
@@ -112,7 +112,7 @@ const ShareStoryList = () => {
 
         try {
             console.log(batchedLikes);
-            await axios.post('http://localhost:8080/like/batch-update', batchedLikes, {
+            await axiosInstance.post('/like/batch-update', batchedLikes, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -134,7 +134,7 @@ const ShareStoryList = () => {
 
         try {
             console.log(batchedLocks);
-            await axios.post('http://localhost:8080/story/batch-update', batchedLocks, {
+            await axiosInstance.post('/story/batch-update', batchedLocks, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }

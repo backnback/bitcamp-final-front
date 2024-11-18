@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../components/AxiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { InputProvider } from "../components/InputProvider";
 import { ButtonProvider } from '../components/ButtonProvider';
@@ -24,29 +24,29 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!isVerified) { // flag 대신 isVerified 사용
       alert("인증이 완료되지 않은 이메일입니다");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
     formData.append('nickname', nickname);
-  
+
     // 프로필 이미지가 있을 때만 추가
     if (profileImage) {
       formData.append('profileImage', profileImage);
     }
-  
+
     try {
-      const response = await axios.post('http://localhost:8080/sign/up', formData, {
+      const response = await axiosInstance.post('/sign/up', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       if (response.status === 200) {
         navigate('/');
       }
@@ -54,37 +54,37 @@ function SignUp() {
       console.error("회원가입 중 오류 발생:", error);
     }
   };
-  
+
 
   const getUserAuthCode = async (e) => {
     e.preventDefault();
-  
+
     if (!email) {
       alert("이메일을 입력해주세요");
       return;
     }
-  
+
     //이메일 중복 인증
     try {
-      const response = await axios.post('http://localhost:8080/sign/findemail', { email }, {
+      const response = await axiosInstance.post('/sign/findemail', { email }, {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
       });
-      
+
       if (!response.data) {
         setDuplication("사용가능한 이메일 입니다");
-  
+
         // 이메일 중복이 아니라면 인증 코드 발송
         try {
-          const authResponse = await axios.post('http://localhost:8080/sign/emailverification', { email }, {
+          const authResponse = await axiosInstance.post('/sign/emailverification', { email }, {
             headers: {
               'Content-Type': 'application/json',
             },
             withCredentials: true,
           });
-  
+
           if (authResponse.data) {
             alert("인증번호가 이메일로 발송되었습니다.");
           } else {
@@ -100,36 +100,36 @@ function SignUp() {
       console.error("이메일 중복 확인 중 오류 발생:", error);
     }
   };
-  
-  
 
-  
+
+
+
   const setUserAuthCode = async (e) => {
     e.preventDefault();
-  
+
     if (!authCode) {
       alert("인증번호를 입력해주세요");
       return;
     }
-  
+
     try {
-      const response = await axios.post('http://localhost:8080/sign/verificationcode', { authCode }, {
+      const response = await axiosInstance.post('/sign/verificationcode', { authCode }, {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true, // 쿠키 사용 시 설정
       });
-      if(response.data){
+      if (response.data) {
         alert("정상적으로 처리 되었습니다");
-        setIsVerified(true); 
-      }else{
+        setIsVerified(true);
+      } else {
         alert("인증코드가 알맞지 않습니다 다시입력해 주세요");
       }
     } catch (error) {
       console.error("인증번호 요청 중 오류 발생:", error);
     }
   };
-  
+
 
   return (
     <div className={styles.signupContainer}>
@@ -139,7 +139,7 @@ function SignUp() {
           <div className={styles.inputGroup}>
             <label>이메일 <span className={styles.required}>*</span></label>
             <span className={duplication.includes("사용가능한 이메일") ? styles.success : styles.error}>
-            {`${duplication}`}
+              {`${duplication}`}
             </span>
             <div className={styles.inputWrapper}>
               <InputProvider>
@@ -149,8 +149,8 @@ function SignUp() {
                   id="email01"
                   name="이메일"
                   value={email}
-                  placeholder="이메일 입력" 
-                  onChange={(e) => setEmail(e.target.value)} 
+                  placeholder="이메일 입력"
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </InputProvider>
@@ -164,22 +164,22 @@ function SignUp() {
           <div className={styles.inputGroup}>
             <label>인증번호 <span className={styles.required}>*</span></label>
             <div className={styles.inputWrapper}>
-            <InputProvider>
-              <input 
-                type="text" 
-                placeholder="인증번호" 
-                value={authCode} 
-                className="form__input" 
-                onChange={(e) => setAuthCode(e.target.value)}
-                required
-              />
-            </InputProvider>
-            <ButtonProvider>
+              <InputProvider>
+                <input
+                  type="text"
+                  placeholder="인증번호"
+                  value={authCode}
+                  className="form__input"
+                  onChange={(e) => setAuthCode(e.target.value)}
+                  required
+                />
+              </InputProvider>
+              <ButtonProvider>
                 <button type="button" className="button button__primary" onClick={setUserAuthCode}>
                   <span className="button__text">인증확인</span>
                 </button>
               </ButtonProvider>
-              </div>
+            </div>
           </div>
           <div className={styles.inputGroup}>
             <label>비밀번호 <span className={styles.required}>*</span></label>
@@ -190,7 +190,7 @@ function SignUp() {
                 id="pwd01"
                 name="비밀번호"
                 value={password}
-                placeholder="비밀번호" 
+                placeholder="비밀번호"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
@@ -199,11 +199,11 @@ function SignUp() {
           <div className={styles.inputGroup}>
             <label>닉네임 <span className={styles.required}>*</span></label>
             <InputProvider>
-              <input 
-                type="text" 
-                placeholder="닉네임" 
-                value={nickname} 
-                className="form__input" 
+              <input
+                type="text"
+                placeholder="닉네임"
+                value={nickname}
+                className="form__input"
                 onChange={(e) => setNickname(e.target.value)}
                 required
               />
@@ -211,7 +211,7 @@ function SignUp() {
           </div>
           <div className={styles.inputGroup}>
             <label>프로필 사진</label>
-            {profileImage && <span>{ "(" + profileImage.name+ ")"}</span>}
+            {profileImage && <span>{"(" + profileImage.name + ")"}</span>}
             <div className={styles.inputWrapper}>
               <InputProvider>
                 <label htmlFor="file01" className="form__label form__label__file">
