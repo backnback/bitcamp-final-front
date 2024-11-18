@@ -44,10 +44,15 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
             <div className={styles.top}>
                 <div className={styles.profile}>
                     <div className={styles.profile__link}>
-                        <span className={styles.profile__img__wrap}>
-                            {/* <img src={'/images/profile-default.png'} alt="" className={styles.profile__img} /> */}
-                            <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
-                                alt={`${profileName}의 프로필 이미지`} className={styles.profile__img} />
+                        <span className={`${styles.profile__img__wrap} ${profileImg || styles.profile__img__name__wrap}`}>
+                            {
+                                profileImg != null ?
+                                    <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
+                                        alt={`${profileName}의 프로필 이미지`} className={`${styles.profile__img} line1`} />
+                                    :
+                                    <span className={`${styles.profile__img__name} line1`}>{profileName != '' ? profileName : "Guest"}</span>
+                            }
+
                         </span>
                         {/* <span className={`${styles.profile__name} line1`}>제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토</span> */}
                         <span className={`${styles.profile__name} line1`}>{profileName}</span>
@@ -74,7 +79,7 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
             <div role="button" tabIndex={0} className={styles.middle} onClick={onClick}>
                 {/* <img src={"/images/sample.jpg"} alt={'story image'} className={`${styles.thumnail}`} /> */}
                 <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${storyThum}`}
-                    alt={'story image'} className={`${styles.thumnail}`} />
+                    alt={'story image'} className={`${styles.thumbnail}`} />
             </div>
             <div className={styles.bottom}>
                 <div className={styles.bottom__header}>

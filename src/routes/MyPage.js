@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Flicking, { ViewportSlot } from "@egjs/react-flicking";
 import { Arrow } from "@egjs/flicking-plugins";
-import "@egjs/flicking-plugins/dist/arrow.css";
 import likeStoryStyles from "../assets/styles/css/StoryItemList.module.css";
 import styles from '../assets/styles/css/MyPage.module.css';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
@@ -239,8 +238,12 @@ const MyPage = () => {
                             ))}
 
                             <ViewportSlot>
-                                <span className="flicking-arrow-prev is-thin"></span>
-                                <span className="flicking-arrow-next is-thin"></span>
+                                <button type='button' className="flicking-arrow-prev flicking-arrow-custom">
+                                    <span className='blind'>이전</span>
+                                </button>
+                                <button type='button' className="flicking-arrow-next flicking-arrow-custom">
+                                    <span className='blind'>다음</span>
+                                </button>
                             </ViewportSlot>
                         </Flicking>
                     </div>
@@ -253,6 +256,12 @@ const MyPage = () => {
                         handleModal={openStoryModal}
                     /> */}
                 </div>
+
+                <ButtonProvider width={'69'} className={`${styles.likeStory__more}`}>
+                    <button type="button" className={`button button__darkgray`}>
+                        <span className={`button__text`}>더보기</span>
+                    </button>
+                </ButtonProvider>
             </div>
 
             <div className={`${styles.box__wrap}`}>

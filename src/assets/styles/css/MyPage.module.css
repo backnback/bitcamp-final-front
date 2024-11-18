@@ -1,4 +1,5 @@
 .box__wrap {
+    position: relative;
     border-radius: var(--border-radius);
     padding: 23px 0;
     margin: 15px auto;
@@ -36,6 +37,12 @@
     left: auto;
     gap: 30px;
     padding: 20px;
+}
+
+.likeStory__more {
+    position: absolute;
+    top: 15px;
+    right: 20px;
 }
 
 .alarm__wrap {

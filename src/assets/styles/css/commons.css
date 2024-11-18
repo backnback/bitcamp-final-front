@@ -4,6 +4,7 @@
 @import url('_form.css');
 @import url('_modal.css');
 @import url('_photo.css');
+@import url('_slide.css');
 
 .blind {
     opacity: 0;
