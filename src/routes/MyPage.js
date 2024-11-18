@@ -1,4 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
+import Flicking, { ViewportSlot } from "@egjs/react-flicking";
+import { Arrow } from "@egjs/flicking-plugins";
+import "@egjs/flicking-plugins/dist/arrow.css";
+import likeStoryStyles from "../assets/styles/css/StoryItemList.module.css";
 import styles from '../assets/styles/css/MyPage.module.css';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
 // import './ShareStoryList.css'; // 스타일 파일 임포트
@@ -9,9 +13,14 @@ import Profile from "../components/Profile";
 import ShareStoryView from './ShareStoryView.js';
 import useModals from '../useModals';
 import { modals } from '../components/Modals';
+import StoryItem from '../components/StoryItem.js';
+import { useRef } from 'react';
+import { ButtonProvider } from '../components/ButtonProvider.js';
 
 
 const MyPage = () => {
+    const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
+    const _plugins = [new Arrow()];
     const [storyList, setStoryList] = useState([]); // 변수 이름을 stories로 수정
     const [alarmListDTOs, setAlarmListDTOs] = useState([]);
     const [user, setUser] = useState([]);
@@ -196,14 +205,53 @@ const MyPage = () => {
                 <div className={`${styles.title__wrap}`}>
                     <h3 className={`${styles.title}`}>좋아요한 스토리({storyList.length})</h3>
                 </div>
-                <div className={`${styles.content__wrap}`}>
-                    <StoryItemList
+                <div className={`${styles.content__wrap} ${styles.likeStory__wrap}`}>
+                    <div className={`${styles.likeStory__list__ul}`}>
+                        <Flicking
+                            // renderOnlyVisible={true}
+                            // ref={flickingRef} // Flicking에 ref 연결
+                            circular={false}  // 순환 슬라이드 여부
+                            align={'prev'}
+                            cameraTag={'ul'}
+                            plugins={_plugins}
+                        >
+                            {Array.isArray(storyList) && storyList.map(storyListDTO => (
+                                <li className={`${likeStoryStyles.list__item} ${styles.likeStory__list__item} flicking-panel`} key={storyListDTO.storyId}>
+                                    <StoryItem
+                                        storyPage={'like-story'}
+                                        storyId={storyListDTO.storyId}
+                                        profileImg={storyListDTO.userPath || 'default.png'} // 프로필 이미지
+                                        profileName={storyListDTO.userNickname} // 프로필 이름
+                                        currentLock={!storyListDTO.share} // 공유 여부
+                                        storyThum={storyListDTO.mainPhoto.path || 'default.png'} // 썸네일 이미지
+                                        currentLike={storyListDTO.likeStatus} // 좋아요 상태
+                                        currentLikeCount={storyListDTO.likeCount} // 좋아요 개수
+                                        storyTitle={storyListDTO.title} // 스토리 제목
+                                        storyContent={storyListDTO.content} // 스토리 내용
+                                        storyLocation={`${storyListDTO.locationFirstName} ${storyListDTO.locationDetail}`} // 위치 정보
+                                        storyDate={storyListDTO.travelDate} // 여행 날짜
+                                        onLikeChange={handleBatchedLikesChange}  // 좋아요 변경 시 호출할 함수 전달
+                                        onLockChange={handleBatchedLocksChange}
+                                        onClick={() => openStoryModal(storyListDTO.storyId)}
+                                    />
+                                </li>
+                                // <div className="flicking-panel" key={index}>{index + 1}</div>
+                            ))}
+
+                            <ViewportSlot>
+                                <span className="flicking-arrow-prev is-thin"></span>
+                                <span className="flicking-arrow-next is-thin"></span>
+                            </ViewportSlot>
+                        </Flicking>
+                    </div>
+
+                    {/* <StoryItemList
                         storyPage={'like-story'}
                         storyList={storyList}
                         onBatchedLikesChange={handleBatchedLikesChange}
                         onBatchedLocksChange={handleBatchedLocksChange}
                         handleModal={openStoryModal}
-                    />
+                    /> */}
                 </div>
             </div>
 

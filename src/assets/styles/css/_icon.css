@@ -29,12 +29,44 @@
     background-image: url("data:image/svg+xml,%3Csvg width='80' height='81' viewBox='0 0 80 81' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M39.9998 17.6405V64.3072M16.6665 40.9738H63.3332' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
 }
 
-.icon__arrow__right__black {
+.icon__back__black {
     width: 35px;
     height: 35px;
     background-size: 35px;
     background-position: center;
     background-image: url("data:image/svg+xml,%3Csvg width='35' height='35' viewBox='0 0 35 35' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.125 26.25L21.875 17.5L13.125 8.75' stroke='%231E1E1E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+}
+
+.icon__up__black {
+    width: 10px;
+    height: 6px;
+    background-size: contain;
+    background-position: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M 1 5 L 5 1 L 9 5' stroke='%231E1E1E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.icon__right__black {
+    width: 6px;
+    height: 10px;
+    background-size: contain;
+    background-position: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='10' viewBox='0 0 6 10' fill='none'%3E%3Cpath d='M 1 9 L 5 5 L 1 1' stroke='%231E1E1E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E");
+}
+
+.icon__down__black {
+    width: 10px;
+    height: 6px;
+    background-size: contain;
+    background-position: center;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231E1E1E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+}
+
+.icon__left__black {
+    width: 6px;
+    height: 10px;
+    background-size: contain;
+    background-position: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='10' viewBox='0 0 6 10' fill='none'%3E%3Cpath d='M 5 9 L 1 5 L 5 1' stroke='%231E1E1E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E");
 }
 
 .icon__edit__black {
@@ -113,7 +145,6 @@
     background-image: url("data:image/svg+xml,%3Csvg width='21' height='22' viewBox='0 0 21 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.375 18.875L14.5687 15.0687M16.625 10.125C16.625 13.991 13.491 17.125 9.625 17.125C5.75901 17.125 2.625 13.991 2.625 10.125C2.625 6.25901 5.75901 3.125 9.625 3.125C13.491 3.125 16.625 6.25901 16.625 10.125Z' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
     /* background-image: url("../../../../public/images/icon/icon-search.png"); */
 }
-
 
 [class*=icon__heart] {
     width: 25px;

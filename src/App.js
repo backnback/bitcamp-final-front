@@ -144,8 +144,6 @@ function App() {
                                     <Route path="/find-email" element={<FindEmail />} /> {/* 이메일 찾기 페이지 */}
                                     <Route path="/find-password" element={<FindPassword />} /> {/* 비번 찾기 페이지 */}
                                     <Route path="/newPassword" element={<NewPassword />} /> {/* 비번 재생성 페이지 */}
-
-                                    {/* <Route path="/form/test" element={<FormStyles />} /> */}
                                 </Routes>
                             </div>
                         </div>

@@ -125,7 +125,7 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
 
                 <ButtonProvider width={'icon'}>
                     <button type="button" className={`button button__icon`} onClick={handleClickCancel}>
-                        <i data-button="icon" className={`icon icon__arrow__right__black`}></i>
+                        <i data-button="icon" className={`icon icon__back__black`}></i>
                         <span className={`blind`}>닫기</span>
                     </button>
                 </ButtonProvider>
