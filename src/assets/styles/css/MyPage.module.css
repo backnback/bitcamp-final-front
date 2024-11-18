@@ -23,6 +23,21 @@
     padding: 20px;
 }
 
+.likeStory__wrap {
+    padding: 0;
+}
+
+.likeStory__list__ul [class*=flicking-viewport] {
+    width: auto;
+    height: auto;
+}
+
+.likeStory__list__ul [class*=flicking-camera] {
+    left: auto;
+    gap: 30px;
+    padding: 20px;
+}
+
 .alarm__wrap {
     overflow: auto;
     height: 400px;
