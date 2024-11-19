@@ -38,7 +38,7 @@ const ShareStoryList = () => {
     const [accessToken, setAccessToken] = useState(null); // accessToken 상태 추가
     const navigate = useNavigate(); // navigate 함수를 사용하여 페이지 이동
     const { token } = localStorage.getItem('accessToken');
-    const [batchedLikes, setBatchedLikes] = useState([]);
+    const [isThrottled, setIsThrottled] = useState(false);
     const [batchedLocks, setBatchedLocks] = useState([]);
     const { openModal } = useModals();
     const [searchQuery, setSearchQuery] = useState("");
@@ -48,18 +48,18 @@ const ShareStoryList = () => {
     const [hasMore, setHasMore] = useState(true);
 
     const handleScrollEnd = () => {
-        if(hasMore){
-        setLimit((prevLimit) => prevLimit + 6);
-        }else{
+        if (hasMore) {
+            setLimit((prevLimit) => prevLimit + 6);
+        } else {
             alert("현재 가지고 올 수 있는 데이터를 모두 가지고 왔습니다.");
         }
     };
-    
+
     UseScrollAlert(handleScrollEnd);
 
     // 정렬 옵션 변경
     const handleSortByChange = (event) => {
-        if(hasMore == false){
+        if (hasMore == false) {
             setHasMore(true);
         }
         const sortByOption = event.target.value === "1" ? "과거순" : "";
@@ -87,7 +87,7 @@ const ShareStoryList = () => {
 
     // 검색 제출 버튼
     const handleSearchSubmit = (event) => {
-        if(hasMore == false){
+        if (hasMore == false) {
             setHasMore(true);
         }
         event.preventDefault();
@@ -101,27 +101,32 @@ const ShareStoryList = () => {
         setBatchedLocks([]);
     };
 
-    // StoryItemList에서 모아둔 like 변경 사항을 저장하는 함수
-    const handleBatchedLikesChange = (newBatchedLikes) => {
-        setBatchedLikes(newBatchedLikes);
-    };
 
-    // 페이지 이동이나 새로고침 시, 서버에 좋아요 변경 사항 전송
-    const handleSubmitLikes = async () => {
-        if (batchedLikes.length === 0) return;
+    // 좋아요 처리
+    const handleLikeChange = async (storyId, action) => {
+        if (isThrottled) {
+            console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
+            return;
+        }
+
+        setIsThrottled(true); // 클릭 비활성화
 
         try {
-            console.log(batchedLikes);
-            await axiosInstance.post('/like/batch-update', batchedLikes, {
+            await axiosInstance.post('/like/update', { storyId, action }, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-            setBatchedLikes([]); // 전송 후 초기화
+            console.log('좋아요 상태 변경 성공');
         } catch (error) {
             console.error("좋아요 변경 사항 전송 중 에러 발생", error);
+        } finally {
+            // 500ms 이후 클릭 활성화
+            setTimeout(() => setIsThrottled(false), 500);
         }
     };
+
+
 
     // StoryItemList에서 모아둔 Lock 변경 사항을 저장하는 함수
     const handleBatchedLocksChange = (newBatchedLocks) => {
@@ -221,24 +226,21 @@ const ShareStoryList = () => {
 
         // 페이지 새로고침 시 전송
         const handleBeforeUnload = () => {
-            handleSubmitLikes();  // 좋아요 변경 사항 전송
             handleSubmitLocks();  // 공유 변경 사항 전송
         };
 
         // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLocks, handleSubmitLikes);
+        window.addEventListener('beforeunload', handleSubmitLocks);
 
         // 페이지 이동 시 전송
         const unlisten = navigate((location) => {
-            handleSubmitLikes();
             handleSubmitLocks();
         });
         return () => {
-            window.removeEventListener('beforeunload', handleSubmitLocks, handleSubmitLikes);
-            handleSubmitLikes(); // 컴포넌트 언마운트 시에도 전송
+            window.removeEventListener('beforeunload', handleSubmitLocks);
             handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
         };
-    }, [accessToken, batchedLikes, batchedLocks]);
+    }, [accessToken, batchedLocks]);
 
     useEffect(() => {
         if (accessToken) {
@@ -311,7 +313,7 @@ const ShareStoryList = () => {
                 <StoryItemList
                     storyPage={`share-story`}
                     storyList={storyList}
-                    onBatchedLikesChange={handleBatchedLikesChange}
+                    onLikeChange={handleLikeChange}
                     onBatchedLocksChange={handleBatchedLocksChange}
                     handleModal={openStoryModal}
                 />

@@ -5,15 +5,12 @@ import StoryItem from '../components/StoryItem';
 import { StoryAddContext } from '../components/StoryItem';
 
 
-function StoryItemList({ storyPage, storyList, onAddStory, onBatchedLikesChange, onBatchedLocksChange, handleModal }) {
-    const [batchedLikes, setBatchedLikes] = useState([]);
+function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onBatchedLocksChange, handleModal }) {
     const [batchedLocks, setBatchedLocks] = useState([]);
 
     const handleLikeChange = (storyId, action) => {
         console.log(`Story ID: ${storyId}, Action: ${action}`);
-        setBatchedLikes((prev) => [...prev, { storyId, action }]);
-        onBatchedLikesChange(batchedLikes);  // 즉시 변경 사항 전달
-        return batchedLikes;
+        onLikeChange(storyId, action);
     };
 
     // useEffect(() => {
@@ -35,14 +32,10 @@ function StoryItemList({ storyPage, storyList, onAddStory, onBatchedLikesChange,
     };
 
     useEffect(() => {
-        if (batchedLikes.length > 0) {
-            onBatchedLikesChange(batchedLikes);
-        }
-
         if (batchedLocks.length > 0) {
             onBatchedLocksChange(batchedLocks);
         }
-    }, [batchedLikes, batchedLocks]);
+    }, [batchedLocks]);
 
     return (
         <div className={styles.list}>
