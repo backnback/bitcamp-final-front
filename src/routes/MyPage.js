@@ -16,6 +16,7 @@ import { modals } from '../components/Modals';
 import StoryItem from '../components/StoryItem.js';
 import { useRef } from 'react';
 import { ButtonProvider } from '../components/ButtonProvider.js';
+import Swal from 'sweetalert2';
 
 
 const MyPage = () => {
@@ -25,54 +26,36 @@ const MyPage = () => {
     const [alarmListDTOs, setAlarmListDTOs] = useState([]);
     const [user, setUser] = useState([]);
     const navigate = useNavigate(); // navigate 함수를 사용하여 페이지 이동
-    const [batchedLikes, setBatchedLikes] = useState([]);
+    const [isThrottled, setIsThrottled] = useState(false);
     const [batchedLocks, setBatchedLocks] = useState([]);
     const [accessToken, setAccessToken] = useState(null);
     const { openModal } = useModals();
 
-    // StoryItemList에서 모아둔 like 변경 사항을 저장하는 함수
-    const handleBatchedLikesChange = (newBatchedLikes) => {
-        setBatchedLikes(newBatchedLikes);
-    };
 
-    // 페이지 이동이나 새로고침 시, 서버에 좋아요 변경 사항 전송
-    const handleSubmitLikes = async () => {
-        if (batchedLikes.length === 0) return;
+    // 좋아요 처리
+    const handleLikeChange = async (storyId, action) => {
+        if (isThrottled) {
+            console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
+            return;
+        }
+
+        setIsThrottled(true); // 클릭 비활성화
 
         try {
-            console.log(batchedLikes);
-            await axiosInstance.post('/like/batch-update', batchedLikes, {
+            await axiosInstance.post('/like/update', { storyId, action }, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-            setBatchedLikes([]); // 전송 후 초기화
+            console.log('좋아요 상태 변경 성공');
         } catch (error) {
             console.error("좋아요 변경 사항 전송 중 에러 발생", error);
+        } finally {
+            // 500ms 이후 클릭 활성화
+            setTimeout(() => setIsThrottled(false), 500);
         }
     };
 
-    // StoryItemList에서 모아둔 Lock 변경 사항을 저장하는 함수
-    const handleBatchedLocksChange = (newBatchedLocks) => {
-        setBatchedLocks(newBatchedLocks);
-    };
-
-    // 페이지 이동이나 새로고침 시, 서버에 공유 변경 사항 전송
-    const handleSubmitLocks = async () => {
-        if (batchedLocks.length === 0) return;
-
-        try {
-            console.log(batchedLocks);
-            await axiosInstance.post('/story/batch-update', batchedLocks, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-            setBatchedLocks([]); // 전송 후 초기화
-        } catch (error) {
-            console.error("공유 변경 사항 전송 중 에러 발생", error);
-        }
-    };
 
     const confirmView = async (storyId, otherUserId) => {
         try {
@@ -168,33 +151,7 @@ const MyPage = () => {
         }
     }, [accessToken]);
 
-    useEffect(() => {
-        // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLikes);
 
-        // 페이지 이동 시 전송
-        const unlisten = navigate((location) => {
-            handleSubmitLikes();
-        });
-        return () => {
-            window.removeEventListener('beforeunload', handleSubmitLikes);
-            handleSubmitLikes(); // 컴포넌트 언마운트 시에도 전송
-        };
-    }, [batchedLikes]);
-
-    useEffect(() => {
-        // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLocks);
-
-        // 페이지 이동 시 전송
-        const unlisten = navigate((location) => {
-            handleSubmitLocks();
-        });
-        return () => {
-            window.removeEventListener('beforeunload', handleSubmitLocks);
-            handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
-        };
-    }, [batchedLocks]);
 
     return (
         <div className={`${styles.container}`}>
@@ -230,8 +187,7 @@ const MyPage = () => {
                                         storyContent={storyListDTO.content} // 스토리 내용
                                         storyLocation={`${storyListDTO.locationFirstName} ${storyListDTO.locationDetail}`} // 위치 정보
                                         storyDate={storyListDTO.travelDate} // 여행 날짜
-                                        onLikeChange={handleBatchedLikesChange}  // 좋아요 변경 시 호출할 함수 전달
-                                        onLockChange={handleBatchedLocksChange}
+                                        onLikeChange={handleLikeChange}  // 좋아요 변경 시 호출할 함수 전달
                                         onClick={() => openStoryModal(storyListDTO.storyId)}
                                     />
                                 </li>
