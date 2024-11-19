@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
+import "@egjs/flicking-plugins/dist/arrow.css";
 import './assets/styles/css/reset.css';
 // import styles
 import "@egjs/flicking/dist/flicking.css"; // Supports IE10+, using CSS flex
@@ -17,9 +18,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-        <ModalsProvider>
-          <App />
-        </ModalsProvider>
+      <ModalsProvider>
+        <App />
+      </ModalsProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

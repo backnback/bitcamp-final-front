@@ -54,11 +54,23 @@
     align-items: center;
     width: 25px;
     height: 25px;
+    border: 1px solid var(--color-profile-border);
+    border-radius: 100%;
+    text-align: center;
+}
+
+.profile__img__name__wrap {
+    background-color: var(--color-primary);
 }
 
 .profile__img {
     aspect-ratio: 1/1;
     border-radius: 100%;
+}
+
+.profile__img__name {
+    color: var(--color-white);
+    font-size: var(--font-size-text);
 }
 
 .profile__name {
@@ -68,6 +80,7 @@
 .middle {
     overflow: hidden;
     flex: 0 213px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,7 +88,14 @@
     background-color: var(--color-gray-f5);
 }
 
-.thumbnail {}
+.middle::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
 
 .bottom {
     overflow: hidden;
