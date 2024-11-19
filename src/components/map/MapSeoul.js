@@ -1,12 +1,6 @@
-import {createContext, createElement, useContext, useEffect} from "react";
-import {createPath} from "react-router-dom";
-import * as d3 from 'd3';
+import {useEffect, useRef, useState} from "react";
 
-const LocationMap = createContext();
-
-export const useLocationMapContext = () => useContext(LocationMap);
-
-export const LocationMapeSvg = ({gId, gClassName, eventClick, pathD}) => {
+export const LocationMapSvg = ({gId, gClassName, eventClick, pathD}) => {
     return (
         <g id={gId} className={`province ${gClassName}`} role="button" tabIndex="0" onClick={eventClick}>
             <path
@@ -15,10 +9,6 @@ export const LocationMapeSvg = ({gId, gClassName, eventClick, pathD}) => {
         </g>
     );
 }
-
-const LocationActive = createContext();
-
-export const useLocationActiveContext = () => useContext(LocationActive);
 
 export const LocationActiveSvg = ({
                                       gId,
@@ -29,23 +19,97 @@ export const LocationActiveSvg = ({
                                       pathId,
                                       imgHref,
                                       imgId,
-                                      imgWidth,
-                                      imgHeight,
-                                      imgX,
-                                      imgY,
                                   }) => {
+
+    const pathRef = useRef(null);
+    const imgRef = useRef(null);
+
+    const [imageDimensions, setImageDimensions] = useState({
+        width: 0,
+        height: 0,
+    });
+
+    useEffect(() => {
+        const image = new Image();
+
+        image.onload = () => {
+            // 원본 이미지가 로드된 후 크기 값을 가져옴
+            setImageDimensions({
+                width: image.width,  // 원본 이미지의 width
+                height: image.height,  // 원본 이미지의 height
+            });
+            console.log(imgId, "imgWidth", image.width, "imgHeight", image.height)
+
+        };
+        // 이미지 소스를 설정하여 로드 시작
+        image.src = imgHref;
+    }, [imgHref]);
+
+    useEffect(() => {
+        if (imageDimensions.width === 0 || imageDimensions.height === 0) return;
+
+        const imageTag = imgRef.current;
+        // console.log(imageTag)
+        const pathTag = pathRef.current;
+        // console.log(pathTag)
+
+        const pathBox = pathTag.getBBox();
+
+        let imgWidth, imgHeight, imgX, imgY;
+
+        // 이미지가 정사각형일 때 크기 조정
+        if (imageDimensions.width === imageDimensions.height) {
+            // 더 큰 값을 기준으로 크기 설정
+            const scaleFactor = Math.max(pathBox.width, pathBox.height) / imageDimensions.width;
+
+            imgWidth = imageDimensions.width * scaleFactor;
+            imgHeight = imageDimensions.height * scaleFactor;
+
+            // 중심 좌표를 기준으로 배치
+            imgX = pathBox.x + (pathBox.width - imgWidth) / 2;
+            imgY = pathBox.y + (pathBox.height - imgHeight) / 2;
+        } else {
+            // 비율이 다른 경우 기존 로직 적용
+            if (imageDimensions.width > imageDimensions.height) {
+                imgHeight = pathBox.height;
+                imgWidth = (imageDimensions.width / imageDimensions.height) * pathBox.height;
+                imgX = pathBox.x + (pathBox.width - imgWidth) / 2;
+                imgY = pathBox.y;
+            } else {
+                imgWidth = pathBox.width;
+                imgHeight = (imageDimensions.height / imageDimensions.width) * pathBox.width;
+                imgX = pathBox.x;
+                imgY = pathBox.y + (pathBox.height - imgHeight) / 2;
+            }
+        }
+
+        // 이미지 속성 설정
+        imageTag.setAttribute("width", imgWidth);
+        imageTag.setAttribute("height", imgHeight);
+        imageTag.setAttribute("x", imgX);
+        imageTag.setAttribute("y", imgY);
+
+    }, [imageDimensions]); // imgHref가 변경될 때마다 이미지 정보를 업데이트
+
     return (
         <g id={gId} className={`province ${gClassName}`} role="button" tabIndex="0" onClick={eventClick}>
             <defs>
                 <clipPath id={clipPathId}>
                     <path
+                        ref={pathRef}
                         d={pathD}
                         id={pathId}/>
                 </clipPath>
             </defs>
+
             <image
+                ref={imgRef}
                 href={imgHref}
-                clipPath={`url(#${clipPathId})`} id={imgId} width={imgWidth} height={imgHeight} x={imgX} y={imgY}/>
+                clipPath={`url(#${clipPathId})`} id={imgId}/>
+
+            {/*<image*/}
+            {/*    href={imgHref}*/}
+            {/*    clipPath={`url(#${clipPathId})`} id={imgId} width={imgWidth} height={imgHeight} x={imgX} y={imgY}/>*/}
             <use href={`#${pathId}`} fill={`url(#${imgId})`}/>
         </g>
     );
@@ -85,31 +149,16 @@ const MapSeoul = ({storyPhotoList, eventClick, openListModal, openAddModal}) => 
     //     // const svg = document.getElementById('서울특별시_시군구');
     //     // const buttons = svg.querySelectorAll('g[role=button]');
     //
-    //     console.dir(svg);
+    //     // console.dir(svg);
     //     for (const button of buttons) {
     //         console.dir(button);
-    //         const path = document.querySelector("#p680");
-    //         const image = document.querySelector('#img680');
+    //         const path = document.querySelector(`#${pathId}`);
+    //         const image = document.querySelector(`#${imgId}`);
     //         const pathBox = path.getBBox();
     //
     //         // console.log(pathBox, image.style.x )
     //
-    //         if (image.style.width > image.style.height) {
-    //             image.style.width = 'auto';
-    //             image.style.height = pathBox.height;
-    //             image.style.x = pathBox.x - ((pathBox.width / 2) / 2);
-    //             image.style.y = pathBox.y;
-    //         } else if (image.style.width < image.style.height) {
-    //             image.style.width = pathBox.width;
-    //             image.style.height = 'auto';
-    //             image.style.y = pathBox.y - ((pathBox.height / 2) / 2);
-    //             image.style.x = pathBox.x;
-    //         } else {
-    //             image.style.width = 'auto';
-    //             image.style.height = pathBox.height;
-    //             image.style.x = pathBox.x;
-    //             image.style.y = pathBox.y;
-    //         }
+    //
     //     }
     // }
 
@@ -117,14 +166,15 @@ const MapSeoul = ({storyPhotoList, eventClick, openListModal, openAddModal}) => 
     //     const svg = document.getElementById('서울특별시_시군구');
     //     const buttons = svg.querySelectorAll('g[role=button]');
     //
-    //     console.dir(svg);
+    //     // console.dir(svg);
     //     for (const button of buttons) {
-    //     console.dir(button);
-    //     const path = document.querySelector("#p680");
-    //     const image = document.querySelector('#img680');
+    //     // console.dir(button);
+    //
+    //     const path = document.querySelector();
+    //     const image = document.querySelector();
     //     const pathBox = path.getBBox();
     //
-    //     // console.log(pathBox, image.style.x )
+    //     // console.log(pathBox, image.style.x)
     //
     //     if (image.style.width > image.style.height) {
     //         image.style.width = 'auto';
@@ -170,18 +220,16 @@ const MapSeoul = ({storyPhotoList, eventClick, openListModal, openAddModal}) => 
                                             imgId={key}
                                         />
                                     );
-                                } else if (item.mainPhotoPath == null) {
+                                } else {
                                     return (
-                                        <LocationMapeSvg
+                                        <LocationMapSvg
                                             key={`map-${key}`}
-                                            gId={"g" + key}
+                                            gId={key}
                                             gClassName={key}
                                             pathD={path}
                                             eventClick={eventClick}
                                         />
                                     );
-                                } else {
-                                    return null;
                                 }
                             })
                         ) : null
