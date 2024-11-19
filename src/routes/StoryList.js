@@ -40,7 +40,6 @@ const MyStoryList = () => {
     const [accessToken, setAccessToken] = useState(null);
     const navigate = useNavigate(); // navigate 함수를 사용하여 페이지 이동
     const [isThrottled, setIsThrottled] = useState(false);
-    const [batchedLocks, setBatchedLocks] = useState([]);
     const { openModal } = useModals();
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("");
@@ -75,7 +74,7 @@ const MyStoryList = () => {
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
         if (event.target.value == '') {
-            setBatchedLocks([]);
+            fetchStoryList(accessToken, sortBy, '', setStoryList, limit, setHasMore);
         }
     };
 
@@ -92,7 +91,7 @@ const MyStoryList = () => {
 
     const handleSearchDelete = (event) => {
         setSearchQuery((value) => value = '');
-        setBatchedLocks([]);
+        fetchStoryList(accessToken, sortBy, '', setStoryList, limit, setHasMore);
     }
 
 
@@ -121,26 +120,27 @@ const MyStoryList = () => {
     };
 
 
+    // 공유 처리
+    const handleLockChange = async (storyId, action) => {
+        if (isThrottled) {
+            console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
+            return;
+        }
 
-    // StoryItemList에서 모아둔 Lock 변경 사항을 저장하는 함수
-    const handleBatchedLocksChange = (newBatchedLocks) => {
-        setBatchedLocks(newBatchedLocks);
-    };
-
-    // 페이지 이동이나 새로고침 시, 서버에 공유 변경 사항 전송
-    const handleSubmitLocks = async () => {
-        if (batchedLocks.length === 0) return;
+        setIsThrottled(true); // 클릭 비활성화
 
         try {
-            console.log(batchedLocks);
-            await axiosInstance.post('/story/batch-update', batchedLocks, {
+            await axiosInstance.post('/story/share-update', { storyId, action }, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-            setBatchedLocks([]); // 전송 후 초기화
+            console.log('공유 상태 변경 성공');
         } catch (error) {
             console.error("공유 변경 사항 전송 중 에러 발생", error);
+        } finally {
+            // 500ms 이후 클릭 활성화
+            setTimeout(() => setIsThrottled(false), 500);
         }
     };
 
@@ -196,18 +196,7 @@ const MyStoryList = () => {
             fetchStoryList();
         }
 
-        // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLocks);
-
-        // 페이지 이동 시 전송
-        const unlisten = navigate((location) => {
-            handleSubmitLocks();
-        });
-        return () => {
-            window.removeEventListener('beforeunload', handleSubmitLocks);
-            handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
-        };
-    }, [accessToken, batchedLocks]);
+    }, [accessToken]);
 
     useEffect(() => {
         if (accessToken) {
@@ -280,7 +269,7 @@ const MyStoryList = () => {
                     storyList={storyList}
                     onAddStory={openAddModal}
                     onLikeChange={handleLikeChange}
-                    onBatchedLocksChange={handleBatchedLocksChange}
+                    onLockChange={handleLockChange}
                     handleModal={openStoryModal}
                 />
             </div>

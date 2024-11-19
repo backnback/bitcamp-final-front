@@ -5,37 +5,23 @@ import StoryItem from '../components/StoryItem';
 import { StoryAddContext } from '../components/StoryItem';
 
 
-function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onBatchedLocksChange, handleModal }) {
-    const [batchedLocks, setBatchedLocks] = useState([]);
+function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onLockChange, handleModal }) {
 
     const handleLikeChange = (storyId, action) => {
         console.log(`Story ID: ${storyId}, Action: ${action}`);
         onLikeChange(storyId, action);
     };
 
-    // useEffect(() => {
-    //     if (batchedLikes.length > 0) {
-    //         onBatchedLikesChange(batchedLikes);
-    //     }
-    // }, [batchedLikes]);
-
 
     const handleLockChange = (storyId, action) => {
         console.log(`Story ID: ${storyId}, Action: ${action}`);
-        setBatchedLocks((prev) => [...prev, { storyId, action }]);
-        onBatchedLocksChange(batchedLocks);  // 즉시 변경 사항 전달
-        return batchedLocks;
+        onLockChange(storyId, action);  // 즉시 변경 사항 전달
     };
 
     const handleModalWithStoryId = (storyId) => {
         handleModal(storyId);
     };
 
-    useEffect(() => {
-        if (batchedLocks.length > 0) {
-            onBatchedLocksChange(batchedLocks);
-        }
-    }, [batchedLocks]);
 
     return (
         <div className={styles.list}>

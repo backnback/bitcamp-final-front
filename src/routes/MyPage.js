@@ -32,7 +32,6 @@ const MyPage = () => {
     const { openModal } = useModals();
 
 
-
     // 좋아요 처리
     const handleLikeChange = async (storyId, action) => {
         if (isThrottled) {
@@ -57,28 +56,6 @@ const MyPage = () => {
         }
     };
 
-
-    // StoryItemList에서 모아둔 Lock 변경 사항을 저장하는 함수
-    const handleBatchedLocksChange = (newBatchedLocks) => {
-        setBatchedLocks(newBatchedLocks);
-    };
-
-    // 페이지 이동이나 새로고침 시, 서버에 공유 변경 사항 전송
-    const handleSubmitLocks = async () => {
-        if (batchedLocks.length === 0) return;
-
-        try {
-            console.log(batchedLocks);
-            await axiosInstance.post('/story/batch-update', batchedLocks, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-            setBatchedLocks([]); // 전송 후 초기화
-        } catch (error) {
-            console.error("공유 변경 사항 전송 중 에러 발생", error);
-        }
-    };
 
     const confirmView = async (storyId, otherUserId) => {
         try {
@@ -175,19 +152,6 @@ const MyPage = () => {
     }, [accessToken]);
 
 
-    useEffect(() => {
-        // 페이지 새로고침 시 전송
-        window.addEventListener('beforeunload', handleSubmitLocks);
-
-        // 페이지 이동 시 전송
-        const unlisten = navigate((location) => {
-            handleSubmitLocks();
-        });
-        return () => {
-            window.removeEventListener('beforeunload', handleSubmitLocks);
-            handleSubmitLocks(); // 컴포넌트 언마운트 시에도 전송
-        };
-    }, [batchedLocks]);
 
     return (
         <div className={`${styles.container}`}>
@@ -224,7 +188,6 @@ const MyPage = () => {
                                         storyLocation={`${storyListDTO.locationFirstName} ${storyListDTO.locationDetail}`} // 위치 정보
                                         storyDate={storyListDTO.travelDate} // 여행 날짜
                                         onLikeChange={handleLikeChange}  // 좋아요 변경 시 호출할 함수 전달
-                                        onLockChange={handleBatchedLocksChange}
                                         onClick={() => openStoryModal(storyListDTO.storyId)}
                                     />
                                 </li>
