@@ -1,44 +1,121 @@
-import { createContext, createElement, useContext, useEffect } from "react";
-import { createPath } from "react-router-dom";
-import * as d3 from 'd3';
+import {useEffect, useRef, useState} from "react";
 
-const LocationMap = createContext();
-
-export const useLocationMapContext = () => useContext(LocationMap);
-
-export const LocationMapeSvg = ({ gId, gClassName, eventClick, pathD }) => {
+export const LocationMapSvg = ({gId, gClassName, eventClick, pathD}) => {
     return (
         <g id={gId} className={`province ${gClassName}`} role="button" tabIndex="0" onClick={eventClick}>
             <path
                 d={pathD}
-                id={gId} />
+                id={gId}/>
         </g>
     );
 }
 
-const LocationActive = createContext();
+export const LocationActiveSvg = ({
+                                      gId,
+                                      gClassName,
+                                      eventClick,
+                                      clipPathId,
+                                      pathD,
+                                      pathId,
+                                      imgHref,
+                                      imgId,
+                                  }) => {
 
-export const useLocationActiveContext = () => useContext(LocationActive);
+    const pathRef = useRef(null);
+    const imgRef = useRef(null);
 
-export const LocationActiveSvg = ({ gId, gClassName, eventClick, clipPathId, pathD, pathId, imgHref, imgClipPathUrl, imgId, imgWidth, imgHeight, imgX, imgY, useHref, useFill }) => {
+    const [imageDimensions, setImageDimensions] = useState({
+        width: 0,
+        height: 0,
+    });
+
+    useEffect(() => {
+        const image = new Image();
+
+        image.onload = () => {
+            // 원본 이미지가 로드된 후 크기 값을 가져옴
+            setImageDimensions({
+                width: image.width,  // 원본 이미지의 width
+                height: image.height,  // 원본 이미지의 height
+            });
+            console.log(imgId, "imgWidth", image.width, "imgHeight", image.height)
+
+        };
+        // 이미지 소스를 설정하여 로드 시작
+        image.src = imgHref;
+    }, [imgHref]);
+
+    useEffect(() => {
+        if (imageDimensions.width === 0 || imageDimensions.height === 0) return;
+
+        const imageTag = imgRef.current;
+        // console.log(imageTag)
+        const pathTag = pathRef.current;
+        // console.log(pathTag)
+
+        const pathBox = pathTag.getBBox();
+
+        let imgWidth, imgHeight, imgX, imgY;
+
+        // 이미지가 정사각형일 때 크기 조정
+        if (imageDimensions.width === imageDimensions.height) {
+            // 더 큰 값을 기준으로 크기 설정
+            const scaleFactor = Math.max(pathBox.width, pathBox.height) / imageDimensions.width;
+
+            imgWidth = imageDimensions.width * scaleFactor;
+            imgHeight = imageDimensions.height * scaleFactor;
+
+            // 중심 좌표를 기준으로 배치
+            imgX = pathBox.x + (pathBox.width - imgWidth) / 2;
+            imgY = pathBox.y + (pathBox.height - imgHeight) / 2;
+        } else {
+            // 비율이 다른 경우 기존 로직 적용
+            if (imageDimensions.width > imageDimensions.height) {
+                imgHeight = pathBox.height;
+                imgWidth = (imageDimensions.width / imageDimensions.height) * pathBox.height;
+                imgX = pathBox.x + (pathBox.width - imgWidth) / 2;
+                imgY = pathBox.y;
+            } else {
+                imgWidth = pathBox.width;
+                imgHeight = (imageDimensions.height / imageDimensions.width) * pathBox.width;
+                imgX = pathBox.x;
+                imgY = pathBox.y + (pathBox.height - imgHeight) / 2;
+            }
+        }
+
+        // 이미지 속성 설정
+        imageTag.setAttribute("width", imgWidth);
+        imageTag.setAttribute("height", imgHeight);
+        imageTag.setAttribute("x", imgX);
+        imageTag.setAttribute("y", imgY);
+
+    }, [imageDimensions]); // imgHref가 변경될 때마다 이미지 정보를 업데이트
+
     return (
         <g id={gId} className={`province ${gClassName}`} role="button" tabIndex="0" onClick={eventClick}>
             <defs>
                 <clipPath id={clipPathId}>
                     <path
+                        ref={pathRef}
                         d={pathD}
-                        id={pathId} />
+                        id={pathId}/>
                 </clipPath>
             </defs>
+
             <image
+                ref={imgRef}
                 href={imgHref}
-                clipPath={`url(${imgClipPathUrl})`} id={imgId} width={imgWidth} height={imgHeight} x={imgX} y={imgY} />
-            <use href={useHref} fill={`url(${useFill})`} />
+                clipPath={`url(#${clipPathId})`} id={imgId}/>
+
+            {/*<image*/}
+            {/*    href={imgHref}*/}
+            {/*    clipPath={`url(#${clipPathId})`} id={imgId} width={imgWidth} height={imgHeight} x={imgX} y={imgY}/>*/}
+            <use href={`#${pathId}`} fill={`url(#${imgId})`}/>
         </g>
     );
 }
 
-const MapSeoul = ({ storyPhotoList, eventClick, openListModal, openAddModal }) => {
+const MapSeoul = ({storyPhotoList, eventClick, openListModal, openAddModal}) => {
 
     const mapPaths = {
         680: "M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z",
@@ -68,71 +145,95 @@ const MapSeoul = ({ storyPhotoList, eventClick, openListModal, openAddModal }) =
         260: "M 640.36 313.06 620.16 322.88 596.34 317.48 579.58 260.23 582.88 230.27 581.03 211.22 612.12 199.51 649.89 199.48 670.5 203.04 673.95 238.02 666.25 248.9 656.13 289.69 640.36 313.06 Z"
     }
 
-    useEffect(() => {
-
-
-
-    }, []);
-
-    // useEffect(() => {
+    // const imagePosition = () => {
     //     // const svg = document.getElementById('서울특별시_시군구');
     //     // const buttons = svg.querySelectorAll('g[role=button]');
     //
     //     // console.dir(svg);
-    //     // for (const button of buttons) {
-    //         // console.dir(button);
-    //         const path = document.querySelector("#p680");
-    //         const image = document.querySelector('#img680');
+    //     for (const button of buttons) {
+    //         console.dir(button);
+    //         const path = document.querySelector(`#${pathId}`);
+    //         const image = document.querySelector(`#${imgId}`);
     //         const pathBox = path.getBBox();
     //
     //         // console.log(pathBox, image.style.x )
     //
-    //         if (image.style.width > image.style.height) {
-    //             image.style.width = 'auto';
-    //             image.style.height = pathBox.height;
-    //             image.style.x = pathBox.x - ((pathBox.width / 2) / 2);
-    //             image.style.y = pathBox.y;
-    //         } else if (image.style.width < image.style.height) {
-    //             image.style.width = pathBox.width;
-    //             image.style.height = 'auto';
-    //             image.style.y = pathBox.y - ((pathBox.height / 2) / 2);
-    //             image.style.x = pathBox.x;
-    //         } else {
-    //             image.style.width = 'auto';
-    //             image.style.height = pathBox.height;
-    //             image.style.x = pathBox.x;
-    //             image.style.y = pathBox.y;
-    //         }
-    //     // }
+    //
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     const svg = document.getElementById('서울특별시_시군구');
+    //     const buttons = svg.querySelectorAll('g[role=button]');
+    //
+    //     // console.dir(svg);
+    //     for (const button of buttons) {
+    //     // console.dir(button);
+    //
+    //     const path = document.querySelector();
+    //     const image = document.querySelector();
+    //     const pathBox = path.getBBox();
+    //
+    //     // console.log(pathBox, image.style.x)
+    //
+    //     if (image.style.width > image.style.height) {
+    //         image.style.width = 'auto';
+    //         image.style.height = pathBox.height;
+    //         image.style.x = pathBox.x - ((pathBox.width / 2) / 2);
+    //         image.style.y = pathBox.y;
+    //     } else if (image.style.width < image.style.height) {
+    //         image.style.width = pathBox.width;
+    //         image.style.height = 'auto';
+    //         image.style.y = pathBox.y - ((pathBox.height / 2) / 2);
+    //         image.style.x = pathBox.x;
+    //     } else {
+    //         image.style.width = 'auto';
+    //         image.style.height = pathBox.height;
+    //         image.style.x = pathBox.x;
+    //         image.style.y = pathBox.y;
+    //     }
+    //     }
     // }, []);
 
     return (
         <div className={`city__wrap`}>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="800" viewBox="0 0 800 667"
-                strokeLinecap="round" strokeLinejoin="round" id="서울특별시_시군구" className={`city__list`}>
+                 strokeLinecap="round" strokeLinejoin="round" id="서울특별시_시군구" className={`city__list`}>
                 <g id="서울특별시_시군구_경계">
+                    {
+                        storyPhotoList && storyPhotoList.length > 0 ? (
+                            storyPhotoList.map((item) => {
+                                const key = item.id.toString().slice(-3); // 유일한 key 생성
+                                const path = mapPaths[key]; // mapPaths에서 해당 key의 path 가져오기
 
-                    <LocationMapeSvg />
-                    <LocationActiveSvg />
-                    {/*폴리곤*/}
-                    {/*<polygon*/}
-                    {/*    points="553.2,423.42 554.4,425.2 575.01,432.66 577.2,458.2 579.3,485.93 605.4,492.4 629.82,501.86 641.1,510.2 653.08,519.63 670.2,544.2 684.54,574.67 678.1,578.4 671.43,585.15 655.8,585.1 645.91,585.11 636.2,590.1 628.14,599.12 623.1,588.8 618.95,572.87 605.1,561.4 592.77,553.08 582.6,560.2 570.56,566.86 556.6,570.2 542.27,571.45 533.1,549.2 524.33,528.33 517.6,529.4 509.72,530.38 495.2,500.4 485.27,465.09 481.6,452.4 478.6,438.95 469.4,434.2 460.71,429.63 469.4,419.2 478.01,409.22 500.2,406.2 522.57,405.01 537.2,414.2 553.2,423.42"*/}
-                    {/*    fill="red" stroke="black"/>*/}
-
-                    {/*패쓰*/}
-                    {/* <g id="680" className={`province`} role="button" tabIndex="0" onClick={eventClick}>
-                        <defs>
-                            <clipPath id="680_clipPath">
-                                <path
-                                    d="M 553.2 423.42 575.01 432.66 579.3 485.93 629.82 501.86 653.08 519.63 684.54 574.67 671.43 585.15 645.91 585.11 628.14 599.12 618.95 572.87 592.77 553.08 570.56 566.86 542.27 571.45 524.33 528.33 509.72 530.38 485.27 465.09 478.6 438.95 460.71 429.63 478.01 409.22 522.57 405.01 553.2 423.42 Z"
-                                    id="p680" />
-                            </clipPath>
-                        </defs>
-                        <image
-                            href="https://helpx.adobe.com/content/dam/help/en/photoshop/using/quick-actions/remove-background-before-qa1.png"
-                            clipPath="url(#680_clipPath)" id="img680" />
-                        <use href="#p680" fill="url(#img680)" />
-                    </g> */}
+                                if (item.mainPhotoPath !== null) {
+                                    return (
+                                        <LocationActiveSvg
+                                            key={`active-${key}`}
+                                            gId={key}
+                                            gClassName={key}
+                                            eventClick={eventClick}
+                                            clipPathId={"clip" + key}
+                                            pathId={key}
+                                            pathD={path}
+                                            imgHref={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${item.mainPhotoPath}`}
+                                            imgId={key}
+                                        />
+                                    );
+                                } else {
+                                    return (
+                                        <LocationMapSvg
+                                            key={`map-${key}`}
+                                            gId={key}
+                                            gClassName={key}
+                                            pathD={path}
+                                            eventClick={eventClick}
+                                        />
+                                    );
+                                }
+                            })
+                        ) : null
+                    }
                 </g>
             </svg>
         </div>

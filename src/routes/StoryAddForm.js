@@ -88,7 +88,13 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
 
 
     const handleFileChange = (event) => {
-        setFiles(Array.from(event.target.files));
+        const uploadedFiles = Array.from(event.target.files);
+        setFiles(uploadedFiles);
+    
+        // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
+        if (uploadedFiles.length === 1) {
+            setMainPhotoIndex(0);
+        }
     };
 
     const handleSubmit = async (event) => {
