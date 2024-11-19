@@ -49,8 +49,16 @@ const ShareStoryList = () => {
 
     const handleScrollEnd = () => {
         if(hasMore){
+            window.scrollBy({
+                top: -100, 
+                behavior: 'smooth', 
+            });
         setLimit((prevLimit) => prevLimit + 6);
         }else{
+            window.scrollBy({
+                top: -100, 
+                behavior: 'smooth', 
+            });
             alert("현재 가지고 올 수 있는 데이터를 모두 가지고 왔습니다.");
         }
     };

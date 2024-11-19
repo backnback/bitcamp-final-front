@@ -44,13 +44,21 @@ const MyStoryList = () => {
     const { openModal } = useModals();
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("");
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(6);
     const [hasMore, setHasMore] = useState(true);
 
     const handleScrollEnd = () => {
         if(hasMore){
-        setLimit((prevLimit) => prevLimit + 5);
+            window.scrollBy({
+                top: -100, 
+                behavior: 'smooth', 
+            });
+        setLimit((prevLimit) => prevLimit + 6);
         }else{
+            window.scrollBy({
+                top: -100, 
+                behavior: 'smooth',
+            });
             alert("현재 가지고 올 수 있는 데이터를 모두 가지고 왔습니다.");
         }
     };
