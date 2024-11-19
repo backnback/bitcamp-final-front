@@ -48,7 +48,6 @@ const MyStoryList = () => {
 
 
     const handleScrollEnd = () => {
-<<<<<<< HEAD
         if(hasMore){
             window.scrollBy({
                 top: -100, 
@@ -60,14 +59,8 @@ const MyStoryList = () => {
                 top: -100, 
                 behavior: 'smooth',
             });
-=======
-        if (hasMore) {
-            setLimit((prevLimit) => prevLimit + 5);
-        } else {
->>>>>>> 1399333e2b403760b78a3659c739b9a0bb2aeea0
-            alert("현재 가지고 올 수 있는 데이터를 모두 가지고 왔습니다.");
-        }
-    };
+        };
+    }
 
     UseScrollAlert(handleScrollEnd);
 
