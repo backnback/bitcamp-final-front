@@ -40,6 +40,7 @@ import Map from "./components/Map";
 import { jwtDecode } from "jwt-decode";
 import MapLocation from "./routes/MapLocation";
 import SlideTest from "./routes/SlideTest";
+import LikeStoryList from "./routes/LikeStoryList.js";
 
 function App() {
     // UserProvider 내부에서 useUser 훅을 호출하여 사용자 정보 가져오기
@@ -187,6 +188,7 @@ function App() {
 
                                     <Route path="/viewuser/:id" element={<ViewUser />} /> {/* 특정 사용자 보기 */}
                                     <Route path="/share-story/list" element={<ShareStoryList />} /> {/* 스토리 목록 페이지 */}
+                                    <Route path="/like-story/list" element={<LikeStoryList />} /> {/* 좋아요한 스토리 목록 페이지 */}
                                     <Route path="/my-story/list" element={<StoryList />} /> {/* 스토리 목록 페이지 */}
                                     <Route path="/my-page" element={<MyPage />} /> {/* 마이 페이지 */}
                                     <Route path="/my-story/form/add" element={<StoryAddForm />} /> {/* 스토리 추가 */}

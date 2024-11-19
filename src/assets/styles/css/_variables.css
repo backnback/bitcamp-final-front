@@ -53,6 +53,7 @@
     --color-blue-83-button-hover: rgba(123, 192, 236, 0.9);
 
     --color-profile-border: var(--color-blue-83-20);
+    --color-textInput-label: var(--color-gray-1e);
     --color-mypage-box: #83CDFB12;
 
     /* padding, margin */

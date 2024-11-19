@@ -257,11 +257,11 @@ const MyPage = () => {
                     /> */}
                 </div>
 
-                <ButtonProvider width={'69'} className={`${styles.likeStory__more}`}>
-                    <button type="button" className={`button button__darkgray`}>
+                <div className={`${styles.likeStory__more}`}>
+                    <Link to={`/like-story/list`} className={`button button__darkgray`}>
                         <span className={`button__text`}>더보기</span>
-                    </button>
-                </ButtonProvider>
+                    </Link>
+                </div>
             </div>
 
             <div className={`${styles.box__wrap}`}>

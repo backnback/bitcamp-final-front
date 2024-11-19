@@ -49,3 +49,30 @@
     overflow: auto;
     height: 400px;
 }
+
+.userEdit__profile__img__wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 166px;
+    height: 166px;
+    margin: 0 auto 50px;
+    border: 1px solid var(--color-profile-border);
+    border-radius: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.userEdit__profile__img__name__wrap {
+    background-color: var(--color-primary);
+}
+
+.userEdit__profile__img {
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+}
+
+.userEdit__profile__img__name {
+    color: var(--color-white);
+    font-size: var(--font-size-h4);
+}

@@ -1,10 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InputProvider } from "./InputProvider";
 import axiosInstance from './AxiosInstance';
-
-const UserEditContext = createContext();
-
-export const useStoryAddEditContext = () => useContext(UserEditContext);
+import styles from '../assets/styles/css/MyPage.module.css';
 
 const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, setProfileImage, accessToken }) => {
     const [filename, setFilename] = useState('');
@@ -49,50 +46,61 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
     };
 
     return (
-        <div>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%'
-                }}
-            >
-                <img
+        <div className={`${styles.userEdit__wrap}`}>
+            <div className={`${styles.userEdit__profile__wrap}`}>
+                <label htmlFor="userEditFile" className={`${styles.userEdit__profile__img__wrap} ${profileImage || styles.userEdit__profile__img__name__wrap}`}>
+                    {
+                        filename != '' ?
+                            <img
+                                src={profileImage ? URL.createObjectURL(profileImage) : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${filename}`}
+                                // onClick={handleImageClick} // 이미지 클릭 시 파일 선택창 열리도록 처리
+                                alt="프로필 사진"
+                                className={`${styles.userEdit__profile__img}`}
+                            />
+                            :
+                            <span className={`${styles.userEdit__profile__img__name} line1`}>{nickname != null ? nickname : "Guest"}</span>
+
+                    }
+                    <i className='icon icon__profile__file'></i>
+                    <input type='file' className={`blind`} id="userEditFile" onChange={handleImageChange} />
+                </label>
+                {/* <img
                     src={profileImage ? URL.createObjectURL(profileImage) : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${filename}`}
-                    style={{ width: '200px', height: '200px', borderRadius: '50%', objectFit: 'cover', cursor: 'pointer', border: '2px solid black' }}
                     onClick={handleImageClick} // 이미지 클릭 시 파일 선택창 열리도록 처리
                     alt="프로필 사진"
-                />
-                <input
+                /> */}
+                {/* <input
                     type="file"
                     className="blind"
                     id="file01"
                     onChange={handleImageChange}
                     style={{ display: 'none' }}
-                />
+                /> */}
             </div>
-            <label>닉네임</label>
-            <InputProvider>
-                <input
-                    value={nickname}
-                    className={`form__input`}
-                    onChange={(e) => setNickname(e.target.value)}
-                />
-            </InputProvider>
-            <label>비밀번호</label>
-            <InputProvider>
-                <input
-                    type="password"
-                    className="form__input"
-                    id="pwd01"
-                    name="비밀번호"
-                    value={password}
-                    placeholder="비밀번호"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </InputProvider>
+            <div>
+                <InputProvider label={`닉네임`} inputId={`nickname01`} required={true}>
+                    <input
+                        value={nickname}
+                        id='nickname01'
+                        className={`form__input`}
+                        placeholder='닉네임을 입력해주세요.'
+                        onChange={(e) => setNickname(e.target.value)}
+                        required
+                    />
+                </InputProvider>
+
+                <InputProvider label={`비밀번호`} inputId={`pwd01`}>
+                    <input
+                        type="password"
+                        className="form__input"
+                        id="pwd01"
+                        name="비밀번호"
+                        value={password}
+                        placeholder="비밀번호를 입력해주세요."
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </InputProvider>
+            </div>
         </div>
     );
 }

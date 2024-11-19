@@ -1,13 +1,12 @@
-import ReactModal from 'react-modal';
 import axiosInstance from './AxiosInstance';
 import UserEdit from './UserEdit';
-import Reauthenticate from './Reauthenticate';
 import { ButtonProvider } from './ButtonProvider';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { InputProvider } from './InputProvider';
 
 
-const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = true }) => {
+const ReauthenticateModal = () => {
 
     const [password, setPassword] = useState('');
     const [nickname, setNickname] = useState('');
@@ -40,7 +39,6 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
             console.error("마이페이지 회원인증 요청 중 오류 발생:", error);
             alert("마이페이지 회원인증 오류가 발생했습니다. 나중에 다시 시도해주세요.");
         }
-
     };
 
     const handleClickEditSubmit = async (e) => {
@@ -99,11 +97,6 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
         }
     };
 
-
-    const handleClickCancel = () => {
-        onClose();
-    };
-
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token) {
@@ -114,39 +107,26 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
     }, []);
 
     return (
-        <ReactModal
-            isOpen
-            onRequestClose={onClose}
-            shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
-            className="modal modal-right"
-            overlayClassName="modal-overlay">
-
-            <div className='modal__hedader'>
-
-                <ButtonProvider width={'icon'}>
-                    <button type="button" className={`button button__icon`} onClick={handleClickCancel}>
-                        <i data-button="icon" className={`icon icon__back__black`}></i>
-                        <span className={`blind`}>닫기</span>
-                    </button>
-                </ButtonProvider>
-            </div>
+        <>
             {currentUser ?
                 <>
                     <div className='modal__body'>
-                        <UserEdit password={password} setPassword={setPassword}
-                            nickname={nickname} setNickname={setNickname}
-                            profileImage={profileImage}
-                            setProfileImage={setProfileImage} accessToken={accessToken} />
+                        <form id='form-userEdit'>
+                            <UserEdit password={password} setPassword={setPassword}
+                                nickname={nickname} setNickname={setNickname}
+                                profileImage={profileImage}
+                                setProfileImage={setProfileImage} accessToken={accessToken} />
+                        </form>
                     </div>
 
                     <div className='modal__footer'>
-                        <ButtonProvider>
-                            <button type="button" className={`button button__primary`} onClick={handleClickEditSubmit}>
+                        <ButtonProvider width={'130'}>
+                            <button type="button" className={`button button__primary`} form='#form-userEdit' onClick={handleClickEditSubmit}>
                                 <span className={`button__text`}>수정하기</span>
                             </button>
                         </ButtonProvider>
-                        <ButtonProvider>
-                            <button type="button" className={`button button__whiteRed`} onClick={deleteUser}>
+                        <ButtonProvider width={'130'}>
+                            <button type="button" className={`button button__whiteRed`} form='#form-userEdit' onClick={deleteUser}>
                                 <span className={`button__text`}>탈퇴하기</span>
                             </button>
                         </ButtonProvider>
@@ -155,20 +135,33 @@ const ReauthenticateModal = ({ onSubmit, onClose, shouldCloseOnOverlayClick = tr
                 :
                 <>
                     <div className='modal__body'>
-                        <Reauthenticate password={password} setPassword={setPassword} />
+                        <form id='form-userPassword' onSubmit={handleClickSubmit}>
+                            <InputProvider label={'비밀번호'} inputId={'pwd01'}>
+                                <input
+                                    type="password"
+                                    className="form__input"
+                                    id="pwd01"
+                                    name="비밀번호"
+                                    value={password}
+                                    placeholder="비밀번호를 입력해주세요."
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </InputProvider>
+                            {/* <Reauthenticate password={password} setPassword={setPassword} /> */}
+                        </form>
                     </div>
 
                     <div className='modal__footer'>
                         <ButtonProvider>
-                            <button type="button" className={`button button__primary`} onClick={handleClickSubmit}>
+                            <button type="button" className={`button button__primary`} form='#form-userPassword' onClick={handleClickSubmit}>
                                 <span className={`button__text`}>확인</span>
                             </button>
                         </ButtonProvider>
                     </div>
                 </>
             }
-
-        </ReactModal>
+        </>
     );
 };
 

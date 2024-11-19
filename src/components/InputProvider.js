@@ -4,9 +4,15 @@ const Input = createContext();
 
 export const useFormContext = () => useContext(Input);
 
-export const InputProvider = ({ children, type, className }) => {
+export const InputProvider = ({ label, inputId, labelClassName, children, type, className, required }) => {
     return (
         <div className={`form__item form__item__input ${className ? className : ``}`}>
+            {label ?
+                <label htmlFor={`${inputId}`} className={`form__label__textInput ${labelClassName != null ? labelClassName : ``}`}>
+                    {label}
+                    {required ? <span className='required__red'>*</span> : ``}
+                </label> :
+                ''}
             <div className={`form__input__wrap`}>
                 <Input.Provider value={type}>
                     {children}
