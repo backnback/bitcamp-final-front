@@ -50,13 +50,13 @@ const MyStoryList = () => {
     const handleScrollEnd = () => {
         if (hasMore) {
             window.scrollBy({
-                top: -100,
+                top: -50,
                 behavior: 'smooth',
             });
             setLimit((prevLimit) => prevLimit + 6);
         } else {
             window.scrollBy({
-                top: -100,
+                top: -50,
                 behavior: 'smooth',
             });
         };
@@ -183,36 +183,23 @@ const MyStoryList = () => {
     };
 
     useEffect(() => {
-        // 로컬 스토리지에서 accessToken을 가져오는 함수
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            setAccessToken(token);
-        } else {
-            console.warn("Access token이 없습니다.");
-        }
-
-        // accessToken이 설정된 경우에만 fetchList 호출
-        if (accessToken) {
-            const fetchStoryList = async () => {
+        const loadAccessTokenAndFetchStories = async () => {
+            const token = localStorage.getItem('accessToken');
+            if (token) {
+                setAccessToken(token);
                 try {
-                    const response = await axiosInstance.get('/story/list', {
-                        params: {
-                            share: false,
-                            sortBy: sortBy
-                        },
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    }); // API 요청
-                    setStoryList(response.data);
+                    await fetchStoryList(token, sortBy, searchQuery, setStoryList, limit, setHasMore);
                 } catch (error) {
-                    console.error("There was an error", error);
+                    console.error("Error fetching story list:", error);
                 }
-            };
-            fetchStoryList();
-        }
+            } else {
+                console.warn("Access token이 없습니다.");
+                navigate('/login'); // 로그인 페이지로 이동 (필요 시 추가)
+            }
+        };
 
-    }, [accessToken]);
+        loadAccessTokenAndFetchStories();
+    }, [sortBy, searchQuery, limit, navigate]);
 
     useEffect(() => {
         if (accessToken) {
