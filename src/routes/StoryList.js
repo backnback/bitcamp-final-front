@@ -48,15 +48,15 @@ const MyStoryList = () => {
 
 
     const handleScrollEnd = () => {
-        if(hasMore){
+        if (hasMore) {
             window.scrollBy({
-                top: -100, 
-                behavior: 'smooth', 
+                top: -100,
+                behavior: 'smooth',
             });
-        setLimit((prevLimit) => prevLimit + 6);
-        }else{
+            setLimit((prevLimit) => prevLimit + 6);
+        } else {
             window.scrollBy({
-                top: -100, 
+                top: -100,
                 behavior: 'smooth',
             });
         };
@@ -69,8 +69,17 @@ const MyStoryList = () => {
         if (hasMore == false) {
             setHasMore(true);
         }
-        const sortByOption = event.target.value === "1" ? "과거순" : "";
+
+        let sortByOption = "";
+
+        if (event.target.value === "1") {
+            sortByOption = "과거순";
+        } else if (event.target.value === "2") {
+            sortByOption = "좋아요순";
+        }
+
         setSortBy(sortByOption);
+
         if (accessToken) {
             fetchStoryList(accessToken, sortByOption, searchQuery, setStoryList);
         }
