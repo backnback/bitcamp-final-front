@@ -1,0 +1,60 @@
+.flicking-arrow-prev {
+    left: 0;
+}
+
+.flicking-arrow-next {
+    right: 0;
+}
+
+.flicking-arrow-prev,
+.flicking-arrow-next {
+    width: 27px;
+    height: calc(100% - 40px);
+    background-color: var(--color-white-90);
+}
+
+.flicking-arrow-prev:hover,
+.flicking-arrow-next:hover {
+    background-color: var(--color-white);
+    transition: .2s;
+}
+
+.flicking-arrow-prev::before {
+    left: 9px;
+}
+
+.flicking-arrow-prev::after {
+    top: calc(50% - 2px);
+    left: 9px;
+}
+
+.flicking-arrow-next::before {
+    right: 9px;
+}
+
+.flicking-arrow-next::after {
+    top: calc(50% - 2px);
+    right: 9px;
+}
+
+.flicking-arrow-prev::before,
+.flicking-arrow-prev::after,
+.flicking-arrow-next::before,
+.flicking-arrow-next::after {
+    width: 12px;
+    height: 3px;
+    background-color: var(--color-black);
+}
+
+.flicking-arrow-disabled,
+.flicking-arrow-disabled {
+    display: none;
+}
+
+.flicking-arrow-disabled::before,
+.flicking-arrow-disabled::after,
+.flicking-arrow-disabled::before,
+.flicking-arrow-disabled::after {
+    /* content: none; */
+    background-color: var(--color-black);
+}

@@ -1,18 +1,22 @@
-import React from 'react';
 import styles from "../assets/styles/css/Profile.module.css";
 import useModals from '../useModals';
 import { modals } from '../components/Modals';
 import { ButtonProvider } from '../components/ButtonProvider';
+import ReauthenticateModal from './ReauthenticateModal';
 
 const Profile = ({ loginUser }) => {
 
   const { openModal } = useModals();
 
+  // 내 프로필 수정 모달
   const handleClick = () => {
-    openModal(modals.reauthenticateModal, {
+    const content = <ReauthenticateModal />;
+    openModal(modals.modalSidebarRight, {
+      modalId: 'reauth',
       onSubmit: () => {
-        console.log('비지니스 로직 처리...2');
+        console.log('프로필 로직 처리..');
       },
+      content
     });
   };
 

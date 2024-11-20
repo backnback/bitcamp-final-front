@@ -7,6 +7,10 @@
     max-width: 130px;
 }
 
+.button__item__69 {
+    max-width: 69px;
+}
+
 .button__item__icon {
     display: inline-flex;
     justify-content: center;
@@ -70,6 +74,20 @@
 }
 
 .button__black .button__text {
+    color: var(--color-white);
+}
+
+.button__darkgray {
+    background: var(--color-gray-2c);
+    border: 1px solid var(--color-gray-2c);
+}
+
+.button__darkgray:hover {
+    background-color: var(--color-gray-2c-90);
+    border-color: var(--color-gray-2c-90);
+}
+
+.button__darkgray .button__text {
     color: var(--color-white);
 }
 

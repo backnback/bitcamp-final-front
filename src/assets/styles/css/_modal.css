@@ -14,3 +14,35 @@
     background-color: var(--color-white);
     box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.25);
 }
+
+.modal__container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.modal__content {
+    overflow: auto;
+    flex-shrink: 1;
+}
+
+.modal__header {
+    padding: 20px 30px 5px 20px;
+}
+
+.modal__body {
+    padding: 0 30px 5px;
+}
+
+.modal__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5px 30px 20px;
+}
+
+.modal__footer .button__item {
+    flex: 1;
+}
+
+/* reauth */
