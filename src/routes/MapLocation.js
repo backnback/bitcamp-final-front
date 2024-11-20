@@ -23,6 +23,7 @@ import StoryAddForm from "./StoryAddForm";
 import useModals from "../useModals";
 import { modals } from "../components/Modals";
 import MapStoryList from "../components/MapStoryList";
+import {mapPathJson} from "../mapPath.json";
 
 function MapLocation() {
     const { locationId } = useParams(); // URL에서 ID 파라미터를 가져옴
@@ -135,10 +136,9 @@ function MapLocation() {
     };
 
     return (
-
         <div>
             {RenderComponent ? (
-                React.cloneElement(RenderComponent, { storyPhotoList: storyPhotoList, eventClick: handleClick, openListModal: openListModal, openAddModal: openAddModal })
+                React.cloneElement(RenderComponent, { storyPhotoList: storyPhotoList, eventClick: handleClick, mapPaths: mapPathJson[locationId]})
             ) : (
                 <div>Loading...</div>
             )}
