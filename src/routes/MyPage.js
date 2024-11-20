@@ -184,7 +184,7 @@ const MyPage = () => {
                                         currentLikeCount={storyListDTO.likeCount} // 좋아요 개수
                                         storyTitle={storyListDTO.title} // 스토리 제목
                                         storyContent={storyListDTO.content} // 스토리 내용
-                                        storyLocation={`${storyListDTO.locationFirstName} ${storyListDTO.locationDetail}`} // 위치 정보
+                                        storyLocation={`${storyListDTO.locationFirstName} ${storyListDTO.locationSecondName}`} // 위치 정보
                                         storyDate={storyListDTO.travelDate} // 여행 날짜
                                         onLikeChange={handleLikeChange}  // 좋아요 변경 시 호출할 함수 전달
                                         onClick={() => openStoryModal(storyListDTO.storyId)}
