@@ -4,7 +4,7 @@
     word-break: break-all;
 }
 
-.form__item__input:not(.form__item:last-of-type) {
+.form__item__input:not(.form__item__input:last-of-type) {
     margin-bottom: 20px;
 }
 
@@ -94,7 +94,8 @@
     margin: 10px 0;
 }
 
-.search__form__wrap .form__item {
+.search__form__wrap .form__item,
+.search__form__wrap .form__item:not(.form__item:last-of-type) {
     margin: 0;
 }
 
