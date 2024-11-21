@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../components/AxiosInstance';
-
-// import './StoryUpdateForm.css';
-import { InputProvider } from '../components/InputProvider';
-import { SelectProvider } from '../components/SelectProvider';
-import { ButtonProvider } from '../components/ButtonProvider';
-import { PhotosProvider } from '../components/PhotosProvider';
-import styles from "../assets/styles/css/StoryItem.module.css";
+import { FormProvider, StoryForm } from '../components/FormProvider';
 import Swal from 'sweetalert2';
 
 
@@ -25,6 +19,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 월은 0부터 시작
     const [selectedDay, setSelectedDay] = useState(new Date().getDate());
+    const [checkedShare, setCheckedShare] = useState(false);
     const [loading, setLoading] = useState(true);
     const [mainPhotoIndex, setMainPhotoIndex] = useState('');
 
@@ -153,7 +148,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
         formData.append('firstName', selectedFirstName);
         formData.append('secondName', selectedSecondName);
         formData.append('oldStoryId', storyId);
-        formData.append('share', false);
+        formData.append('share', checkedShare);
         formData.append('mainPhotoIndex', mainPhotoIndex);
 
         files.forEach(file => {
@@ -199,136 +194,44 @@ const MyStoryUpdateForm = ({ storyId }) => {
         setMainPhotoIndex(index); // Main 이미지
     };
 
+    const handleCheckboxChange = (event) => {
+        const checked = event.target.checked;
+        setCheckedShare(checked);
+        console.log("Checkbox is checked:", checked);
+    };
+
+    const onAddPhoto = () => {
+
+    };
+
+
+    const formValue = {
+        title, setTitle,
+        selectedYear, setSelectedYear,
+        selectedMonth, setSelectedMonth,
+        selectedDay, setSelectedDay,
+        selectedFirstName, setSelectedFirstName, firstNames,
+        selectedSecondName, setSelectedSecondName, secondNames,
+        locationDetail, setLocationDetail,
+        handleFileChange,
+        content, setContent,
+        checkedShare, handleCheckboxChange,
+        files,
+        mainPhotoIndex, handleMainPhotoSelect, onAddPhoto,
+        handleButtonClick,
+        handleSubmit
+    }
+
 
     if (loading) {
         return <div>로딩 중...</div>;
     }
 
+
     return (
-        <form onSubmit={handleSubmit} className="story-update-form">
-            <h2>스토리 수정</h2>
-
-            <InputProvider>
-                <input
-                    type='text'
-                    className={`form__input`}
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                    id='text01'
-                    name='텍수투'
-                    placeholder="제목" />
-            </InputProvider>
-
-            <SelectProvider>
-                <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    id="select01" name="selectYear" className={`form__select`}>
-                    <option value={'0'}>년</option>
-                    {[...Array(10)].map((_, index) => {
-                        const year = new Date().getFullYear() - index;
-                        return <option key={year} value={year}>{year}</option>;
-                    })}
-                </select>
-            </SelectProvider>
-
-            <SelectProvider>
-                <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                    id="select02" name="selectMonth" className={`form__select`}>
-                    <option value={'0'}>달</option>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => (
-                        <option key={month} value={month}>{month}</option>
-                    ))}
-                </select>
-            </SelectProvider>
-
-            <SelectProvider>
-                <select
-                    value={selectedDay}
-                    onChange={(e) => setSelectedDay(Number(e.target.value))}
-                    id="select03" name="selectDay" className={`form__select`}>
-                    <option value={'0'}>일</option>
-                    {[...Array(31)].map((_, index) => {
-                        const day = index + 1;
-                        return <option key={day} value={day}>{day}</option>;
-                    })}
-                </select>
-            </SelectProvider>
-
-            <SelectProvider>
-                <select id="select01" name="selectFirstName" className={`form__select`}
-                    onChange={(e) => setSelectedFirstName(e.target.value)} value={selectedFirstName}>
-                    <option value={'0'}>지역 선택</option>
-                    {firstNames.map((firstName) => (
-                        <option key={firstName} value={firstName}>
-                            {firstName}
-                        </option>
-                    ))}
-                </select>
-            </SelectProvider>
-
-            <SelectProvider>
-                <select id="select02" name="selectSecondName" className={`form__select`}
-                    onChange={(e) => setSelectedSecondName(e.target.value)} value={selectedSecondName} disabled={!selectedFirstName}>
-                    <option value={'0'}>세부 지역 선택</option>
-                    {secondNames.map((location) => (
-                        <option key={location.id} value={location.secondName}>
-                            {location.secondName}
-                        </option>
-                    ))}
-                </select>
-            </SelectProvider>
-
-            <InputProvider>
-                <input
-                    type='text'
-                    className={`form__input`}
-                    value={locationDetail}
-                    onChange={(e) => setLocationDetail(e.target.value)}
-                    required
-                    id='text02'
-                    name='텍수투'
-                    placeholder="지역 상세정보 입력" />
-            </InputProvider>
-
-            <InputProvider>
-                <textarea
-                    id='textarea01'
-                    placeholder='내용 입력'
-                    className={`form__textarea`}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    required
-                ></textarea>
-            </InputProvider>
-
-            <input
-                type="file"
-                multiple
-                onChange={handleFileChange}
-            />
-
-            <PhotosProvider
-                photos={files}
-                viewMode={false}
-                className="custom-photo-container"
-                mainPhotoIndex={mainPhotoIndex}
-                onSelectMainPhoto={handleMainPhotoSelect}
-            />
-
-
-
-            <ButtonProvider>
-                <button type="button" id="submit-button" className={`button button__primary`} onClick={handleButtonClick}>
-                    <span className={`button__text`}>수정</span>
-                </button>
-            </ButtonProvider>
-
-
-        </form>
+        <FormProvider value={formValue}>
+            <StoryForm />
+        </FormProvider>
     );
 };
 
