@@ -51,6 +51,7 @@
 }
 
 .userEdit__profile__img__wrap {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,6 +62,10 @@
     border-radius: 100%;
     text-align: center;
     cursor: pointer;
+}
+
+.userEdit__profile__img__wrap:hover .userEdit__profile__img {
+    filter: invert(0.05);
 }
 
 .userEdit__profile__img__name__wrap {
@@ -75,4 +80,10 @@
 .userEdit__profile__img__name {
     color: var(--color-white);
     font-size: var(--font-size-h4);
+}
+
+.userEdit__profile__icon {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
