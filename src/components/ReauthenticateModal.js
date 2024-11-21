@@ -4,6 +4,7 @@ import { ButtonProvider } from './ButtonProvider';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { InputProvider } from './InputProvider';
+import Swal from 'sweetalert2';
 
 
 const ReauthenticateModal = () => {
@@ -29,11 +30,21 @@ const ReauthenticateModal = () => {
                 },
             });
             if (response.data) {            // 성공 응답일 때만 처리
-                alert("인증되었습니다");
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: "인증되었습니다!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 setCurrentUser(true);
                 setPassword('');
             } else {
-                alert("인증 실패: 비밀번호를 확인해주세요.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "비밀번호를 확인해주세요",
+                });
             }
         } catch (error) {
             console.error("마이페이지 회원인증 요청 중 오류 발생:", error);
@@ -56,20 +67,38 @@ const ReauthenticateModal = () => {
             if (response.data.accessToken) {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 setAccessToken(response.data.accessToken);
-                alert("수정되었습니다.");
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: "수정되었습니다!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 window.location.reload(); // 헤더 정보 업데이트
             } else {
-                alert("수정 실패...");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "오류가 발생하였습니다...수정 실패..",
+                });
             }
         } catch (error) {
             console.error("회원정보 수정 중 오류 발생:", error);
-            alert("회원정보 수정 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
         }
     };
 
     const deleteUser = async (e) => {
         e.preventDefault();
-        if (window.confirm("정말로 삭제하시겠습니까?")) {
+
+        const result = await Swal.fire({
+            text: "탈퇴하시겠습니까?",
+            icon: "warning", // 경고 아이콘
+            showCancelButton: true, // 취소 버튼 표시
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+        });
+
+        if (result.isConfirmed) {
             try {
                 const response = await axiosInstance.delete('/user/delete', {
                     headers: {
@@ -77,7 +106,13 @@ const ReauthenticateModal = () => {
                     },
                 });
                 if (response.data) {
-                    alert("계정을 삭제하였습니다");
+                    Swal.fire({
+                        position: "top",
+                        icon: "success",
+                        title: "계정을 성공적으로 삭제하였습니다. 안녕히가세요",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
                     if (localStorage.getItem('lastLoginEmail') != null && localStorage.getItem('lastLoginEmail') != undefined) {
@@ -86,14 +121,23 @@ const ReauthenticateModal = () => {
                     navigate("/");
                     window.location.reload();
                 } else {
-                    alert("삭제 실패...");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "오류가 발생하였습니다...탈퇴 실패..",
+                    });
                 }
             } catch (error) {
                 console.error("회원정보 삭제 중 오류 발생:", error);
-                alert("회원정보 삭제 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
             }
         } else {
-            alert("삭제를 취소합니다");
+            Swal.fire({
+                text: "삭제를 취소합니다",
+                toast: true,
+                position: 'top', 
+                showConfirmButton: false,
+                timer: 2000, // 3초 후 자동 닫힘
+            });
         }
     };
 
