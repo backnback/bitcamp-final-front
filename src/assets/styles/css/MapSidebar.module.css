@@ -1,0 +1,24 @@
+.container {
+    border-right: rgba(176,236,248, 0.5) solid 2px;
+}
+
+.side__box {
+    height: 90%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.side__box a {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+.side__box a:hover {
+    background: rgba(176,236,248, 0.5);
+}
+
+.side__text {
+    padding: 8px 12px 8px 12px;
+}

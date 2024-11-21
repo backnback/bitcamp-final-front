@@ -170,23 +170,23 @@ function App() {
                                     <Route path="/slide/test" element={<SlideTest />} />
                                     {/* 라우터 경로 설정 */}
                                     <Route path="map/story/:locationId" element={<MapLocation />} />
-                                    <Route path="/map/story/seoul" element={<MapSeoul />} />
-                                    <Route path="/map/story/busan" element={<MapBusan />} />
-                                    <Route path="/map/story/daegu" element={<MapDaegu />} />
-                                    <Route path="/map/story/daejeon" element={<MapDaejeon />} />
-                                    <Route path="/map/story/gwangju" element={<MapGwangju />} />
-                                    <Route path="/map/story/gwangwon" element={<MapGwangwon />} />
-                                    <Route path="/map/story/gyeonggi" element={<MapGyeonggi />} />
-                                    <Route path="/map/story/incheon" element={<MapIncheon />} />
-                                    <Route path="/map/story/jeju" element={<MapJeju />} />
-                                    <Route path="/map/story/northChungcheoung" element={<MapNorthChungcheoung />} />
-                                    <Route path="/map/story/northGyeongsang" element={<MapNorthGyeongsang />} />
-                                    <Route path="/map/story/northJeolla" element={<MapNorthJeolla />} />
-                                    <Route path="/map/story/sejong" element={<MapSejong />} />
-                                    <Route path="/map/story/southChungcheong" element={<MapSouthChungcheong />} />
-                                    <Route path="/map/story/southGyeongsan" element={<MapSouthGyeongsan />} />
-                                    <Route path="/map/story/southJeolla" element={<MapSouthJeolla />} />
-                                    <Route path="/map/story/ulsan" element={<MapUlsan />} />
+                                    {/*<Route path="/map/story/seoul" element={<MapSeoul />} />*/}
+                                    {/*<Route path="/map/story/busan" element={<MapBusan />} />*/}
+                                    {/*<Route path="/map/story/daegu" element={<MapDaegu />} />*/}
+                                    {/*<Route path="/map/story/daejeon" element={<MapDaejeon />} />*/}
+                                    {/*<Route path="/map/story/gwangju" element={<MapGwangju />} />*/}
+                                    {/*<Route path="/map/story/gwangwon" element={<MapGwangwon />} />*/}
+                                    {/*<Route path="/map/story/gyeonggi" element={<MapGyeonggi />} />*/}
+                                    {/*<Route path="/map/story/incheon" element={<MapIncheon />} />*/}
+                                    {/*<Route path="/map/story/jeju" element={<MapJeju />} />*/}
+                                    {/*<Route path="/map/story/northChungcheoung" element={<MapNorthChungcheoung />} />*/}
+                                    {/*<Route path="/map/story/northGyeongsang" element={<MapNorthGyeongsang />} />*/}
+                                    {/*<Route path="/map/story/northJeolla" element={<MapNorthJeolla />} />*/}
+                                    {/*<Route path="/map/story/sejong" element={<MapSejong />} />*/}
+                                    {/*<Route path="/map/story/southChungcheong" element={<MapSouthChungcheong />} />*/}
+                                    {/*<Route path="/map/story/southGyeongsan" element={<MapSouthGyeongsan />} />*/}
+                                    {/*<Route path="/map/story/southJeolla" element={<MapSouthJeolla />} />*/}
+                                    {/*<Route path="/map/story/ulsan" element={<MapUlsan />} />*/}
 
                                     <Route path="/viewuser/:id" element={<ViewUser />} /> {/* 특정 사용자 보기 */}
                                     <Route path="/share-story/list" element={<ShareStoryList />} /> {/* 스토리 목록 페이지 */}

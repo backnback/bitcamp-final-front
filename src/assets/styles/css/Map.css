@@ -1,5 +1,10 @@
+.container {
+    display: flex;
+}
+
 .map__container {
-    padding: 95px 46px 95px 270px;
+    padding: 80px 46px 80px 270px;
+    height: 100%;
 }
 
 .map__list {
@@ -14,7 +19,7 @@
 }
 
 .city a:hover {
-    filter: invert(5%);
+    filter: invert(50%);
 }
 
 [data-count='0'] {
