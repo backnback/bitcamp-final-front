@@ -43,31 +43,34 @@ import SlideTest from "./routes/SlideTest";
 import LikeStoryList from "./routes/LikeStoryList.js";
 
 function App() {
-    // UserProvider 내부에서 useUser 훅을 호출하여 사용자 정보 가져오기
-    const [users, setUsers] = useState([]); // 사용자 목록 상태
+    const [users, setUsers] = useState([]);
     const [accessToken, setAccessToken] = useState(null);
     const [user, setUser] = useState(null);
     const currentLocation = useLocation();
     const [currentTime, setCurrentTime] = useState(Date.now());
     const navigate = useNavigate();
 
-
     useEffect(() => {
-        const checkTokenExpiration = async () => {
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                console.log("토큰 없음");
-                navigate('/login'); // 토큰이 없으면 로그인 페이지로 이동
+        const token = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        if (!token) {
+            console.log("토큰 없음");
+            const allowedPaths = ['/signup', '/find-email', '/find-password' ,'/newPassword'];
+            if (allowedPaths.includes(currentLocation.pathname)) {
+                console.log("토큰 없이 접근 허용");
                 return;
             }
+            navigate('/login');
+            return;
+        }
 
+        const checkTokenExpiration = async () => {
             const decodedToken = jwtDecode(token);
-            const expirationTime = decodedToken.exp * 1000; // 초 -> 밀리초
+            const expirationTime = decodedToken.exp * 1000;
             const remainTime = expirationTime - Date.now();
 
             if (remainTime <= 1000 * 60 * 5) {
-                // 만료 5분 전이라면 토큰 갱신
-                const refreshToken = localStorage.getItem('refreshToken');
                 try {
                     const response = await axiosInstance.post('/user/refreshtoken', {
                         refreshToken
@@ -82,53 +85,43 @@ function App() {
                     localStorage.setItem('accessToken', newAccessToken);
                     setAccessToken(newAccessToken);
                     setUser(jwtDecode(newAccessToken));
-
                     console.log("토큰 갱신 성공");
                 } catch (error) {
                     console.error("토큰 갱신 실패:", error);
                     localStorage.clear();
-                    navigate('/login'); // 갱신 실패 시 로그아웃
+                    navigate('/login');
                 }
             } else {
-                // 토큰 유효
                 setAccessToken(token);
                 setUser(decodedToken);
                 console.log("토큰 유효");
             }
 
-            // 다음 갱신 체크 예약
-            setTimeout(checkTokenExpiration, remainTime - 1000 * 60 * 5); // 5분 전
+            setTimeout(checkTokenExpiration, remainTime - 1000 * 60 * 5);
         };
 
         checkTokenExpiration();
-    }, [navigate]);
-
+    }, [currentLocation.pathname, navigate]);
 
     useEffect(() => {
-        // console.log('page changed to:', currentLocation.pathname)
-
-        // body class
         const locationNames = document.body.classList;
         for (const locationName of locationNames) {
-            document.body.classList.remove(locationName)
+            document.body.classList.remove(locationName);
         }
-        const [firstName, secondName] = currentLocation.pathname.split('/').filter((item) => item != '');
+        const [firstName, secondName] = currentLocation.pathname.split('/').filter((item) => item !== '');
 
         document.body.classList.add('body');
-        if (firstName != undefined) {
+        if (firstName) {
             document.body.classList.add(`body__${firstName}`);
         }
-        if (secondName != undefined) {
-            document.body.classList.add(`body__${firstName}`, `body__${firstName}__${secondName}`)
+        if (secondName) {
+            document.body.classList.add(`body__${firstName}`, `body__${firstName}__${secondName}`);
         } else {
             const pageLogin = document.getElementById('login');
-
             if (pageLogin) {
                 pageLogin.ownerDocument.body.classList.add(`body__${pageLogin.id}`);
             }
         }
-
-        //fetchUsers(); // 컴포넌트가 처음 로드될 때 사용자 목록을 가져옴
     }, [currentLocation]);
 
     return (
