@@ -1,14 +1,18 @@
 import Map from '../components/Map';
 import styles from '../assets/styles/css/Map.css';
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axiosInstance from '../components/AxiosInstance';
+import Sidebar from "../components/Sidebar";
 
 function StoryMap() {
     useEffect(() => {
         document.body.className = 'body body__story body__map'
     })
+
     const [accessToken, setAccessToken] = useState(null);
     const [mapStoryList, setMapStoryList] = useState(null);
+    const [hovered, sethHovered] = useState(null);
+
     useEffect(() => {
         if (accessToken) {
             const mapProvince = async () => {
@@ -27,6 +31,8 @@ function StoryMap() {
         }
     }, [accessToken]);
 
+    console.log(hovered)
+
     // 로컬 스토리지에서 accessToken을 가져오는 함수
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
@@ -37,9 +43,13 @@ function StoryMap() {
         }
     }, []);
 
+
     return (
-        <div className={`map__container`}>
-            <Map storyList={mapStoryList} />
+        <div className={`container`}>
+            <Sidebar onHovered={sethHovered}/>
+            <div className={`map__container`}>
+                <Map storyList={mapStoryList} hovered={hovered}/>
+            </div>
         </div>
     )
 }

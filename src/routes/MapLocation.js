@@ -23,7 +23,8 @@ import StoryAddForm from "./StoryAddForm";
 import useModals from "../useModals";
 import { modals } from "../components/Modals";
 import MapStoryList from "../components/MapStoryList";
-import {mapPathJson} from "../mapPath.json";
+import { mapPathJson } from "../mapPath.js";
+import CityMap from "../components/CityMap";
 
 function MapLocation() {
     const { locationId } = useParams(); // URL에서 ID 파라미터를 가져옴
@@ -34,27 +35,9 @@ function MapLocation() {
     const [storyList, setStoryList] = useState(null);
     const { openModal } = useModals();
 
-    const mapComponents = {
-        11: <MapSeoul />,
-        26: <MapBusan />,
-        27: <MapDaegu />,
-        28: <MapIncheon />,
-        29: <MapGwangju />,
-        30: <MapDaejeon />,
-        31: <MapUlsan />,
-        36: <MapSejong />,
-        41: <MapGyeonggi />,
-        51: <MapGwangwon />,
-        43: <MapNorthChungcheoung />,
-        44: <MapSouthChungcheong />,
-        52: <MapNorthJeolla />,
-        46: <MapSouthJeolla />,
-        47: <MapNorthGyeongsang />,
-        48: <MapSouthGyeongsan />,
-        50: <MapJeju />
-    };
 
-    const RenderComponent = mapComponents[locationId] || null;
+
+    const RenderComponent = <CityMap />;
     // console.log(RenderComponent)
 
     useEffect(() => {

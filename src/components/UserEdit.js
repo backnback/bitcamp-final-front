@@ -48,7 +48,7 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
     return (
         <div className={`${styles.userEdit__wrap}`}>
             <div className={`${styles.userEdit__profile__wrap}`}>
-                <label htmlFor="userEditFile" className={`${styles.userEdit__profile__img__wrap} ${profileImage || styles.userEdit__profile__img__name__wrap}`}>
+                <label htmlFor="userEditFile" className={`${styles.userEdit__profile__img__wrap} ${filename == '' ? styles.userEdit__profile__img__name__wrap : ``}`}>
                     {
                         filename != '' ?
                             <img
@@ -61,7 +61,7 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                             <span className={`${styles.userEdit__profile__img__name} line1`}>{nickname != null ? nickname : "Guest"}</span>
 
                     }
-                    <i className='icon icon__profile__file'></i>
+                    <i className={`icon icon__profile__file ${styles.userEdit__profile__icon}`}></i>
                     <input type='file' className={`blind`} id="userEditFile" onChange={handleImageChange} />
                 </label>
                 {/* <img
