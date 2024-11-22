@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axiosInstance from '../components/AxiosInstance';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { useNavigate } from 'react-router-dom';  // navigate 사용을 위해 추가
+import Swal from 'sweetalert2';
 
 function AdminPage() {
     const [user, setUser] = useState([]);
@@ -33,8 +34,16 @@ function AdminPage() {
     }, []);  // 빈 배열로 처음 렌더링 시 한 번만 호출
 
     const deleteUser = async (userId) => {
-        console.log(userId);
-        if (window.confirm("정말로 삭제하시겠습니까?")) {
+
+        const result = await Swal.fire({
+            text: "삭제하시겠습니까?",
+            icon: "warning", // 경고 아이콘
+            showCancelButton: true, // 취소 버튼 표시
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+        });
+
+        if (result.isConfirmed) {
             try {
                 const response = await axiosInstance.post('/user/admindelete', {
                     userId: userId
@@ -45,18 +54,34 @@ function AdminPage() {
                 });
 
                 if (response.data) {
-                    alert("계정을 삭제하였습니다");
+                    Swal.fire({
+                        position: "top",
+                        icon: "success",
+                        title: "계정을 성공적으로 삭제하였습니다.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                     navigate("/admin");  // 삭제 후 홈으로 이동
                     window.location.reload();  // 페이지 새로고침
                 } else {
-                    alert("삭제 실패...");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "삭제 실패...",
+                    });
                 }
             } catch (error) {
                 console.error("회원삭제 중 오류 발생:", error);
-                alert("회원삭제 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+                console.log("회원삭제 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
             }
         } else {
-            alert("삭제를 취소합니다");
+            Swal.fire({
+                text: "삭제를 취소합니다",
+                toast: true,
+                position: 'top', 
+                showConfirmButton: false,
+                timer: 2000, // 3초 후 자동 닫힘
+            });
         }
     };
 
