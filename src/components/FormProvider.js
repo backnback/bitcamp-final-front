@@ -34,8 +34,8 @@ export const StoryForm = () => {
         handleFileChange,
         content, setContent,
         checkedShare, handleCheckboxChange,
-        files,
-        mainPhotoIndex, handleMainPhotoSelect, onAddPhoto,
+        files, onAddPhoto, onDeletePhoto,
+        mainPhotoIndex, handleMainPhotoSelect,
         handleButtonClick,
         handleSubmit
     } = useFormContext();
@@ -156,6 +156,7 @@ export const StoryForm = () => {
                             mainPhotoIndex={mainPhotoIndex}
                             onSelectMainPhoto={handleMainPhotoSelect}
                             onAddPhoto={onAddPhoto}
+                            onDeletePhoto={onDeletePhoto}
                         />
                     )}
                 </div>

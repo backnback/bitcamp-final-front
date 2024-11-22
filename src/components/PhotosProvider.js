@@ -2,15 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 import Flicking from "@egjs/react-flicking";
 import "@egjs/react-flicking/dist/flicking.css";
 import { InputProvider } from '../components/InputProvider';
+import { ButtonProvider } from '../components/ButtonProvider';
 
 
-export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, itemClassName, layout, onSelectMainPhoto, onAddPhoto }) => {
+
+export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, itemClassName, layout, onSelectMainPhoto, onAddPhoto, onDeletePhoto }) => {
     const validPhotos = Array.isArray(photos) ? photos : [];
+    const fileInputRef = useRef(null);
     const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 진행 중 상태
     const [mainPhotoIdx, setMainPhotoIdx] = useState(mainPhotoIndex);
 
+
+    const handleDeletePhoto = (photo) => {
+        console.log("삭제하려는 파일:", photo);
+        onDeletePhoto(photo);  // 상위 컴포넌트에게 삭제할 사진을 전달
+    };
 
     const handleSelectMainPhoto = (index) => {
         if (onSelectMainPhoto) {
@@ -18,6 +26,21 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
             onSelectMainPhoto(index); // 상위 컴포넌트로 선택한 대표 이미지 ID 전달
         }
         setMainPhotoIdx(index);
+    };
+
+    const handleAddPhotoClick = () => {
+        // button 클릭 시 file input의 click 이벤트를 트리거
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (event) => {
+        // 파일 선택이 변경되었을 때 처리
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            onAddPhoto(files); // 부모 컴포넌트로 파일 목록 전달
+        }
     };
 
 
@@ -50,7 +73,10 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
     const moveRight = (event) => {
         if (isAnimating) return; // 애니메이션 진행 중일 때 이동 차단
         event.stopPropagation();
-        const newIndex = Math.min(currentIndex + 1, validPhotos.length - 2); // 최대 인덱스를 초과하지 않도록 설정
+        const newIndex = Math.min(
+            currentIndex + 1,
+            viewMode ? validPhotos.length - 3 : validPhotos.length - 2
+        ); // 최대 인덱스를 초과하지 않도록 설정
         setCurrentIndex(newIndex); // 인덱스 업데이트
         moveToSlide(newIndex); // 슬라이드 이동
     };
@@ -62,20 +88,36 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
             // File 객체일 경우 URL.createObjectURL로 처리
             const objectURL = URL.createObjectURL(photo);
             return (
-                <img
-                    src={objectURL}
-                    alt="추가된 사진들"
-                    className="story-photo"
-                />
+                <div className='photo__photoItem'>
+                    <img
+                        src={objectURL}
+                        alt="추가된 사진들"
+                        className="story-photo"
+                    />
+                    {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
+                        <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
+                            <span className={`blind`}>삭제</span>
+                            <i className={`icon icon__x__black`}></i>
+                        </button>
+                    </ButtonProvider>}
+                </div>
             );
         } else {
             // 기존 photo 객체일 경우 기존 URL 사용
             return (
-                <img
-                    src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
-                    alt={`Photo ${photo.id}`}
-                    className={`story-photo ${photo.mainPhoto ? 'main-photo' : ''}`}
-                />
+                <div className='photo__photoItem'>
+                    <img
+                        src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
+                        alt={`Photo ${photo.id}`}
+                        className={`story-photo ${photo.mainPhoto ? 'main-photo' : ''}`}
+                    />
+                    {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
+                        <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
+                            <span className={`blind`}>삭제</span>
+                            <i className={`icon icon__x__black`}></i>
+                        </button>
+                    </ButtonProvider>}
+                </div>
             );
         }
     };
@@ -87,13 +129,12 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
         if (flickingRef.current) {
             let targetIndex = mainPhotoIdx;
 
-            // mainPhotoIdx가 마지막 인덱스일 경우, 그 인덱스에서 -2로 이동
             if (mainPhotoIdx === validPhotos.length - 1) {
-                targetIndex = mainPhotoIdx - 1; // 마지막 인덱스에서 -2
+                targetIndex = viewMode ? mainPhotoIdx - 2 : mainPhotoIdx - 1; // 마지막 인덱스에서 -1
             }
             // mainPhotoIdx가 마지막 직전 인덱스일 경우, 그 인덱스에서 -1로 이동
             else if (mainPhotoIdx === validPhotos.length - 2) {
-                targetIndex = mainPhotoIdx; // 마지막 직전 인덱스에서 -1
+                targetIndex = viewMode ? mainPhotoIdx - 1 : mainPhotoIdx; // 마지막 직전 인덱스
             }
 
             moveToSlide(targetIndex); // 최종적으로 결정된 인덱스로 이동
@@ -151,23 +192,39 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                                     )}
                                 </div>
                             ))}
-                            <div className="photo__photoItem">
-                                <button type="button" className={`button button__story__add`} onClick={onAddPhoto}>
+                            {!viewMode && <div className="photo__photoItem">
+                                <button type="button" className={`button button__story__add`} onClick={handleAddPhotoClick}>
                                     <span className={`blind`}>사진 등록</span>
                                     <i className={`icon icon__plus__white`}></i>
                                 </button>
-                            </div>
+                            </div>}
                         </Flicking>
                         {/* 버튼을 추가하여 슬라이드를 이동 */}
                         <div className="slider__button">
                             {currentIndex > 0 && <button type="button" className="left" onClick={moveLeft}>◀</button>}
-                            {currentIndex < validPhotos.length - 2 && <button type="button" className="right" onClick={moveRight}>▶</button>}
+                            {currentIndex > 0 && (
+                                <button type="button" className="left" onClick={moveLeft}>◀</button>
+                            )}
+                            {viewMode
+                                ? currentIndex < validPhotos.length - 3 && (
+                                    <button type="button" className="right" onClick={moveRight}>▶</button>
+                                )
+                                : currentIndex < validPhotos.length - 2 && (
+                                    <button type="button" className="right" onClick={moveRight}>▶</button>
+                                )}
                         </div>
                     </div>
                 </div>
             ) : (
                 <p>사진이 없습니다.</p>
             )}
+            <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                style={{ display: 'none' }}
+                onChange={handleFileChange} // 파일이 선택되면 호출되는 함수
+            />
         </div>
     );
 };

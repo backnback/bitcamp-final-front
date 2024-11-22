@@ -56,6 +56,7 @@ const MyStoryUpdateForm = ({ storyId }) => {
                     setLocationDetail(story.locationDetail);
                     setSelectedFirstName(story.locationFirstName);
                     setSelectedSecondName(story.locationSecondName);
+                    setCheckedShare(story.share);
                     setMainPhotoIndex(story.mainPhotoIndex);
                     setFiles(story.photos || []);
                     setLoading(false);  // 데이터를 불러온 후 로딩 상태를 false로 설정
@@ -103,26 +104,8 @@ const MyStoryUpdateForm = ({ storyId }) => {
     }, [selectedYear, selectedMonth, selectedDay]);
 
 
-    // 파일 추가 로직을 변경하여 File 객체만 유지
-    const handleFileChange = (event) => {
-        const newFiles = Array.from(event.target.files);
-        setFiles([...files, ...newFiles]); // File 객체만 추가
-    };
-
-
     useEffect(() => {
-        console.log("Current States:", {
-            title,
-            travelDate,
-            content,
-            locationDetail,
-            selectedFirstName,
-            selectedSecondName,
-            selectedYear,
-            selectedMonth,
-            selectedDay,
-            files
-        });
+
     }, [title, travelDate, content, locationDetail, selectedFirstName, selectedSecondName, selectedYear, selectedMonth, selectedDay, files]);
 
 
@@ -151,14 +134,21 @@ const MyStoryUpdateForm = ({ storyId }) => {
         formData.append('share', checkedShare);
         formData.append('mainPhotoIndex', mainPhotoIndex);
 
+        let photos = [];
         files.forEach(file => {
             if (file instanceof File) {
                 formData.append('files', file);
+            } else if (file.path) {  // photo 객체인 경우
+                photos.push(file);
             }
         });
+        formData.append('photosJson', JSON.stringify(photos));
+
 
         try {
-            console.log(formData);
+            formData.forEach((value, key) => {
+                console.log(`${key}:`, value);
+            });
             const response = await axiosInstance.post('/my-story/update', formData, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -200,8 +190,49 @@ const MyStoryUpdateForm = ({ storyId }) => {
         console.log("Checkbox is checked:", checked);
     };
 
-    const onAddPhoto = () => {
 
+    useEffect(() => {
+        if (files.length > 0) {
+            console.log("업로드된 파일들:", files);
+        }
+
+
+    }, [files]);
+
+
+    // 파일 추가 로직을 변경하여 File 객체만 유지
+    const onAddPhoto = (files) => {
+        const uploadedFiles = Array.from(files);
+
+        if (uploadedFiles.length > 0) {
+            setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+
+            // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
+            if (uploadedFiles.length === 1) {
+                setMainPhotoIndex(0);
+            }
+        } else {
+            console.warn("No files selected.");
+        }
+    };
+
+    const onDeletePhoto = (photo) => {
+        setFiles((prevFiles) => {
+            console.log("삭제하려는 파일:", photo);
+
+            const updatedFiles = prevFiles.filter((file) => {
+                // File 객체일 경우
+                if (photo instanceof File) {
+                    return file !== photo;
+                }
+
+                // Photo 객체일 경우
+                return file.id !== photo.id;
+            });
+
+            console.log("삭제 후 파일 리스트:", updatedFiles);
+            return updatedFiles;
+        });
     };
 
 
@@ -213,11 +244,10 @@ const MyStoryUpdateForm = ({ storyId }) => {
         selectedFirstName, setSelectedFirstName, firstNames,
         selectedSecondName, setSelectedSecondName, secondNames,
         locationDetail, setLocationDetail,
-        handleFileChange,
         content, setContent,
         checkedShare, handleCheckboxChange,
-        files,
-        mainPhotoIndex, handleMainPhotoSelect, onAddPhoto,
+        files, onAddPhoto, onDeletePhoto,
+        mainPhotoIndex, handleMainPhotoSelect,
         handleButtonClick,
         handleSubmit
     }
