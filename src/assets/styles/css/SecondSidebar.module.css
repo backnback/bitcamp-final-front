@@ -1,0 +1,10 @@
+.container {
+    border-right: rgba(176,236,248, 0.5) solid 2px;
+}
+
+.side__box {
+    height: 90%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}

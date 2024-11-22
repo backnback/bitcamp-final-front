@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styles from '../assets/styles/css/FindEmail.module.css';
-import { InputProvider } from '../components/InputProvider';
-import { ButtonProvider } from '../components/ButtonProvider';
-import { useNavigate } from 'react-router-dom';
+import {InputProvider} from '../components/InputProvider';
+import {ButtonProvider} from '../components/ButtonProvider';
+import {useNavigate} from 'react-router-dom';
 import axiosInstance from '../components/AxiosInstance';
 
 
@@ -21,7 +21,7 @@ const NewPassword = () => {
         }
 
         try {
-            const response = await axiosInstance.post('/sign/newpassword', { email, password }, {
+            const response = await axiosInstance.post('/sign/newpassword', {email, password}, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

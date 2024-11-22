@@ -9,16 +9,20 @@
     flex-direction: column;
 }
 
-.side__box a {
+.side__a {
     width: 100%;
     padding: 10px;
     text-align: center;
 }
 
-.side__box a:hover {
+.side__a:hover {
     background: rgba(176,236,248, 0.5);
 }
 
 .side__text {
     padding: 8px 12px 8px 12px;
+}
+
+.select {
+    background: rgba(176,236,248, 0.5);
 }
