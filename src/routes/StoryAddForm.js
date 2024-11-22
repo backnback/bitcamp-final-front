@@ -82,6 +82,7 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
     }, [selectedYear, selectedMonth, selectedDay]);
 
 
+
     const handleFileChange = (event) => {
         const uploadedFiles = Array.from(event.target.files);
         setFiles(uploadedFiles);
@@ -165,8 +166,42 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
         setMainPhotoIndex(index); // Main 이미지
     };
 
-    const onAddPhoto = () => {
 
+    useEffect(() => {
+        if (files.length > 0) {
+            console.log("업로드된 파일들:", files);
+        }
+
+
+    }, [files]);
+
+
+    const onAddPhoto = (files) => {
+        const uploadedFiles = Array.from(files);
+
+        if (uploadedFiles.length > 0) {
+            setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+
+            // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
+            if (uploadedFiles.length === 1) {
+                setMainPhotoIndex(0);
+            }
+        } else {
+            console.warn("No files selected.");
+        }
+    };
+
+    const onDeletePhoto = (photo) => {
+        setFiles((prevFiles) => {
+            console.log("삭제하려는 파일:", photo);
+
+            const updatedFiles = prevFiles.filter((file) => {
+                return file !== photo;
+            });
+
+            console.log("삭제 후 파일 리스트:", updatedFiles);
+            return updatedFiles;
+        });
     };
 
 
@@ -178,7 +213,7 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
         selectedFirstName, setSelectedFirstName, firstNames,
         selectedSecondName, setSelectedSecondName, secondNames,
         locationDetail, setLocationDetail,
-        handleFileChange,
+        handleFileChange, onAddPhoto, onDeletePhoto,
         content, setContent,
         checkedShare, handleCheckboxChange,
         files,

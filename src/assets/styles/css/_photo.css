@@ -53,6 +53,14 @@
     margin-right: 10px;
 }
 
+.photo__photoItem .button__item__x {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 10;
+}
+
+
 /* custom 스타일을 적용했을 때 */
 .photo__photoItem__custom {}
 
