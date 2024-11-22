@@ -5,6 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { InputProvider } from "../components/InputProvider";
 import { ButtonProvider } from "../components/ButtonProvider";
 import styles from "../assets/styles/css/Login.module.css";
+import Swal from 'sweetalert2';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -47,11 +48,15 @@ function Login() {
                     navigate('/admin');
                 }
             } else {
-                alert("로그인 실패: 이메일 또는 비밀번호를 확인해주세요.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "로그인 실패: 이메일 또는 비밀번호를 확인해주세요.",
+                });
             }
         } catch (error) {
             console.error("로그인 요청 중 오류 발생:", error);
-            alert("로그인 요청 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+            console.log("로그인 요청 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
         }
     };
 
