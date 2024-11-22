@@ -37,7 +37,9 @@ import MapSouthGyeongsan from "./components/map/MapSouthGyeongsan";
 import MapSouthJeolla from "./components/map/MapSouthJeolla";
 import MapUlsan from "./components/map/MapUlsan";
 import Map from "./components/Map";
-import { jwtDecode } from "jwt-decode";
+import OAuth2RedirectHandler from './components/OAuth2RedirectHandler';
+
+import { jwtDecode } from 'jwt-decode';
 import MapLocation from "./routes/MapLocation";
 import SlideTest from "./routes/SlideTest";
 import LikeStoryList from "./routes/LikeStoryList.js";
@@ -135,7 +137,7 @@ function App() {
                                 <Routes>
                                     <Route path="/" element={<Login />} />
                                     <Route path="/login" element={<Login />} /> {/* 로그인 페이지 */}
-
+                                    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
                                     <Route path="/signup" element={<SignUp />} /> {/* 회원가입 페이지 */}
                                     <Route path="/find-email" element={<FindEmail />} /> {/* 이메일 찾기 페이지 */}
                                     <Route path="/find-password" element={<FindPassword />} /> {/* 비번 찾기 페이지 */}
