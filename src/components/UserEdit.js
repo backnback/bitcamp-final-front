@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { InputProvider } from "./InputProvider";
 import axiosInstance from './AxiosInstance';
 import styles from '../assets/styles/css/MyPage.module.css';
+import Swal from 'sweetalert2';
 
 const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, setProfileImage, accessToken }) => {
     const [filename, setFilename] = useState('');
@@ -25,7 +26,11 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                         setProfileImage(null);
                     }
                 } else {
-                    alert("해당 정보를 가져오지 못했습니다.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "해당 정보를 가져오지 못했습니다.",
+                    });
                 }
             } catch (error) {
                 console.error("회원 정보를 가져오던 중 오류 발생:", error);

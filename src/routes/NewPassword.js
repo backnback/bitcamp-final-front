@@ -4,6 +4,7 @@ import {InputProvider} from '../components/InputProvider';
 import {ButtonProvider} from '../components/ButtonProvider';
 import {useNavigate} from 'react-router-dom';
 import axiosInstance from '../components/AxiosInstance';
+import Swal from 'sweetalert2';
 
 
 const NewPassword = () => {
@@ -16,7 +17,11 @@ const NewPassword = () => {
         e.preventDefault();
 
         if (password !== checkPassword) {
-            alert("비밀번호가 같지 않습니다");
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "비밀번호가 같지 않습니다.",
+            });
             return;
         }
 
@@ -28,11 +33,21 @@ const NewPassword = () => {
                 withCredentials: true,
             });
             if (response.data) {
-                alert("성공적으로 변경되었습니다");
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: "성공적으로 변경되었습니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 sessionStorage.removeItem("email");
                 navigate('/');
             } else {
-                alert("비밀번호 변경에 실패했습니다.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "비밀번호 변경에 실패했습니다.",
+                });
             }
         } catch (error) {
             console.error("비밀번호 변경 중 오류 발생:", error);
