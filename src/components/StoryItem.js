@@ -17,7 +17,7 @@ export const StoryAddContext = ({ children }) => {
     );
 }
 
-function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, currentLock, storyThum, currentLike, currentLikeCount, storyTitle, storyContent, storyLocation, storyDate, onLikeChange, onLockChange, onClick }) {
+function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, currentLock, storyThum, currentLike, currentLikeCount, storyTitle, storyContent, storyLocation, storyDate, onLikeChange, onLockChange, onClick, onDelete}) {
     const [like, setLike] = useState(currentLike);
     const [lock, setLock] = useState(currentLock);
 
@@ -34,6 +34,12 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
         if (newLike !== like) {
             onLikeChange(storyId, newLike ? 'add' : 'delete');
             setLike(newLike);
+        }
+    }
+
+    const deleteClick = () => {
+        if (onDelete) {
+            onDelete(storyId); // 삭제 함수가 부모로부터 전달되었을 경우 호출
         }
     }
 
@@ -73,6 +79,15 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
                             </button>
                         </ButtonProvider> :
                         null
+                }
+                {
+                storyPage == 'all-story' ?
+                    <ButtonProvider width={'icon'}>
+                        <button type="button" className={`button button__icon`} onClick={deleteClick}>
+                            <i data-button="icon" className={`icon icon__trash__red`}></i>
+                        </button>
+                    </ButtonProvider> :
+                null
                 }
 
             </div>

@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import axiosInstance from './components/AxiosInstance.js';
 
 import Header from "./components/Header";
+import AdminHeader from "./components/AdminHeader";
 import SignUp from "./routes/SignUp";
 import ViewUser from "./routes/ViewUser"; // ViewUser 컴포넌트 import
 import Login from "./routes/Login"; // Login 컴포넌트 import
 import StoryMap from "./routes/StoryMap";
 import StoryList from "./routes/StoryList"; // StoryList 컴포넌트 import
 import ShareStoryList from "./routes/ShareStoryList"; // ShareStoryList 컴포넌트 import
+import AllStoryList from "./routes/AllStoryList";
 import MyPage from "./routes/MyPage";
 import FaqBoard from "./routes/FaqBoard";
 import StoryAddForm from "./routes/StoryAddForm";
@@ -48,8 +50,8 @@ function App() {
     const [users, setUsers] = useState([]);
     const [accessToken, setAccessToken] = useState(null);
     const [user, setUser] = useState(null);
+    const [role, setRole] = useState(null);
     const currentLocation = useLocation();
-    const [currentTime, setCurrentTime] = useState(Date.now());
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -67,10 +69,21 @@ function App() {
             return;
         }
 
+        const decodedToken = jwtDecode(token);
+        setRole(decodedToken.auth);
+
         const checkTokenExpiration = async () => {
             const decodedToken = jwtDecode(token);
+            const decodedEfreshToken = jwtDecode(refreshToken);
             const expirationTime = decodedToken.exp * 1000;
+            const refreshExpirationTime = decodedEfreshToken.exp * 1000;
             const remainTime = expirationTime - Date.now();
+
+            if(remainTime < 0 || refreshExpirationTime < 0){
+                localStorage.clear();
+                navigate("/");
+                window.location.reload();
+            }
 
             if (remainTime <= 1000 * 60 * 5) {
                 try {
@@ -82,17 +95,36 @@ function App() {
                             'Content-Type': 'application/json'
                         },
                     });
-
+                
+                    // 새로 갱신된 토큰 처리
                     const newAccessToken = response.data.accessToken;
                     localStorage.setItem('accessToken', newAccessToken);
                     setAccessToken(newAccessToken);
                     setUser(jwtDecode(newAccessToken));
                     console.log("토큰 갱신 성공");
+                
                 } catch (error) {
-                    console.error("토큰 갱신 실패:", error);
-                    localStorage.clear();
-                    navigate('/login');
+                    // 서버에서 받은 오류 메시지를 확인
+                    if (error.response && error.response.data.error) {
+                        const errorMessage = error.response.data.error;
+                        
+                        // "Refresh Token이 만료되었습니다." 오류가 발생했을 경우
+                        if (errorMessage === "Refresh Token이 만료되었습니다.") {
+                            console.log("토큰 만료: 다시 로그인 해주세요.");
+                            localStorage.clear(); // 로컬스토리지 초기화
+                            navigate('/login'); // 로그인 페이지로 리다이렉트
+                        } else {
+                            console.log("토큰 갱신 실패:", errorMessage);
+                            localStorage.clear();
+                            navigate('/login');
+                        }
+                    } else {
+                        console.error("토큰 갱신 실패:", error);
+                        localStorage.clear();
+                        navigate('/login');
+                    }
                 }
+                
             } else {
                 setAccessToken(token);
                 setUser(decodedToken);
@@ -151,7 +183,13 @@ function App() {
                 <>
                     {/* 로그인 했을 때 */}
                     <div className={`layout__wrapper layout__wrapper__header`}>
+
+                    {/* accessToken을 디코딩하여 역할 확인 */}
+                    {role === 'ROLE_ADMIN' ? (
+                        <AdminHeader />
+                    ) : (
                         <Header />
+                    )}
 
                         <div className={`layout__content__wrapper`}>
                             <div className={`layout__contents`}>
@@ -185,6 +223,7 @@ function App() {
 
                                     <Route path="/viewuser/:id" element={<ViewUser />} /> {/* 특정 사용자 보기 */}
                                     <Route path="/share-story/list" element={<ShareStoryList />} /> {/* 스토리 목록 페이지 */}
+                                    <Route path="/all-story/list" element={<AllStoryList />} /> {/* 어드민이 관리하는 스토리 목록 페이지 */}
                                     <Route path="/like-story/list" element={<LikeStoryList />} /> {/* 좋아요한 스토리 목록 페이지 */}
                                     <Route path="/my-story/list" element={<StoryList />} /> {/* 스토리 목록 페이지 */}
                                     <Route path="/my-page" element={<MyPage />} /> {/* 마이 페이지 */}
