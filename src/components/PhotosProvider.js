@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import Flicking from "@egjs/react-flicking";
-import "@egjs/react-flicking/dist/flicking.css";
+import Flicking, { ViewportSlot } from "@egjs/react-flicking";
+import { Arrow, Pagination } from "@egjs/flicking-plugins";
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
+import styles from "../assets/styles/css/Photo.module.css";
 
 
 
@@ -10,7 +11,12 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
     const validPhotos = Array.isArray(photos) ? photos : [];
     const fileInputRef = useRef(null);
     const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
+    const arrowPlugin = new Arrow();
+    const [pagination, setPagination] = useState();
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [syncImg, setSyncImg] = useState();
+    const [_active, setActive] = useState(false);
+    const paginationPlugin = useRef(new Pagination({ type: "fraction" }));
     const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 진행 중 상태
     const [mainPhotoIdx, setMainPhotoIdx] = useState(mainPhotoIndex);
 
@@ -28,12 +34,12 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
         setMainPhotoIdx(index);
     };
 
-    const handleAddPhotoClick = () => {
-        // button 클릭 시 file input의 click 이벤트를 트리거
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
-    };
+    // const handleAddPhotoClick = () => {
+    //     // button 클릭 시 file input의 click 이벤트를 트리거
+    //     if (fileInputRef.current) {
+    //         fileInputRef.current.click();
+    //     }
+    // };
 
     const handleFileChange = (event) => {
         // 파일 선택이 변경되었을 때 처리
@@ -43,80 +49,55 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
         }
     };
 
+    const handleClickSlide = (event) => {
+        const img = event.currentTarget.querySelector(`[data-img-id]`);
 
-    // 슬라이드를 이동하는 함수
-    const moveToSlide = (index) => {
-        if (isAnimating) return; // 애니메이션 진행 중이면 이동하지 않음
-        setIsAnimating(true); // 애니메이션 시작
-
-        flickingRef.current.moveTo(index)
-            .then(() => {
-                setIsAnimating(false); // 애니메이션이 끝나면 상태를 원래대로 복원
-                setCurrentIndex(index);
-            })
-            .catch((error) => {
-                setIsAnimating(false); // 애니메이션 도중 오류 발생 시 상태 복원
-                console.error("애니메이션 오류:", error);
-            });
-    };
-
-    // 왼쪽으로 1칸 이동하는 함수
-    const moveLeft = (event) => {
-        if (isAnimating) return; // 애니메이션 진행 중일 때 이동 차단
-        event.stopPropagation();
-        const newIndex = Math.max(currentIndex - 1, 0); // 0보다 작은 인덱스로 이동하지 않도록 설정
-        setCurrentIndex(newIndex); // 인덱스 업데이트
-        moveToSlide(newIndex); // 슬라이드 이동
-    };
-
-    // 오른쪽으로 1칸 이동하는 함수
-    const moveRight = (event) => {
-        if (isAnimating) return; // 애니메이션 진행 중일 때 이동 차단
-        event.stopPropagation();
-        const newIndex = Math.min(
-            currentIndex + 1,
-            viewMode ? validPhotos.length - 3 : validPhotos.length - 2
-        ); // 최대 인덱스를 초과하지 않도록 설정
-        setCurrentIndex(newIndex); // 인덱스 업데이트
-        moveToSlide(newIndex); // 슬라이드 이동
-    };
-
+        setSyncImg(img.src);
+    }
 
     // photo(기존 사진)과 file(추가 사진) 구분 처리
-    const renderPhoto = (photo) => {
+    const renderPhoto = (photo, index) => {
         if (photo instanceof File) {
             // File 객체일 경우 URL.createObjectURL로 처리
             const objectURL = URL.createObjectURL(photo);
             return (
-                <div className='photo__photoItem'>
+                <div className={`${styles.slide__photo__wrap}`}>
                     <img
                         src={objectURL}
                         alt="추가된 사진들"
-                        className="story-photo"
+                        className={`${styles.photo__img} ${styles.slide__photo__img}`}
                     />
-                    {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
+                    {/* {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
                         <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
                             <span className={`blind`}>삭제</span>
                             <i className={`icon icon__x__black`}></i>
                         </button>
-                    </ButtonProvider>}
+                    </ButtonProvider>} */}
                 </div>
             );
         } else {
             // 기존 photo 객체일 경우 기존 URL 사용
             return (
-                <div className='photo__photoItem'>
+                <div className={`${styles.slide__photo__wrap}`} role='button' tabIndex={0}
+                    onClick={(e) => {
+                        if (flickingRef.current) {
+                            flickingRef.current.moveTo(index);
+                        }
+                        setCurrentIndex(index);
+                        handleClickSlide(e);
+                    }}>
                     <img
                         src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
                         alt={`Photo ${photo.id}`}
-                        className={`story-photo ${photo.mainPhoto ? 'main-photo' : ''}`}
+                        data-img-id={photo.id}
+                        className={`${styles.photo__img} ${styles.slide__photo__img} ${photo.mainPhoto ? 'main-photo' : ''}`}
                     />
-                    {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
+                    {/* {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
                         <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
                             <span className={`blind`}>삭제</span>
                             <i className={`icon icon__x__black`}></i>
                         </button>
-                    </ButtonProvider>}
+                    </ButtonProvider>} */}
                 </div>
             );
         }
@@ -125,55 +106,56 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
 
 
     useEffect(() => {
+        // setPagination(new Pagination().fractionCurrentFormat)
         // mainPhotoIdx가 변경될 때마다 슬라이드를 해당 인덱스로 이동시킴
-        if (flickingRef.current) {
-            let targetIndex = mainPhotoIdx;
+        // if (flickingRef.current) {
+        //     let targetIndex = mainPhotoIdx;
 
-            if (mainPhotoIdx === validPhotos.length - 1) {
-                targetIndex = viewMode ? mainPhotoIdx - 2 : mainPhotoIdx - 1; // 마지막 인덱스에서 -1
-            }
-            // mainPhotoIdx가 마지막 직전 인덱스일 경우, 그 인덱스에서 -1로 이동
-            else if (mainPhotoIdx === validPhotos.length - 2) {
-                targetIndex = viewMode ? mainPhotoIdx - 1 : mainPhotoIdx; // 마지막 직전 인덱스
-            }
-
-            moveToSlide(targetIndex); // 최종적으로 결정된 인덱스로 이동
-        }
+        //     if (mainPhotoIdx === validPhotos.length - 1) {
+        //         targetIndex = viewMode ? mainPhotoIdx - 2 : mainPhotoIdx - 1; // 마지막 인덱스에서 -1
+        //     }
+        //     // mainPhotoIdx가 마지막 직전 인덱스일 경우, 그 인덱스에서 -1로 이동
+        //     else if (mainPhotoIdx === validPhotos.length - 2) {
+        //         targetIndex = viewMode ? mainPhotoIdx - 1 : mainPhotoIdx; // 마지막 직전 인덱스
+        //     }
+        // }
     }, [mainPhotoIdx]);
 
 
     return (
         <div className={`photo__photos ${viewMode ? `` : `photo__photos__noMain`} ${className != null ? className : ``}`}>
             {validPhotos.length > 0 ? (
-                <div>
+                <div className={`${styles.storyPhoto__wrap}`}>
                     {viewMode && validPhotos.map(photo => (
                         photo.mainPhoto && (
-                            <div key={photo.id} className="photo__mainPhoto">
+                            <div key={photo.id} className={`${styles.photo__big}`}>
                                 <img
-                                    src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
+                                    // src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path ? photo.path : 'default.png'}`}
+                                    src={`${syncImg ? syncImg : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${photo.path}`}`}
                                     alt={`Main Photo`}
-                                    className={`story-photo main-photo`}
+                                    className={`${styles.photo__big__img}`}
                                 />
                             </div>
                         )
                     ))}
 
-                    <div className={`photo__layout ${layout ? `photo__layout__custom` : ``}`}>
+                    <div className={`${styles.slide__wrap} ${layout ? `${styles.slide__wrap__custom}` : ``}`}>
                         <Flicking
-                            ref={flickingRef} // Flicking에 ref 연결
+                            ref={flickingRef}
+                            duration={300}
                             circular={false}  // 순환 슬라이드 여부
-                            duration={500}    // 애니메이션 지속 시간
-                            drag={false}
+                            align={'prev'}
+                            plugins={[arrowPlugin, paginationPlugin.current]}
                             touch={viewMode ? undefined : false}
                         >
                             {validPhotos.map((photo, index) => (
-                                <div className={`photo__photoItem ${itemClassName ? `photo__photoItem__custom` : ``}`}
+                                <div className={`${styles.slide__item} ${itemClassName ? `${styles.slide__item__custom}` : ``} ${currentIndex === index ? styles._active : ``}`}
                                     key={`${photo.id}-${index}`} >
 
-                                    {renderPhoto(photo)}
+                                    {renderPhoto(photo, index)}
 
                                     {viewMode ? (
-                                        photo.mainPhoto && <span className="main-onelabel">대표</span>  // viewMode가 true일 때 대표 이미지만 표시
+                                        photo.mainPhoto && <strong className={`${styles.photo__main__badge}`}>대표</strong>  // viewMode가 true일 때 대표 이미지만 표시
                                     ) : (
                                         <div className={index === mainPhotoIdx ? "main-label" : "sub-label"}>
                                             <InputProvider>
@@ -188,31 +170,41 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                                                     <span className={`input__text`}>대표이미지</span>
                                                 </label>
                                             </InputProvider>
+
+                                            <ButtonProvider width={'icon'} className={`button__item__x`}>
+                                                <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
+                                                    <span className={`blind`}>삭제</span>
+                                                    <i className={`icon icon__x__black`}></i>
+                                                </button>
+                                            </ButtonProvider>
                                         </div>
                                     )}
+
+                                    {/* {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
+                                        <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
+                                            <span className={`blind`}>삭제</span>
+                                            <i className={`icon icon__x__black`}></i>
+                                        </button>
+                                    </ButtonProvider>} */}
                                 </div>
                             ))}
-                            {!viewMode && <div className="photo__photoItem">
+                            {/* {!viewMode && <div className="photo__photoItem">
                                 <button type="button" className={`button button__story__add`} onClick={handleAddPhotoClick}>
                                     <span className={`blind`}>사진 등록</span>
                                     <i className={`icon icon__plus__white`}></i>
                                 </button>
-                            </div>}
+                            </div>} */}
+
+                            <ViewportSlot>
+                                <div className="flicking-pagination"></div>
+                                <button type='button' className="flicking-arrow-prev flicking-arrow-custom">
+                                    <span className='blind'>이전</span>
+                                </button>
+                                <button type='button' className="flicking-arrow-next flicking-arrow-custom">
+                                    <span className='blind'>다음</span>
+                                </button>
+                            </ViewportSlot>
                         </Flicking>
-                        {/* 버튼을 추가하여 슬라이드를 이동 */}
-                        <div className="slider__button">
-                            {currentIndex > 0 && <button type="button" className="left" onClick={moveLeft}>◀</button>}
-                            {currentIndex > 0 && (
-                                <button type="button" className="left" onClick={moveLeft}>◀</button>
-                            )}
-                            {viewMode
-                                ? currentIndex < validPhotos.length - 3 && (
-                                    <button type="button" className="right" onClick={moveRight}>▶</button>
-                                )
-                                : currentIndex < validPhotos.length - 2 && (
-                                    <button type="button" className="right" onClick={moveRight}>▶</button>
-                                )}
-                        </div>
                     </div>
                 </div>
             ) : (

@@ -56,7 +56,7 @@ function App() {
 
         if (!token) {
             console.log("토큰 없음");
-            const allowedPaths = ['/signup', '/find-email', '/find-password' ,'/newPassword'];
+            const allowedPaths = ['/signup', '/find-email', '/find-password', '/newPassword'];
             if (allowedPaths.includes(currentLocation.pathname)) {
                 console.log("토큰 없이 접근 허용");
                 return;

@@ -100,7 +100,7 @@ const StoryView = ({ storyId }) => {
     // 업데이트 버튼 처리
     const handleEdit = () => {
         const content = <StoryUpdateForm storyId={storyId} />
-        openModal(modals.storyEditModal, {
+        openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('확인 클릭');
             },

@@ -4,7 +4,7 @@ import { FormProvider, StoryForm } from '../components/FormProvider';
 import Swal from 'sweetalert2';
 
 
-const MyStoryAddForm = ({ provinceId, cityId }) => {
+const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
     const [title, setTitle] = useState('');
     const [travelDate, setTravelDate] = useState('');
     const [content, setContent] = useState('');
@@ -224,9 +224,20 @@ const MyStoryAddForm = ({ provinceId, cityId }) => {
 
 
     return (
-        <FormProvider value={formValue}>
-            <StoryForm />
-        </FormProvider>
+        <>
+            {
+                isModal ?
+                    <div>
+                        <FormProvider value={formValue}>
+                            <StoryForm />
+                        </FormProvider>
+                    </div>
+                    :
+                    <FormProvider value={formValue}>
+                        <StoryForm />
+                    </FormProvider>
+            }
+        </>
     );
 };
 

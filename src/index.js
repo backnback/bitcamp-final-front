@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import ReactModal from 'react-modal';
 import "@egjs/flicking-plugins/dist/arrow.css";
 import './assets/styles/css/reset.css';
 // import styles
 import "@egjs/flicking/dist/flicking.css"; // Supports IE10+, using CSS flex
 import './assets/styles/css/commons.css';
+import ReactModal from 'react-modal';
 import App from './App';
 import ModalsProvider from './components/ModalProvider';
 // import reportWebVitals from './reportWebVitals';

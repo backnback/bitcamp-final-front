@@ -1,3 +1,7 @@
+.ReactModal__Body--open {
+    overflow: hidden;
+}
+
 .modal-overlay {
     position: fixed;
     inset: 0px;
@@ -27,11 +31,18 @@
 }
 
 .modal__header {
-    padding: 20px 30px 5px 20px;
+    padding: 5px 30px 5px 20px;
+    border-bottom: 1px solid var(--color-black-10)
 }
 
 .modal__body {
-    padding: 0 30px 5px;
+    padding: 10px 30px 5px;
+}
+
+.modal__content__item__center {
+    display: flex;
+    justify-content: center;
+    word-break: break-all;
 }
 
 .modal__footer {
@@ -44,5 +55,3 @@
 .modal__footer .button__item {
     flex: 1;
 }
-
-/* reauth */

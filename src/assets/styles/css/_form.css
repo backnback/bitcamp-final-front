@@ -1,11 +1,19 @@
+.form__item__wrap:not(.form__item:last-of-type) {
+    margin-bottom: 20px;
+}
+
 .form__item {
     flex: 1;
     margin: 10px 0;
     word-break: break-all;
 }
 
-.form__item__input:not(.form__item__input:last-of-type) {
+.form__item:not(.form__item:last-of-type) {
     margin-bottom: 20px;
+}
+
+.form__item__wrap .form__item:not(.form__item:last-of-type) {
+    margin-bottom: 10px;
 }
 
 .form__label {
@@ -14,12 +22,18 @@
     gap: 12px;
 }
 
-.form__label__textInput {
+.form__label__title {
     display: block;
     margin-bottom: 10px;
     color: var(--color-textInput-label);
     font-size: var(--font-size);
     font-weight: 600;
+}
+
+.form__select__wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .form__input,

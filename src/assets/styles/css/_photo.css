@@ -19,22 +19,7 @@
 
 
 .photo__layout {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    position: relative;
-}
-
-.photo__layout__custom {}
-
-
-.flicking-viewport {
-    width: 530px;
-    /* 슬라이드 영역 너비 */
-    height: 200px;
-    /* 슬라이드 영역 높이 */
-    overflow: hidden;
-    /* 슬라이드 영역 밖으로 콘텐츠가 나가지 않도록 설정 */
+    gap: 10px;
 }
 
 .flicking-camera {

@@ -1,0 +1,73 @@
+.photo__big {
+    overflow: hidden;
+    height: 342px;
+    margin-bottom: 7px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-f5);
+}
+
+.photo__big__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.slide__wrap [class*=flicking-viewport] {
+    width: auto;
+    height: auto;
+}
+
+.slide__wrap [class*=flicking-camera] {
+    gap: 10px;
+    padding: 20px 30px;
+}
+
+.slide__item {
+    position: relative;
+    overflow: hidden;
+    width: 158px;
+    height: 175px;
+    border-radius: var(--border-radius);
+}
+
+.photo__main__badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 8px 6px;
+    background: var(--color-primary);
+    font-size: var(--font-badge);
+    color: var(--color-white);
+}
+
+.slide__photo__wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius);
+}
+
+.slide__photo__wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius);
+    border: 3px solid transparent;
+    box-sizing: border-box;
+}
+
+.slide__item._active .slide__photo__wrap::after {
+    border-color: var(--color-primary);
+}
+
+.slide__photo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}

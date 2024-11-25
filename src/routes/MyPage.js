@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import Flicking, { ViewportSlot } from "@egjs/react-flicking";
+import Flicking, { ViewportSlot, DisabledState } from "@egjs/react-flicking";
 import { Arrow } from "@egjs/flicking-plugins";
 import likeStoryStyles from "../assets/styles/css/StoryItemList.module.css";
 import styles from '../assets/styles/css/MyPage.module.css';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추가
 // import './ShareStoryList.css'; // 스타일 파일 임포트
 import axiosInstance from '../components/AxiosInstance.js';
-import StoryItemList from "../components/StoryItemList";
 import AlarmCardList from "../components/AlarmCardList";
 import Profile from "../components/Profile";
 import ShareStoryView from './ShareStoryView.js';
@@ -14,8 +13,6 @@ import useModals from '../useModals';
 import { modals } from '../components/Modals';
 import StoryItem from '../components/StoryItem.js';
 import { useRef } from 'react';
-import { ButtonProvider } from '../components/ButtonProvider.js';
-import Swal from 'sweetalert2';
 
 
 const MyPage = () => {
