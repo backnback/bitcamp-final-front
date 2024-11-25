@@ -214,7 +214,7 @@ const AllStoryList = () => {
                     storyPage={`all-story`}
                     storyList={storyList}
                     onLikeChange={handleLikeChange}
-                    handleModal={openStoryModal}
+                    handleModal={() => {}}
                     onDelete={handleDelete}
                 />
             </div>
