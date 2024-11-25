@@ -31,14 +31,15 @@ const Map = ({ storyList, hovered }) => {
 
         setOldHovered(null);
         if (leaveElement) {
-            leaveElement.removeAttribute('filter');
+            leaveElement.removeAttribute('fill');
         }
 
         if (hovered !== null) {
             const gElement = document.getElementById(`${hovered}`);
             setOldHovered(hovered);
             if (gElement) {
-                gElement.setAttribute('filter', 'invert(50%)');
+                // gElement.setAttribute('border-opacity', '0%');
+                gElement.setAttribute('fill', 'red');
             }
         }
     }, [hovered]);

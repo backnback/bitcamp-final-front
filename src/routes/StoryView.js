@@ -7,7 +7,7 @@ import useModals from '../useModals';
 import { modals } from '../components/Modals';
 
 
-const StoryView = ({ storyId }) => {
+const StoryView = ({ storyId, mapId }) => {
     const [accessToken, setAccessToken] = useState(null);
     const [storyViewDTO, setStoryViewDTO] = useState(null);
     const { openModal } = useModals();
@@ -99,7 +99,7 @@ const StoryView = ({ storyId }) => {
 
     // 업데이트 버튼 처리
     const handleEdit = () => {
-        const content = <StoryUpdateForm storyId={storyId} />
+        const content = <StoryUpdateForm storyId={storyId} mapId={mapId}/>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('확인 클릭');

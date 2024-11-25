@@ -48,7 +48,7 @@ const ReauthenticateModal = () => {
             }
         } catch (error) {
             console.error("마이페이지 회원인증 요청 중 오류 발생:", error);
-            alert("마이페이지 회원인증 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+            console.log("마이페이지 회원인증 오류가 발생했습니다. 나중에 다시 시도해주세요.");
         }
     };
 

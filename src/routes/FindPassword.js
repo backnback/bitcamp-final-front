@@ -4,6 +4,7 @@ import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../components/AxiosInstance';
+import Swal from 'sweetalert2';
 
 
 const FindPassword = () => {
@@ -15,7 +16,11 @@ const FindPassword = () => {
     e.preventDefault();
 
     if (!email) {
-      alert("이메일을 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "이메일을 입력해주세요.",
+    });
       return;
     }
 
@@ -27,9 +32,19 @@ const FindPassword = () => {
         withCredentials: true,
       });
       if (response.data) {
-        alert("인증번호가 이메일로 발송되었습니다.");
+        Swal.fire({
+          position: "top",
+          icon: "success",
+          title: "인증번호가 이메일로 발송되었습니다.",
+          showConfirmButton: false,
+          timer: 1500
+      });
       } else {
-        alert("인증번호 발송에 실패했습니다.");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "인증번호 발송에 실패했습니다.",
+      });
       }
     } catch (error) {
       console.error("이메일 찾는중 오류 발생", error);
@@ -41,7 +56,11 @@ const FindPassword = () => {
     e.preventDefault();
 
     if (!authCode) {
-      alert("인증번호를 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "인증번호를 입력해주세요.",
+    });
       return;
     }
 
@@ -53,11 +72,21 @@ const FindPassword = () => {
         withCredentials: true, // 쿠키 사용 시 설정
       });
       if (response.data) {
-        alert("정상적으로 처리 되었습니다");
+        Swal.fire({
+          position: "top",
+          icon: "success",
+          title: "정상적으로 처리 되었습니다.",
+          showConfirmButton: false,
+          timer: 1500
+      });
         sessionStorage.setItem("email", email);
         navigate('/newPassword');
       } else {
-        alert("인증코드가 알맞지 않습니다 다시입력해 주세요");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "인증코드가 알맞지 않습니다 다시입력해 주세요.",
+      });
       }
 
     } catch (error) {

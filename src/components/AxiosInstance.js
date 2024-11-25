@@ -10,3 +10,4 @@ const AxiosInstance = axios.create({
 });
 
 export default AxiosInstance;
+

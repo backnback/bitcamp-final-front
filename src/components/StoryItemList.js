@@ -4,14 +4,12 @@ import styles from "../assets/styles/css/StoryItemList.module.css";
 import StoryItem from '../components/StoryItem';
 import { StoryAddContext } from '../components/StoryItem';
 
-
-function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onLockChange, handleModal }) {
+function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onLockChange, handleModal, onDelete }) {
 
     const handleLikeChange = (storyId, action) => {
         console.log(`Story ID: ${storyId}, Action: ${action}`);
         onLikeChange(storyId, action);
     };
-
 
     const handleLockChange = (storyId, action) => {
         console.log(`Story ID: ${storyId}, Action: ${action}`);
@@ -22,6 +20,11 @@ function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onLockC
         handleModal(storyId);
     };
 
+    const handleDelete = (storyId) => {
+        if (onDelete) {
+            onDelete(storyId); // 삭제 로직을 처리할 부모 컴포넌트의 함수를 호출
+        }
+    };
 
     return (
         <div className={styles.list}>
@@ -44,18 +47,19 @@ function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onLockC
                             storyPage={storyPage}
                             storyId={storyListDTO.storyId}
                             profileImg={storyListDTO.userPath || 'default.png'} // 프로필 이미지
-                            profileName={storyListDTO.userNickname} // 프로필 이름
+                            profileName={storyListDTO.userNickname || '익명'} // 프로필 이름
                             currentLock={!storyListDTO.share} // 공유 여부
-                            storyThum={storyListDTO.mainPhoto.path || 'default.png'} // 썸네일 이미지
+                            storyThum={storyListDTO.mainPhoto?.path || 'default.png'} // 썸네일 이미지
                             currentLike={storyListDTO.likeStatus} // 좋아요 상태
-                            currentLikeCount={storyListDTO.likeCount} // 좋아요 개수
-                            storyTitle={storyListDTO.title} // 스토리 제목
-                            storyContent={storyListDTO.content} // 스토리 내용
-                            storyLocation={`${storyListDTO.locationFirstName} ${storyListDTO.locationSecondName}`} // 위치 정보
-                            storyDate={storyListDTO.travelDate} // 여행 날짜
+                            currentLikeCount={storyListDTO.likeCount || 0} // 좋아요 개수
+                            storyTitle={storyListDTO.title || '제목 없음'} // 스토리 제목
+                            storyContent={storyListDTO.content || '내용 없음'} // 스토리 내용
+                            storyLocation={`${storyListDTO.locationFirstName || ''} ${storyListDTO.locationSecondName || ''}`} // 위치 정보
+                            storyDate={storyListDTO.travelDate || '날짜 정보 없음'} // 여행 날짜
                             onLikeChange={handleLikeChange}  // 좋아요 변경 시 호출할 함수 전달
                             onLockChange={handleLockChange}
                             onClick={() => handleModalWithStoryId(storyListDTO.storyId)}
+                            onDelete={handleDelete} // 삭제 함수 전달
                         />
                     </li>
                 ))}

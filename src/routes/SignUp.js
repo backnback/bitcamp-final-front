@@ -5,6 +5,7 @@ import { InputProvider } from "../components/InputProvider";
 import { ButtonProvider } from '../components/ButtonProvider';
 import FormFileIcon from "../components/FormFileIcon";
 import styles from '../assets/styles/css/SignUp.module.css';
+import Swal from 'sweetalert2';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -26,7 +27,11 @@ function SignUp() {
     e.preventDefault();
 
     if (!isVerified) { // flag 대신 isVerified 사용
-      alert("인증이 완료되지 않은 이메일입니다");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "인증이 완료되지 않은 이메일입니다.",
+    });
       return;
     }
 
@@ -60,7 +65,11 @@ function SignUp() {
     e.preventDefault();
 
     if (!email) {
-      alert("이메일을 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "이메일을 입력해주세요.",
+    });
       return;
     }
 
@@ -86,9 +95,19 @@ function SignUp() {
           });
 
           if (authResponse.data) {
-            alert("인증번호가 이메일로 발송되었습니다.");
+            Swal.fire({
+              position: "top",
+              icon: "success",
+              title: "인증번호가 이메일로 발송되었습니다.",
+              showConfirmButton: false,
+              timer: 1500
+          });
           } else {
-            alert("인증번호 발송에 실패했습니다.");
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "인증번호 발송에 실패했습니다.",
+          });
           }
         } catch (authError) {
           console.error("인증번호 요청 중 오류 발생:", authError);
@@ -108,7 +127,11 @@ function SignUp() {
     e.preventDefault();
 
     if (!authCode) {
-      alert("인증번호를 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "인증번호를 입력해주세요.",
+    });
       return;
     }
 
@@ -120,10 +143,20 @@ function SignUp() {
         withCredentials: true, // 쿠키 사용 시 설정
       });
       if (response.data) {
-        alert("정상적으로 처리 되었습니다");
+        Swal.fire({
+          position: "top",
+          icon: "success",
+          title: "정상적으로 처리 되었습니다.",
+          showConfirmButton: false,
+          timer: 1500
+      });
         setIsVerified(true);
       } else {
-        alert("인증코드가 알맞지 않습니다 다시입력해 주세요");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "인증코드가 알맞지 않습니다 다시입력해 주세요.",
+      });
       }
     } catch (error) {
       console.error("인증번호 요청 중 오류 발생:", error);

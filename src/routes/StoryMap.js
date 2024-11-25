@@ -31,8 +31,6 @@ function StoryMap() {
         }
     }, [accessToken]);
 
-    console.log(hovered)
-
     // 로컬 스토리지에서 accessToken을 가져오는 함수
     useEffect(() => {
         const token = localStorage.getItem('accessToken');

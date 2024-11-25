@@ -17,6 +17,7 @@ const CityMap = ({storyPhotoList, eventClick, mapPaths}) => {
                         storyPhotoList && storyPhotoList.length > 0 ? (
                             storyPhotoList.map((item) => {
                                 const key = item.id.toString().slice(-3); // 유일한 key 생성
+                                console.log(key)
                                 const path = mapPaths.location[key].d; // mapPaths에서 해당 key의 path 가져오기
 
                                 if (item.mainPhotoPath !== null) {
