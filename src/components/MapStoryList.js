@@ -38,8 +38,8 @@ const MapStoryList = ({storyList, onAddStory, locationId, cityId}) => {
                     <li>
                         <div className={styles.list__box}>
                             <StoryView
-                                // storyPage={storyPage}
                                 storyId={storyListDTO.storyId}
+                                mapId={locationId}
                             />
                         </div>
                     </li>

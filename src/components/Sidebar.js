@@ -30,7 +30,7 @@ const Sidebar = ({onHovered, provinceId}) => {
                         provinceId ?
                             (
                                 <a key={province.id}
-                                   className={province.id === provinceId ? styles.select : styles.side__a}
+                                   className={province.id == provinceId ? styles.select : styles.side__a}
                                    href={`/map/story/${province.id}`}>
                                     <li className={styles.side__text}>{province.firstName}</li>
                                 </a>

@@ -4,7 +4,7 @@ import axiosInstance from "./AxiosInstance";
 
 import styles from "../assets/styles/css/SecondSidebar.module.css"
 
-const Sidebar = ({onHovered, provinceId}) => {
+const Sidebar = ({onHovered, provinceId, clickEvent}) => {
     const [cities, setCities] = useState(null);
 
     useEffect(() => {
@@ -25,8 +25,8 @@ const Sidebar = ({onHovered, provinceId}) => {
             <ul className={styles.side__box}>
                 {
                     cities && cities.map(city => (
-                        <a key={city.id}>
-                            <li>{city.secondName}</li>
+                        <a id={city.id.toString().slice(2)} key={city.id} className={styles.side__a} onClick={clickEvent}>
+                            <li className={styles.side__text}>{city.secondName}</li>
                         </a>
                     ))
                 }

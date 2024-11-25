@@ -4,7 +4,7 @@ import { FormProvider, StoryForm } from '../components/FormProvider';
 import Swal from 'sweetalert2';
 
 
-const MyStoryUpdateForm = ({ storyId }) => {
+const MyStoryUpdateForm = ({ storyId, mapId }) => {
     const [accessToken, setAccessToken] = useState(null);
 
     const [title, setTitle] = useState('');
@@ -166,7 +166,11 @@ const MyStoryUpdateForm = ({ storyId }) => {
                 timer: 1500
             }).then(() => {
                 // 3초 후 페이지 이동
-                window.location.href = '/my-story/list';
+                if (mapId) {
+                    window.location.href = `/map/story/${mapId}`
+                }else {
+                    window.location.href = '/my-story/list';
+                }
             });
         } catch (error) {
             console.error("스토리 업데이트 중 오류가 발생했습니다!", error);

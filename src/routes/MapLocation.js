@@ -108,7 +108,7 @@ function MapLocation() {
     return (
         <div className={styles.container}>
             <Sidebar provinceId={locationId}/>
-            <SidebarSecond provinceId={locationId}/>
+            <SidebarSecond provinceId={locationId} clickEvent={handleClick}/>
             <div>
                 {RenderComponent ? (
                     React.cloneElement(RenderComponent, {
