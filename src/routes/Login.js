@@ -121,11 +121,11 @@ function Login() {
                                 <span className={`button__text`}>로그인</span>
                             </button>
                         </ButtonProvider>
-<ButtonProvider className={styles.login__button}>
-    <button type="button" onClick={handleGoogleLogin} aria-label="Login with Google">
-        <img src="/images/google.svg" alt="Google logo" className="button__google"/>
-    </button>
-</ButtonProvider>
+                        <ButtonProvider className={styles.login__button}>
+                            <button type="button" onClick={handleGoogleLogin} aria-label="Login with Google">
+                                <img src="/images/google.svg" alt="Google logo" className="button__google"/>
+                            </button>
+                        </ButtonProvider>
                         <div className={styles.user__account}>
                             <Link to="/find-email" className={styles.user__account__link}>아이디 찾기</Link><Link to="/find-password" className={styles.user__account__link}>비밀번호 찾기</Link><Link to="/signup" className={styles.user__account__link}>회원가입</Link>
                         </div>
