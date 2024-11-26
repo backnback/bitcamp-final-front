@@ -122,3 +122,9 @@
     background-color: var(--color-blue-83);
     border-color: var(--color-blue-83);
 }
+
+/* 구글 소셜 로그인 버튼 CSS 스타일 (구글 가이드라인 기준) */
+.button__google {
+}
+
+
