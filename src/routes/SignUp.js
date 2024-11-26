@@ -202,57 +202,63 @@ function SignUp() {
       <section className={styles.signupBox}>
         <h2>회원가입</h2>
         <form onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <label>이메일 <span className={styles.required}>*</span></label>
-            <span className={duplication.includes('사용 가능한 이메일') ? styles.success : styles.error}>
-              {duplication}
-            </span>
-            <div className={styles.inputWrapper}>
-              <InputProvider>
-                <input
-                  type="email"
-                  value={email}
-                  placeholder="이메일 입력"
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isOAuthSignUp} // OAuth 회원가입 시 이메일 수정 불가
-                  required
-                />
-              </InputProvider>
-              {!isOAuthSignUp && (
-                <ButtonProvider>
-                  <button type="button" onClick={getUserAuthCode}>
-                    인증번호 받기
-                  </button>
-                </ButtonProvider>
-              )}
-            </div>
-          </div>
+        <div className={styles.inputGroup}>
+                    <label>이메일 <span className={styles.required}>*</span></label>
+                    <span className={duplication.includes("사용가능한 이메일") ? styles.success : styles.error}>
+                      {`${duplication}`}
+                    </span>
+                    <div className={styles.inputWrapper}>
+                      <InputProvider>
+                        <input
+                          type="email"
+                          className="form__input"
+                          id="email01"
+                          name="이메일"
+                          value={email}
+                          placeholder="이메일 입력"
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </InputProvider>
+                    {!isOAuthSignUp && (
+                      <ButtonProvider>
+                        <button type="button" className="button button__primary" onClick={getUserAuthCode}>
+                          <span className="button__text">인증번호 받기</span>
+                        </button>
+                      </ButtonProvider>
+                    )}
+                    </div>
+                  </div>
           {!isOAuthSignUp && (
-            <div className={styles.inputGroup}>
-              <label>인증번호 <span className={styles.required}>*</span></label>
-              <div className={styles.inputWrapper}>
-                <InputProvider>
-                  <input
-                    type="text"
-                    placeholder="인증번호"
-                    value={authCode}
-                    onChange={(e) => setAuthCode(e.target.value)}
-                    required
-                  />
-                </InputProvider>
-                <ButtonProvider>
-                  <button type="button" onClick={setUserAuthCode}>
-                    인증확인
-                  </button>
-                </ButtonProvider>
-              </div>
-            </div>
-          )}
+                    <div className={styles.inputGroup}>
+                      <label>인증번호 <span className={styles.required}>*</span></label>
+                      <div className={styles.inputWrapper}>
+                        <InputProvider>
+                          <input
+                            type="text"
+                            placeholder="인증번호"
+                            value={authCode}
+                            className="form__input"
+                            onChange={(e) => setAuthCode(e.target.value)}
+                            required
+                          />
+                        </InputProvider>
+                        <ButtonProvider>
+                          <button type="button" className="button button__primary" onClick={setUserAuthCode}>
+                            <span className="button__text">인증확인</span>
+                          </button>
+                        </ButtonProvider>
+                      </div>
+                    </div>
+                     )}
           <div className={styles.inputGroup}>
             <label>비밀번호 <span className={styles.required}>*</span></label>
             <InputProvider>
               <input
                 type="password"
+                className="form__input"
+                id="pwd01"
+                name="비밀번호"
                 value={password}
                 placeholder="비밀번호"
                 onChange={(e) => setPassword(e.target.value)}
@@ -261,56 +267,56 @@ function SignUp() {
             </InputProvider>
           </div>
           <div className={styles.inputGroup}>
-            <label>닉네임 <span className={styles.required}>*</span></label>
-            <InputProvider>
-              <input
-                type="text"
-                value={nickname}
-                placeholder="닉네임 입력"
-                onChange={(e) => setNickname(e.target.value)}
-                required
-              />
-            </InputProvider>
+                      <label>닉네임 <span className={styles.required}>*</span></label>
+                      <InputProvider>
+                        <input
+                          type="text"
+                          placeholder="닉네임"
+                          value={nickname}
+                          className="form__input"
+                          onChange={(e) => setNickname(e.target.value)}
+                          required
+                        />
+                      </InputProvider>
           </div>
           <div className={styles.inputGroup}>
             <label>프로필 사진</label>
-            {profileImage && (
-              <span>
-                {typeof profileImage === 'string' ? (
-                  <img src={profileImage} alt="Profile" width="50" />
-                ) : (
-                  profileImage.name
-                )}
-              </span>
-            )}
-            <InputProvider>
-              <label htmlFor="file01" className="form__label form__label__file">
-                <input type="file" id="file01" onChange={handleFileChange} />
-                <FormFileIcon />
-              </label>
-            </InputProvider>
+            {profileImage && <span>{"(" + profileImage.name + ")"}</span>}
+            <div className={styles.inputWrapper}>
+              <InputProvider>
+                <label htmlFor="file01" className="form__label form__label__file">
+                  <input type="file" className="blind" id="file01" onChange={handleFileChange} />
+                  <FormFileIcon />
+                </label>
+              </InputProvider>
+            </div>
           </div>
           <div className={styles.checkboxGroup}>
-            <InputProvider>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={agree}
-                  onChange={(e) => setAgree(e.target.checked)}
-                  required
-                />
-                개인정보 이용 동의
-              </label>
-            </InputProvider>
-          </div>
+                     <InputProvider>
+                       <label htmlFor="checkbox02" className="form__label form__label__checkbox">
+                         <input
+                           type="checkbox"
+                           checked={agree}
+                           onChange={(e) => setAgree(e.target.checked)}
+                           className="form__input"
+                           id="checkbox02"
+                           name="개인정보 동의"
+                           required
+                         />
+                         <span className="input__text">개인 정보 이용 동의</span>
+                       </label>
+                     </InputProvider>
+                   </div>
           <ButtonProvider>
-            <button type="submit">
-              회원가입
+            <button type="submit" className="button button__primary">
+              <span className="button__text">회원가입</span>
             </button>
           </ButtonProvider>
         </form>
       </section>
     </div>
+
+
   );
 }
 
