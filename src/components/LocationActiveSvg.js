@@ -1,8 +1,8 @@
 import {useEffect, useRef, useState} from "react";
+import styles from "../assets/styles/css/city.module.css"
 
 const LocationActiveSvg = ({
                                gId,
-                               gClassName,
                                eventClick,
                                clipPathId,
                                pathD,
@@ -82,7 +82,7 @@ const LocationActiveSvg = ({
     }, [imageDimensions]); // imgHref가 변경될 때마다 이미지 정보를 업데이트
 
     return (
-        <g id={gId} className={`province ${gClassName}`} role="button" tabIndex="0" onClick={eventClick}>
+        <g id={gId} role="button" tabIndex="0" onClick={eventClick}>
             <defs>
                 <clipPath id={clipPathId}>
                     <path
@@ -90,16 +90,22 @@ const LocationActiveSvg = ({
                         d={pathD}
                         id={pathId}/>
                 </clipPath>
+                <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feDropShadow dx="3" dy="3" stdDeviation="4" floodColor="black" floodOpacity="0.5"/>
+                </filter>
             </defs>
-
             <image
                 ref={imgRef}
                 href={imgHref}
                 clipPath={`url(#${clipPathId})`} id={imgId}/>
-
-            {/*<image*/}
-            {/*    href={imgHref}*/}
-            {/*    clipPath={`url(#${clipPathId})`} id={imgId} width={imgWidth} height={imgHeight} x={imgX} y={imgY}/>*/}
+            <path
+                className={styles.shadow}
+                fillOpacity={0}
+                ref={pathRef}
+                d={pathD}
+                id={"p" + pathId}
+                filter="url(#shadow)"
+            />
             <use href={`#${pathId}`} fill={`url(#${imgId})`}/>
         </g>
     );

@@ -41,7 +41,6 @@ function StoryMap() {
         }
     }, []);
 
-
     return (
         <div className={`container`}>
             <Sidebar onHovered={sethHovered}/>

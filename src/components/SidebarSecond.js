@@ -12,7 +12,7 @@ const Sidebar = ({onHovered, provinceId, clickEvent}) => {
             try {
                 const response = await axiosInstance.get(`/location/province/${provinceId}`); // API 요청
                 setCities(response.data)
-                console.log(response.data)
+                // console.log(response.data)
             } catch (error) {
                 console.error("There was an error", error);
             }
@@ -25,7 +25,13 @@ const Sidebar = ({onHovered, provinceId, clickEvent}) => {
             <ul className={styles.side__box}>
                 {
                     cities && cities.map(city => (
-                        <a id={city.id.toString().slice(2)} key={city.id} className={styles.side__a} onClick={clickEvent}>
+                        <a key={city.id}
+                           id={city.id.toString().slice(2)}
+                           className={styles.side__a}
+                           onClick={clickEvent}
+                           onMouseOver={() => onHovered(city.id.toString().slice(2))}
+                           onMouseLeave={() => onHovered(null)}
+                        >
                             <li className={styles.side__text}>{city.secondName}</li>
                         </a>
                     ))

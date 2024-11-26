@@ -5,12 +5,11 @@
 .side__box {
     height: 90%;
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
 }
 
 .side__a {
-    width: 100%;
+    width: 75px;
     padding: 10px;
     text-align: center;
 }
@@ -24,5 +23,8 @@
 }
 
 .select {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
     background: rgba(176,236,248, 0.5);
 }

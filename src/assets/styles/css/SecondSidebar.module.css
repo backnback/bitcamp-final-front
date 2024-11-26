@@ -3,14 +3,14 @@
 }
 
 .side__box {
+    overflow: auto;
     height: 90%;
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
 }
 
 .side__a {
-    width: 100%;
+    width: 110px;
     padding: 10px;
     text-align: center;
 }
