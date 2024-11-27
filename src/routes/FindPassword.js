@@ -20,7 +20,7 @@ const FindPassword = () => {
         icon: "error",
         title: "Oops...",
         text: "이메일을 입력해주세요.",
-    });
+      });
       return;
     }
 
@@ -38,13 +38,13 @@ const FindPassword = () => {
           title: "인증번호가 이메일로 발송되었습니다.",
           showConfirmButton: false,
           timer: 1500
-      });
+        });
       } else {
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "인증번호 발송에 실패했습니다.",
-      });
+        });
       }
     } catch (error) {
       console.error("이메일 찾는중 오류 발생", error);
@@ -60,7 +60,7 @@ const FindPassword = () => {
         icon: "error",
         title: "Oops...",
         text: "인증번호를 입력해주세요.",
-    });
+      });
       return;
     }
 
@@ -78,7 +78,7 @@ const FindPassword = () => {
           title: "정상적으로 처리 되었습니다.",
           showConfirmButton: false,
           timer: 1500
-      });
+        });
         sessionStorage.setItem("email", email);
         navigate('/newPassword');
       } else {
@@ -86,7 +86,7 @@ const FindPassword = () => {
           icon: "error",
           title: "Oops...",
           text: "인증코드가 알맞지 않습니다 다시입력해 주세요.",
-      });
+        });
       }
 
     } catch (error) {
@@ -94,8 +94,12 @@ const FindPassword = () => {
     }
   };
 
+  useEffect(() => {
+    document.body.className = 'body body__auth body__findpassword';
+  })
+
   return (
-    <div className={styles.container}>
+    <div id='findpassword' className={styles.container}>
       <div className={styles.box}>
         <div>
           <h2>비밀번호 찾기</h2>

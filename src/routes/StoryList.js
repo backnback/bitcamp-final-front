@@ -218,7 +218,7 @@ const MyStoryList = () => {
             />
 
             <StoryTitleProvider
-                title={'내 스토리'}
+                title={`내 스토리(${storyList.length})`}
                 selectChildren={
                     <SelectProvider>
                         <select id="select01" name="스토리 정렬" className={`form__select`}

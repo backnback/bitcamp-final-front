@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import LocationActiveSvg from "./LocationActiveSvg";
 import LocationMapSvg from "./LocationMapSvg";
+import mapStyles from "../assets/styles/css/Map.module.css";
 
-const CityMap = ({storyPhotoList, eventClick, mapPaths, hovered}) => {
+const CityMap = ({ storyPhotoList, eventClick, mapPaths, hovered }) => {
 
     const [oldHovered, setOldHovered] = useState();
 
@@ -26,9 +27,9 @@ const CityMap = ({storyPhotoList, eventClick, mapPaths, hovered}) => {
     }, [hovered]);
 
     return (
-        <div className={`city__wrap`}>
+        <div className={`${mapStyles.city__wrap}`}>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width={mapPaths.width} viewBox={mapPaths.viewBox}
-                 strokeLinecap="round" strokeLinejoin="round" id={mapPaths.id} className={`city__list`}>
+                strokeLinecap="round" strokeLinejoin="round" id={mapPaths.id} className={`${mapStyles.city__list}`}>
                 <g id={mapPaths.id + "경계"} stroke="white" strokeWidth="5">
                     {
                         storyPhotoList && storyPhotoList.length > 0 ? (

@@ -1,19 +1,18 @@
 import Map from '../components/Map';
-import styles from '../assets/styles/css/Map.css';
-import {useEffect, useState} from "react";
+import mapStyles from '../assets/styles/css/Map.module.css';
+import { useEffect, useState } from "react";
 import axiosInstance from '../components/AxiosInstance';
 import Sidebar from "../components/Sidebar";
 
 function StoryMap() {
-    useEffect(() => {
-        document.body.className = 'body body__story body__map'
-    })
 
     const [accessToken, setAccessToken] = useState(null);
     const [mapStoryList, setMapStoryList] = useState(null);
     const [hovered, sethHovered] = useState(null);
 
     useEffect(() => {
+        document.body.className = 'body body__map';
+
         if (accessToken) {
             const mapProvince = async () => {
                 try {
@@ -42,10 +41,10 @@ function StoryMap() {
     }, []);
 
     return (
-        <div className={`container`}>
-            <Sidebar onHovered={sethHovered}/>
-            <div className={`map__container`}>
-                <Map storyList={mapStoryList} hovered={hovered}/>
+        <div id='map' className={`${mapStyles.container}`}>
+            <Sidebar onHovered={sethHovered} />
+            <div className={`${mapStyles.map__container}`}>
+                <Map storyList={mapStoryList} hovered={hovered} />
             </div>
         </div>
     )

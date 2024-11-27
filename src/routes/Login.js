@@ -27,15 +27,15 @@ function Login() {
             });
 
 
-        if (response.data) {
-            const { accessToken, refreshToken } = response.data;
+            if (response.data) {
+                const { accessToken, refreshToken } = response.data;
 
-            // 토큰을 로컬 스토리지에 저장
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
+                // 토큰을 로컬 스토리지에 저장
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
 
-            // 토큰 디코딩하여 유저 정보 추출
-            const userInfo = jwtDecode(accessToken);
+                // 토큰 디코딩하여 유저 정보 추출
+                const userInfo = jwtDecode(accessToken);
                 if (rememberEmail) {
                     localStorage.setItem('lastLoginEmail', email);
                 } else {
@@ -67,6 +67,8 @@ function Login() {
 
 
     useEffect(() => {
+        document.body.className = 'body body__login body__auth';
+
         // 로컬 스토리지에서 이메일 가져오기 (저장된 경우에만)
         const savedEmail = localStorage.getItem('lastLoginEmail');
         if (savedEmail) {
@@ -123,7 +125,7 @@ function Login() {
                         </ButtonProvider>
                         <ButtonProvider className={styles.login__button}>
                             <button type="button" onClick={handleGoogleLogin} aria-label="Login with Google">
-                                <img src="/images/google.svg" alt="Google logo" className="button__google"/>
+                                <img src="/images/google.svg" alt="Google logo" className="button__google" />
                             </button>
                         </ButtonProvider>
                         <div className={styles.user__account}>
