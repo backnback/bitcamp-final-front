@@ -12,17 +12,25 @@ function StoryItemView({ storyViewDTO, handleEdit, handleDelete, share }) {
     return (
         <div className={styles.container}>
             <div className={styles.title__box}>
-                {
-                    storyViewDTO.share ?
-                        (<i className={`icon icon__unlock`}></i>)
-                        :
-                        (<i className={`icon icon__lock__black`}></i>)
-                }
-                <h1 className={styles.title__text}>{storyViewDTO.title}</h1>
+                <span className={`${styles.title__icon__left}`}>
+                    {
+                        storyViewDTO.share ?
+                            (<i className={`icon icon__unlock`}></i>)
+                            :
+                            (<i className={`icon icon__lock__black`}></i>)
+                    }
+                </span>
+                <h3 className={styles.title__text}>{storyViewDTO.title}</h3>
             </div>
             <div className={styles.location__date__box}>
-                <span
-                    className={styles.location__date__text}>{storyViewDTO.travelDate} | {storyViewDTO.locationDetail}</span>
+                <p className={`${styles.location__date__text}`}>
+                    <span className={styles.date__text}>
+                        {storyViewDTO.travelDate}
+                    </span>
+                    <span className={`${styles.location__text}`}>
+                        {`${storyViewDTO.locationFirstName} ${storyViewDTO.locationSecondName} ${storyViewDTO.locationDetail != '' ? storyViewDTO.locationDetail : ''}`}
+                    </span>
+                </p>
             </div>
 
             <PhotosProvider
@@ -31,7 +39,9 @@ function StoryItemView({ storyViewDTO, handleEdit, handleDelete, share }) {
                 className="custom-photo-container"
                 mainPhotoIndex={storyViewDTO.mainPhotoIndex}
             />
-            <p className={styles.content__box}>{storyViewDTO.content}</p>
+            <div className={styles.content__box}>
+                <p className={`${styles.content__text} text__content`}>{storyViewDTO.content}</p>
+            </div>
 
             {!share &&
                 <div className={styles.button__group}>

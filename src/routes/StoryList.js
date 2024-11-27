@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추�
 import axiosInstance from '../components/AxiosInstance.js';
 import { StoryAddContext } from '../components/StoryItem';
 import StoryItemList from '../components/StoryItemList';
-import StoryAddForm from './StoryAddForm';
 import StoryEditModal from '../components/StoryEditModal';
 import SearchProvider from "../components/SearchProvider";
 import StoryView from './StoryView.js';
@@ -174,8 +173,8 @@ const MyStoryList = () => {
 
     // 스토리 추가 모달
     const openAddModal = () => {
-        const content = <StoryAddForm />
-        openModal(modals.storyEditModal, {
+        const content = <StoryEditModal />
+        openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('비지니스 로직 처리...2');
             },

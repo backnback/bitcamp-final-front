@@ -1,59 +1,12 @@
-.container {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.form_box {
-    justify-self: center;
-    width: 530px;
-}
-
-.title__box {
-    margin-bottom: 30px;
-}
-
-.date__box {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.date__text {
-    margin: 10px;
-}
-
-.location__box {
-    margin-bottom: 30px;
-}
-
-.location__picker__box {
-    display: flex;
-    align-items: center;
-}
-
 .location__picker__province {
     margin-right: 10px;
 }
 
-.photo__box {
-    margin-bottom: 30px;
-}
-
-.content__box {
-    margin-bottom: 30px;
-}
-
-.content__inputBox {
-    height: 150px
-}
-
 .share__check__box {
-    justify-self: center;
-    margin-bottom: 30px;
+    margin: 30px auto;
 }
 
-.save__button__box {
-    justify-self: center;
-    width: 270px;
+.share__check__box [class*=form__item] {
+    display: flex;
+    justify-content: center;
 }
-

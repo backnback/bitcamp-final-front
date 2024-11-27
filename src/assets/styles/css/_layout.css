@@ -31,7 +31,7 @@
     min-height: 100vh;
 }
 
-[class~=body__story] .layout__content__wrapper,
+[class~=body__map] .layout__content__wrapper,
 [class~=body__login] .layout__content__wrapper {
     max-width: unset;
     padding: 0;
@@ -54,7 +54,7 @@
 }
 
 .title__story__wrap .form__item {
-    flex: 0 105px;
+    flex: 0 110px;
 }
 
 @media all and (max-width: 670px) {
