@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from "react";
-import styles from "../assets/styles/css/city.module.css"
 
 const LocationActiveSvg = ({
                                gId,
@@ -91,7 +90,7 @@ const LocationActiveSvg = ({
                         id={pathId}/>
                 </clipPath>
                 <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feDropShadow dx="3" dy="3" stdDeviation="4" floodColor="black" floodOpacity="0.5"/>
+                    <feDropShadow dx="5" dy="5" stdDeviation="3" floodColor="black" floodOpacity="0.7"/>
                 </filter>
             </defs>
             <image
@@ -99,7 +98,6 @@ const LocationActiveSvg = ({
                 href={imgHref}
                 clipPath={`url(#${clipPathId})`} id={imgId}/>
             <path
-                className={styles.shadow}
                 fillOpacity={0}
                 ref={pathRef}
                 d={pathD}
