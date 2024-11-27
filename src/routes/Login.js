@@ -121,13 +121,9 @@ function Login() {
                                 <span className={`button__text`}>로그인</span>
                             </button>
                         </ButtonProvider>
-                        <ButtonProvider className={styles.google__button}>
-                            <button
-                                type="button"
-                                className={`button button__google`}
-                                onClick={handleGoogleLogin}
-                            >
-                                <span className={`button__text`}>구글 로그인</span>
+                        <ButtonProvider className={styles.login__button}>
+                            <button type="button" onClick={handleGoogleLogin} aria-label="Login with Google">
+                                <img src="/images/google.svg" alt="Google logo" className="button__google"/>
                             </button>
                         </ButtonProvider>
                         <div className={styles.user__account}>
