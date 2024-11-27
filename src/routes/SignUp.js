@@ -22,6 +22,8 @@ function SignUp() {
 
   // URL로 전달된 파라미터 값을 읽어 초기값으로 설정
   useEffect(() => {
+    document.body.className = 'body body__auth body__login__signup';
+
     const params = new URLSearchParams(window.location.search);
     const emailParam = params.get('email');
     const nameParam = params.get('name');
@@ -198,59 +200,59 @@ function SignUp() {
   };
 
   return (
-    <div className={styles.signupContainer}>
+    <div id='signup' className={styles.signupContainer}>
       <section className={styles.signupBox}>
         <h2>회원가입</h2>
         <form onSubmit={handleSubmit}>
-        <div className={styles.inputGroup}>
-                    <label>이메일 <span className={styles.required}>*</span></label>
-                    <span className={duplication.includes("사용가능한 이메일") ? styles.success : styles.error}>
-                      {`${duplication}`}
-                    </span>
-                    <div className={styles.inputWrapper}>
-                      <InputProvider>
-                        <input
-                          type="email"
-                          className="form__input"
-                          id="email01"
-                          name="이메일"
-                          value={email}
-                          placeholder="이메일 입력"
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                        />
-                      </InputProvider>
-                    {!isOAuthSignUp && (
-                      <ButtonProvider>
-                        <button type="button" className="button button__primary" onClick={getUserAuthCode}>
-                          <span className="button__text">인증번호 받기</span>
-                        </button>
-                      </ButtonProvider>
-                    )}
-                    </div>
-                  </div>
+          <div className={styles.inputGroup}>
+            <label>이메일 <span className={styles.required}>*</span></label>
+            <span className={duplication.includes("사용가능한 이메일") ? styles.success : styles.error}>
+              {`${duplication}`}
+            </span>
+            <div className={styles.inputWrapper}>
+              <InputProvider>
+                <input
+                  type="email"
+                  className="form__input"
+                  id="email01"
+                  name="이메일"
+                  value={email}
+                  placeholder="이메일 입력"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </InputProvider>
+              {!isOAuthSignUp && (
+                <ButtonProvider>
+                  <button type="button" className="button button__primary" onClick={getUserAuthCode}>
+                    <span className="button__text">인증번호 받기</span>
+                  </button>
+                </ButtonProvider>
+              )}
+            </div>
+          </div>
           {!isOAuthSignUp && (
-                    <div className={styles.inputGroup}>
-                      <label>인증번호 <span className={styles.required}>*</span></label>
-                      <div className={styles.inputWrapper}>
-                        <InputProvider>
-                          <input
-                            type="text"
-                            placeholder="인증번호"
-                            value={authCode}
-                            className="form__input"
-                            onChange={(e) => setAuthCode(e.target.value)}
-                            required
-                          />
-                        </InputProvider>
-                        <ButtonProvider>
-                          <button type="button" className="button button__primary" onClick={setUserAuthCode}>
-                            <span className="button__text">인증확인</span>
-                          </button>
-                        </ButtonProvider>
-                      </div>
-                    </div>
-                     )}
+            <div className={styles.inputGroup}>
+              <label>인증번호 <span className={styles.required}>*</span></label>
+              <div className={styles.inputWrapper}>
+                <InputProvider>
+                  <input
+                    type="text"
+                    placeholder="인증번호"
+                    value={authCode}
+                    className="form__input"
+                    onChange={(e) => setAuthCode(e.target.value)}
+                    required
+                  />
+                </InputProvider>
+                <ButtonProvider>
+                  <button type="button" className="button button__primary" onClick={setUserAuthCode}>
+                    <span className="button__text">인증확인</span>
+                  </button>
+                </ButtonProvider>
+              </div>
+            </div>
+          )}
           <div className={styles.inputGroup}>
             <label>비밀번호 <span className={styles.required}>*</span></label>
             <InputProvider>
@@ -267,17 +269,17 @@ function SignUp() {
             </InputProvider>
           </div>
           <div className={styles.inputGroup}>
-                      <label>닉네임 <span className={styles.required}>*</span></label>
-                      <InputProvider>
-                        <input
-                          type="text"
-                          placeholder="닉네임"
-                          value={nickname}
-                          className="form__input"
-                          onChange={(e) => setNickname(e.target.value)}
-                          required
-                        />
-                      </InputProvider>
+            <label>닉네임 <span className={styles.required}>*</span></label>
+            <InputProvider>
+              <input
+                type="text"
+                placeholder="닉네임"
+                value={nickname}
+                className="form__input"
+                onChange={(e) => setNickname(e.target.value)}
+                required
+              />
+            </InputProvider>
           </div>
           <div className={styles.inputGroup}>
             <label>프로필 사진</label>
@@ -292,21 +294,21 @@ function SignUp() {
             </div>
           </div>
           <div className={styles.checkboxGroup}>
-                     <InputProvider>
-                       <label htmlFor="checkbox02" className="form__label form__label__checkbox">
-                         <input
-                           type="checkbox"
-                           checked={agree}
-                           onChange={(e) => setAgree(e.target.checked)}
-                           className="form__input"
-                           id="checkbox02"
-                           name="개인정보 동의"
-                           required
-                         />
-                         <span className="input__text">개인 정보 이용 동의</span>
-                       </label>
-                     </InputProvider>
-                   </div>
+            <InputProvider>
+              <label htmlFor="checkbox02" className="form__label form__label__checkbox">
+                <input
+                  type="checkbox"
+                  checked={agree}
+                  onChange={(e) => setAgree(e.target.checked)}
+                  className="form__input"
+                  id="checkbox02"
+                  name="개인정보 동의"
+                  required
+                />
+                <span className="input__text">개인 정보 이용 동의</span>
+              </label>
+            </InputProvider>
+          </div>
           <ButtonProvider>
             <button type="submit" className="button button__primary">
               <span className="button__text">회원가입</span>

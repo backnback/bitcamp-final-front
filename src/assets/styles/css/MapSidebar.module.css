@@ -1,9 +1,9 @@
-.container {
-    border-right: rgba(176,236,248, 0.5) solid 2px;
+.side__wrap {
+    height: 100vh;
+    border-right: rgba(176, 236, 248, 0.5) solid 2px;
 }
 
-.side__box {
-    height: 90%;
+.side__list {
     display: flex;
     flex-direction: column;
 }
@@ -15,7 +15,7 @@
 }
 
 .side__a:hover {
-    background: rgba(176,236,248, 0.5);
+    background: rgba(176, 236, 248, 0.5);
 }
 
 .side__text {
@@ -26,5 +26,5 @@
     width: 100%;
     padding: 10px;
     text-align: center;
-    background: rgba(176,236,248, 0.5);
+    background: rgba(176, 236, 248, 0.5);
 }

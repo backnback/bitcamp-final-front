@@ -198,7 +198,7 @@ const MyPage = () => {
             </div> */}
 
             <StoryTitleProvider
-                title={'좋아요한 스토리'}
+                title={`좋아요한 스토리(${storyList.length})`}
             // selectChildren={
             //     <SelectProvider>
             //         <select id="select01" name="스토리 정렬" className={`form__select`}

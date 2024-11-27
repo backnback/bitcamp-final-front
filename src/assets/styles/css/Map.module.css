@@ -14,12 +14,12 @@
     max-width: 100%;
 }
 
-.city a {
+.city {
     transition: .2s;
 }
 
-.city a:hover {
-    filter: invert(50%);
+.city:hover {
+    filter: drop-shadow(2px 2px 2px gray);
 }
 
 [data-count='0'] {

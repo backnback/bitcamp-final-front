@@ -31,8 +31,8 @@
     min-height: 100vh;
 }
 
-[class~=body__map] .layout__content__wrapper,
-[class~=body__login] .layout__content__wrapper {
+[class*=body__map] .layout__content__wrapper,
+[class*=body__auth] .layout__content__wrapper {
     max-width: unset;
     padding: 0;
 }
@@ -58,7 +58,7 @@
 }
 
 @media all and (max-width: 670px) {
-    .body__login {
+    .body__auth {
         overflow-x: auto;
     }
 }

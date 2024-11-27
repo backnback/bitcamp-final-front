@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../assets/styles/css/FindEmail.module.css';
-import {InputProvider} from '../components/InputProvider';
-import {ButtonProvider} from '../components/ButtonProvider';
-import {useNavigate} from 'react-router-dom';
+import { InputProvider } from '../components/InputProvider';
+import { ButtonProvider } from '../components/ButtonProvider';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../components/AxiosInstance';
 import Swal from 'sweetalert2';
 
@@ -26,7 +26,7 @@ const NewPassword = () => {
         }
 
         try {
-            const response = await axiosInstance.post('/sign/newpassword', {email, password}, {
+            const response = await axiosInstance.post('/sign/newpassword', { email, password }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -53,6 +53,10 @@ const NewPassword = () => {
             console.error("비밀번호 변경 중 오류 발생:", error);
         }
     };
+
+    useEffect(() => {
+        document.body.className = 'body body__auth body__newpassword';
+    })
 
     return (
         <div className={styles.container}>
