@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../components/AxiosInstance';
-import StoryUpdateForm from './StoryUpdateForm';
+import StoryUpdateModal from '../components/StoryUpdateModal';
 import Swal from 'sweetalert2';
 import StoryItemView from '../components/StoryItemView';
 import useModals from '../useModals';
@@ -99,7 +99,7 @@ const StoryView = ({ storyId, mapId }) => {
 
     // 업데이트 버튼 처리
     const handleEdit = () => {
-        const content = <StoryUpdateForm storyId={storyId} mapId={mapId}/>
+        const content = <StoryUpdateModal storyId={storyId} mapId={mapId} />
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('확인 클릭');

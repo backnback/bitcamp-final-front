@@ -129,6 +129,7 @@ export const StoryForm = () => {
                         <InputProvider>
                             <label htmlFor="file01" className="form__label form__label__file">
                                 <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} />
+                                <span className='blind'>사진등록</span>
                                 <FormFileIcon />
                             </label>
                         </InputProvider>

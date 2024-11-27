@@ -23,6 +23,11 @@
     padding: 20px 30px;
 }
 
+.slide__wrap [class*=flicking-arrow] {
+    height: 176px;
+    top: calc(50% - 8.5px);
+}
+
 .slide__item {
     position: relative;
     overflow: hidden;
@@ -31,6 +36,54 @@
     border-radius: var(--border-radius);
 }
 
+/* editMode */
+.photo__badge__wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 5px;
+    width: 100%;
+    font-size: var(--font-badge);
+}
+
+.photo__main__radio {
+    flex: initial;
+    margin: 0;
+}
+
+.photo__main__radio [class*=form__label__radio] {
+    min-height: 30px;
+    padding: 5px 6px;
+    background-color: var(--color-white-70);
+    cursor: pointer;
+}
+
+.photo__main__radio [class*=form__label__radio]:hover {
+    filter: invert(5%);
+    transition: .2s;
+}
+
+.photo__main__radio__checked[class*=form__label__radio] {
+    background-color: var(--color-primary);
+}
+
+.photo__badge__wrap .photo__main__radio:not(.photo__main__radio:last-of-type) {
+    margin-bottom: 0;
+}
+
+.photo__delete__button {
+    margin: 0;
+}
+
+.photo__delete__button [class*=button]:hover {
+    filter: invert(50%);
+    transition: .2s;
+}
+
+/* viewMode */
 .photo__main__badge {
     position: absolute;
     top: 0;
@@ -57,11 +110,12 @@
     width: 100%;
     height: 100%;
     border-radius: var(--border-radius);
-    border: 3px solid transparent;
+    border: 1px solid var(--color-profile-border);
     box-sizing: border-box;
 }
 
 .slide__item._active .slide__photo__wrap::after {
+    border-width: 3px;
     border-color: var(--color-primary);
 }
 
@@ -70,4 +124,8 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+}
+
+.slide__photo__add [class*=form__item] {
+    margin: 0;
 }

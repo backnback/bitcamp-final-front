@@ -4,6 +4,7 @@ import { Arrow, Pagination } from "@egjs/flicking-plugins";
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
 import styles from "../assets/styles/css/Photo.module.css";
+import FormFileIcon from './FormFileIcon';
 
 
 
@@ -11,19 +12,21 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
     const validPhotos = Array.isArray(photos) ? photos : [];
     const fileInputRef = useRef(null);
     const flickingRef = useRef(null); // Flicking에 대한 ref를 생성
-    const arrowPlugin = new Arrow();
-    const [pagination, setPagination] = useState();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [syncImg, setSyncImg] = useState();
     const [_active, setActive] = useState(false);
-    const paginationPlugin = useRef(new Pagination({ type: "fraction" }));
+    const [plugins, setPlugins] = useState([new Arrow(), new Pagination({ type: 'fraction' })]);
     const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 진행 중 상태
     const [mainPhotoIdx, setMainPhotoIdx] = useState(mainPhotoIndex);
+    const [deleteClick, setDeleteClick] = useState(false);
+    const [slideIndex, setSlideIndex] = useState(0);
 
 
-    const handleDeletePhoto = (photo) => {
+    const handleDeletePhoto = (photo, index) => {
         console.log("삭제하려는 파일:", photo);
         onDeletePhoto(photo);  // 상위 컴포넌트에게 삭제할 사진을 전달
+        setDeleteClick(true);
+        setSlideIndex(index);
     };
 
     const handleSelectMainPhoto = (index) => {
@@ -47,6 +50,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
         if (files && files.length > 0) {
             onAddPhoto(files); // 부모 컴포넌트로 파일 목록 전달
         }
+
     };
 
     const handleClickSlide = (event) => {
@@ -67,12 +71,6 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                         alt="추가된 사진들"
                         className={`${styles.photo__img} ${styles.slide__photo__img}`}
                     />
-                    {/* {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
-                        <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
-                            <span className={`blind`}>삭제</span>
-                            <i className={`icon icon__x__black`}></i>
-                        </button>
-                    </ButtonProvider>} */}
                 </div>
             );
         } else {
@@ -92,12 +90,6 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                         data-img-id={photo.id}
                         className={`${styles.photo__img} ${styles.slide__photo__img} ${photo.mainPhoto ? 'main-photo' : ''}`}
                     />
-                    {/* {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
-                        <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
-                            <span className={`blind`}>삭제</span>
-                            <i className={`icon icon__x__black`}></i>
-                        </button>
-                    </ButtonProvider>} */}
                 </div>
             );
         }
@@ -106,6 +98,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
 
 
     useEffect(() => {
+        // setPanels([...panels, panels[panels.length - 1] + 1])
         // setPagination(new Pagination().fractionCurrentFormat)
         // mainPhotoIdx가 변경될 때마다 슬라이드를 해당 인덱스로 이동시킴
         // if (flickingRef.current) {
@@ -145,11 +138,30 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                             duration={300}
                             circular={false}  // 순환 슬라이드 여부
                             align={'prev'}
-                            plugins={[arrowPlugin, paginationPlugin.current]}
-                            touch={viewMode ? undefined : false}
+                            plugins={plugins}
+                            onReady={(e) => {
+                                if (!viewMode) {
+                                    flickingRef.current.moveTo(flickingRef.current.panelCount - 2);
+                                }
+                            }}
+                            onPanelChange={(e) => {
+                                if (!deleteClick) {
+                                    flickingRef.current.moveTo(flickingRef.current.panelCount - 2);
+                                } else {
+                                    flickingRef.current.activePlugins.forEach(plugin => {
+                                        if (plugin instanceof Pagination) {
+                                            if (slideIndex - 1 > 0) {
+                                                plugin._onIndexChange(slideIndex - 1);
+                                            } else if (flickingRef.current.panelCount >= slideIndex) {
+                                                plugin._onIndexChange(flickingRef.current.panelCount - 2);
+                                            }
+                                        }
+                                    });
+                                }
+                            }}
                         >
                             {validPhotos.map((photo, index) => (
-                                <div className={`${styles.slide__item} ${itemClassName ? `${styles.slide__item__custom}` : ``} ${currentIndex === index ? styles._active : ``}`}
+                                <div className={`${styles.slide__item} ${itemClassName ? `${styles.slide__item__custom}` : ``} ${viewMode ? currentIndex === index ? styles._active : `` : ``}`}
                                     key={`${photo.id}-${index}`} >
 
                                     {renderPhoto(photo, index)}
@@ -157,46 +169,44 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                                     {viewMode ? (
                                         photo.mainPhoto && <strong className={`${styles.photo__main__badge}`}>대표</strong>  // viewMode가 true일 때 대표 이미지만 표시
                                     ) : (
-                                        <div className={index === mainPhotoIdx ? "main-label" : "sub-label"}>
-                                            <InputProvider>
-                                                <label htmlFor={`radio-${index}`} className={`form__label form__label__radio`}>
+                                        <div className={`${styles.photo__badge__wrap}`}>
+                                            <InputProvider className={`${styles.photo__main__radio} ${index === mainPhotoIdx ? "photo__radio__main" : "photo__radio__sub"}`}>
+                                                <label htmlFor={`radio-${index}`} className={`form__label form__label__radio ${index === mainPhotoIdx ? styles.photo__main__radio__checked : ``}`}>
                                                     <input
                                                         type='radio'
-                                                        className={`form__input`}
+                                                        className={`form__input blind`}
                                                         id={`radio-${index}`}
                                                         name='라디오1'
                                                         checked={index === mainPhotoIdx}  // 선택된 상태 반영
-                                                        onChange={() => handleSelectMainPhoto(index)} />
+                                                        onChange={() => { handleSelectMainPhoto(index) }} />
                                                     <span className={`input__text`}>대표이미지</span>
                                                 </label>
                                             </InputProvider>
 
-                                            <ButtonProvider width={'icon'} className={`button__item__x`}>
-                                                <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
+                                            <ButtonProvider width={'icon'} className={`button__item__x ${styles.photo__delete__button}`}>
+                                                <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo, index)}>
                                                     <span className={`blind`}>삭제</span>
                                                     <i className={`icon icon__x__black`}></i>
                                                 </button>
                                             </ButtonProvider>
                                         </div>
                                     )}
-
-                                    {/* {!viewMode && <ButtonProvider width={'icon'} className={`button__item__x`}>
-                                        <button type="button" className={`button button__icon button__icon__x`} onClick={() => handleDeletePhoto(photo)}>
-                                            <span className={`blind`}>삭제</span>
-                                            <i className={`icon icon__x__black`}></i>
-                                        </button>
-                                    </ButtonProvider>} */}
                                 </div>
                             ))}
-                            {/* {!viewMode && <div className="photo__photoItem">
-                                <button type="button" className={`button button__story__add`} onClick={handleAddPhotoClick}>
-                                    <span className={`blind`}>사진 등록</span>
-                                    <i className={`icon icon__plus__white`}></i>
-                                </button>
-                            </div>} */}
+
+                            {!viewMode && <div className={`${styles.slide__item} ${styles.slide__photo__add}`}>
+                                <InputProvider>
+                                    <label htmlFor="file01" className="form__label form__label__file">
+                                        <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} onClick={(e) => setDeleteClick(false)} />
+                                        <span className='blind'>사진등록</span>
+                                        <FormFileIcon />
+                                    </label>
+                                </InputProvider>
+                            </div>}
 
                             <ViewportSlot>
                                 <div className="flicking-pagination"></div>
+                                {/* <div className="flicking-pagination"></div> */}
                                 <button type='button' className="flicking-arrow-prev flicking-arrow-custom">
                                     <span className='blind'>이전</span>
                                 </button>
@@ -209,14 +219,8 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                 </div>
             ) : (
                 <p>사진이 없습니다.</p>
-            )}
-            <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                style={{ display: 'none' }}
-                onChange={handleFileChange} // 파일이 선택되면 호출되는 함수
-            />
-        </div>
+            )
+            }
+        </div >
     );
 };

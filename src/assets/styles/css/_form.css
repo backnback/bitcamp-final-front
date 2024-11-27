@@ -66,8 +66,36 @@
 
 .form__input[type=checkbox]:checked,
 .form__input[type=radio]:checked {
-    background-color: var(--color-red);
-    border-color: red;
+    background-color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+.form__input[type=radio].blind+.input__text {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.form__input[type=radio].blind:checked+.input__text {
+    color: var(--color-white);
+}
+
+.form__input[type=radio].blind+.input__text::before {
+    content: '';
+    display: inline-flex;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-primary);
+    border-radius: 100%;
+    box-sizing: border-box;
+}
+
+.form__input[type=radio].blind:checked+.input__text::before {
+    background-color: var(--color-primary);
+    border-width: 2px;
+    border-color: var(--color-white);
+    transition: .2s;
 }
 
 .input__text {
@@ -114,7 +142,7 @@
 }
 
 .search__form__item__select {
-    flex: 0 105px;
+    flex: 0 110px;
 }
 
 .search__form__item__input {
