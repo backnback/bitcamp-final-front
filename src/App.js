@@ -21,24 +21,6 @@ import FindPassword from "./routes/FindPassword";
 import NewPassword from "./routes/NewPassword";
 import AdminPage from "./routes/AdminPage.js";
 
-import MapSeoul from "./components/map/MapSeoul";
-import MapBusan from "./components/map/MapBusan";
-import MapDaegu from "./components/map/MapDaegu";
-import MapDaejeon from "./components/map/MapDaejeon";
-import MapGwangju from "./components/map/MapGwangju";
-import MapGwangwon from "./components/map/MapGwangwon";
-import MapGyeonggi from "./components/map/MapGyeonggi";
-import MapIncheon from "./components/map/MapIncheon";
-import MapJeju from "./components/map/MapJeju";
-import MapNorthChungcheoung from "./components/map/MapNorthChungcheoung";
-import MapNorthGyeongsang from "./components/map/MapNorthGyeongsang";
-import MapNorthJeolla from "./components/map/MapNorthJeolla";
-import MapSejong from "./components/map/MapSejong";
-import MapSouthChungcheong from "./components/map/MapSouthChungcheong";
-import MapSouthGyeongsan from "./components/map/MapSouthGyeongsan";
-import MapSouthJeolla from "./components/map/MapSouthJeolla";
-import MapUlsan from "./components/map/MapUlsan";
-import Map from "./components/Map";
 import OAuth2RedirectHandler from './components/OAuth2RedirectHandler';
 
 import { jwtDecode } from 'jwt-decode';

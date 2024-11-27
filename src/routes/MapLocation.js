@@ -14,6 +14,10 @@ import SidebarSecond from "../components/SidebarSecond";
 import styles from '../assets/styles/css/MapLocation.module.css';
 
 function MapLocation() {
+    useEffect(() => {
+        document.body.className = 'body body__story body__map'
+    })
+
     const {locationId} = useParams(); // URL에서 ID 파라미터를 가져옴
     // const navigate = useNavigate(); // 페이지 이동을 위한 네비게이션 훅
     const [accessToken, setAccessToken] = useState(null);
@@ -22,7 +26,6 @@ function MapLocation() {
     const [storyList, setStoryList] = useState(null);
     const [hovered, setHovered] = useState(null);
     const {openModal} = useModals();
-
 
     const RenderComponent = <CityMap/>;
     // console.log(RenderComponent)
@@ -108,13 +111,14 @@ function MapLocation() {
     return (
         <div className={styles.container}>
             <Sidebar provinceId={locationId}/>
-            <SidebarSecond provinceId={locationId} clickEvent={handleClick}/>
+            <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setHovered}/>
             <div>
                 {RenderComponent ? (
                     React.cloneElement(RenderComponent, {
                         storyPhotoList: storyPhotoList,
                         eventClick: handleClick,
-                        mapPaths: mapPathJson[locationId]
+                        mapPaths: mapPathJson[locationId],
+                        hovered: hovered
                     })
                 ) : (
                     <div>Loading...</div>
