@@ -143,11 +143,11 @@ function Login() {
                                     type='checkbox'
                                     className={`form__input`}
                                     id='save-id'
-                                    name='자동로그인'
+                                    name='아이디 저장'
                                     checked={rememberEmail}
                                     onChange={() => setRememberEmail(!rememberEmail)}
                                 />
-                                <span className={`input__text`}>자동로그인</span>
+                                <span className={`input__text`}>아이디 저장</span>
                             </label>
                         </InputProvider>
                     </form>

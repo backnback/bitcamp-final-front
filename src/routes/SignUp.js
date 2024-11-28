@@ -101,7 +101,6 @@ function SignUp() {
       Swal.fire({
         icon: 'error',
         title: '회원가입 중 오류 발생',
-        text: error.message,
       });
     }
   };
@@ -121,10 +120,7 @@ function SignUp() {
     }
 
     try {
-      const response = await axiosInstance.post('/sign/findemail', { email }, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      });
+      const response = await axiosInstance.post('/sign/findemail', { email });
 
       if (!response.data) {
 
@@ -160,7 +156,6 @@ function SignUp() {
           Swal.fire({
             icon: 'error',
             title: '인증번호 요청 중 오류 발생',
-            text: authError.message,
           });
         }
       } else {
@@ -174,7 +169,6 @@ function SignUp() {
       Swal.fire({
         icon: 'error',
         title: '이메일 중복 확인 중 오류 발생',
-        text: error.message,
       });
     }
   };
@@ -192,10 +186,7 @@ function SignUp() {
     }
 
     try {
-      const response = await axiosInstance.post('/sign/verificationcode', { authCode }, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      });
+      const response = await axiosInstance.post('/sign/verificationcode', { authCode });
 
       if (response.data) {
         Swal.fire({
@@ -217,14 +208,9 @@ function SignUp() {
       Swal.fire({
         icon: 'error',
         title: '인증번호 확인 중 오류 발생',
-        text: error.message,
       });
     }
   };
-
-  useEffect(() => {
-
-  }, [])
 
   return (
     <div id='signup' className={styles.auth__container}>
