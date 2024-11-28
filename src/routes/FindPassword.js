@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../assets/styles/css/FindEmail.module.css';
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../components/AxiosInstance';
 import Swal from 'sweetalert2';
+import { AuthTitleProvider } from '../components/TitleProvider';
+import styles from '../assets/styles/css/Auth.module.css';
 
 
 const FindPassword = () => {
@@ -99,52 +100,52 @@ const FindPassword = () => {
   })
 
   return (
-    <div id='findpassword' className={styles.container}>
-      <div className={styles.box}>
-        <div>
-          <h2>비밀번호 찾기</h2>
-          <div>
-            <InputProvider>
-              <input
-                type="email"
-                className="form__input"
-                id="email01"
-                name="이메일"
-                placeholder="이메일 입력"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} // 이메일 상태 업데이트
-                required
-              />
-            </InputProvider>
-            <ButtonProvider>
+    <div id='findpassword' className={styles.auth__container}>
+      <section className={styles.auth__wrap}>
+        <AuthTitleProvider title={`비밀번호 찾기`} />
+        <InputProvider label={`이메일`} inputId={`email01`} required={true}>
+          <div className={`${styles.auth__input__wrap}`}>
+            <input
+              type="email"
+              className="form__input"
+              id="email01"
+              name="이메일"
+              value={email}
+              placeholder="이메일 입력"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <ButtonProvider width={`120`}>
               <button type="button" className="button button__primary" onClick={getUserAuthCode}>
                 <span className="button__text">인증번호 받기</span>
               </button>
             </ButtonProvider>
           </div>
-          <div >
-            <label>인증번호</label>
-            <div>
-              <InputProvider>
-                <input
-                  type="text"
-                  placeholder="인증번호"
-                  value={authCode}
-                  className="form__input"
-                  onChange={(e) => setAuthCode(e.target.value)}
-                  required
-                />
-              </InputProvider>
-              <ButtonProvider>
-                <button type="button" className="button button__primary" onClick={setUserAuthCode}>
-                  <span className="button__text">인증확인</span>
-                </button>
-              </ButtonProvider>
-            </div>
+          {/* <span className={`${styles.auth__sub__notice} ${duplication.includes(" ") ? styles.error : styles.success}`}>{`${duplication}`}</span> */}
+        </InputProvider>
+
+        <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
+          <div className={`${styles.auth__input__wrap}`}>
+            <input
+              type="text"
+              className="form__input"
+              id="authNumber"
+              name="인증번호"
+              value={authCode}
+              placeholder="인증번호 입력"
+              onChange={(e) => setAuthCode(e.target.value)}
+              required
+            />
+            <ButtonProvider width={`120`}>
+              <button type="button" className="button button__primary" onClick={setUserAuthCode}>
+                <span className="button__text">인증확인</span>
+              </button>
+            </ButtonProvider>
           </div>
-        </div>
-      </div>
-    </div>
+        </InputProvider>
+      </section >
+    </div >
   );
 };
 

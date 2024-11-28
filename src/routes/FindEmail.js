@@ -29,10 +29,10 @@ const FindEmail = () => {
       return;
     }
 
-    if(!isValidEmail(email)){
+    if (!isValidEmail(email)) {
       setDuplication('해당 이메일은 이메일 형식이 아닙니다');
       return;
-    }else{
+    } else {
       setDuplication("");
     }
 
@@ -147,7 +147,7 @@ const FindEmail = () => {
               </button>
             </ButtonProvider>
           </div>
-          <span className={`${styles.auth__notice} ${duplication.includes(" ") ? styles.error : styles.success}`}>{`${duplication}`}</span>
+          <span className={`${styles.auth__sub__notice} ${duplication.includes(" ") ? styles.error : styles.success}`}>{`${duplication}`}</span>
         </InputProvider>
 
         <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
@@ -170,7 +170,7 @@ const FindEmail = () => {
           </div>
         </InputProvider>
 
-        {message && <div className={`${styles.auth__sub__message} ${styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
+        {message && <div className={`${styles.auth__message} ${message.includes("가입되어있는 아이디") ? styles.success : styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
       </section>
     </div>
   );
