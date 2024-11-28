@@ -1,14 +1,15 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
+import mapStyles from "../assets/styles/css/Map.module.css";
 
 const LocationActiveSvg = ({
-                               gId,
-                               eventClick,
-                               clipPathId,
-                               pathD,
-                               pathId,
-                               imgHref,
-                               imgId,
-                           }) => {
+    gId,
+    eventClick,
+    clipPathId,
+    pathD,
+    pathId,
+    imgHref,
+    imgId,
+}) => {
 
     const pathRef = useRef(null);
     const imgRef = useRef(null);
@@ -81,30 +82,31 @@ const LocationActiveSvg = ({
     }, [imageDimensions]); // imgHref가 변경될 때마다 이미지 정보를 업데이트
 
     return (
-        <g id={gId} role="button" tabIndex="0" onClick={eventClick}>
+        <g id={gId} role="button" tabIndex="0" onClick={eventClick} className={`${mapStyles.province__active__g}`}>
             <defs>
                 <clipPath id={clipPathId}>
                     <path
                         ref={pathRef}
                         d={pathD}
-                        id={pathId}/>
+                        id={pathId} />
                 </clipPath>
                 <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feDropShadow dx="5" dy="5" stdDeviation="3" floodColor="black" floodOpacity="0.7"/>
+                    <feDropShadow dx="5" dy="5" stdDeviation="3" floodColor="black" floodOpacity="0.7" />
                 </filter>
             </defs>
             <image
                 ref={imgRef}
                 href={imgHref}
-                clipPath={`url(#${clipPathId})`} id={imgId}/>
+                clipPath={`url(#${clipPathId})`} id={imgId} />
             <path
                 fillOpacity={0}
                 ref={pathRef}
                 d={pathD}
                 id={"p" + pathId}
                 filter="url(#shadow)"
+                className={`${mapStyles.province__active__filter__p}`}
             />
-            <use href={`#${pathId}`} fill={`url(#${imgId})`}/>
+            <use href={`#${pathId}`} fill={`url(#${imgId})`} />
         </g>
     );
 }

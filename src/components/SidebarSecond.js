@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import axiosInstance from "./AxiosInstance";
 
-import styles from "../assets/styles/css/SecondSidebar.module.css"
+import styles from "../assets/styles/css/MapSidebar.module.css"
 
-const Sidebar = ({onHovered, provinceId, clickEvent}) => {
+const SidebarSecond = ({ onHovered, provinceId, clickEvent }) => {
     const [cities, setCities] = useState(null);
 
     useEffect(() => {
@@ -21,19 +21,25 @@ const Sidebar = ({onHovered, provinceId, clickEvent}) => {
     }, []);
 
     return (
-        <div className={styles.container}>
-            <ul className={styles.side__box}>
+        <div className={styles.secondside__wrap}>
+            <ul className={styles.secondside__list}>
                 {
                     cities && cities.map(city => (
-                        <a key={city.id}
-                           id={city.id.toString().slice(2)}
-                           className={styles.side__a}
-                           onClick={clickEvent}
-                           onMouseOver={() => onHovered(city.id.toString().slice(2))}
-                           onMouseLeave={() => onHovered(null)}
-                        >
-                            <li className={styles.side__text}>{city.secondName}</li>
-                        </a>
+                        <li key={city.id} className={styles.secondside__item}>
+                            <a
+                                href=""
+                                id={city.id.toString().slice(2)}
+                                className={styles.secondside__link}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    clickEvent(e)
+                                }}
+                                onMouseOver={() => onHovered(city.id.toString().slice(2))}
+                                onMouseLeave={() => onHovered(null)}
+                            >
+                                <span className={`${styles.secondside__link__text}`}>{city.secondName}</span>
+                            </a>
+                        </li>
                     ))
                 }
             </ul>
@@ -41,4 +47,4 @@ const Sidebar = ({onHovered, provinceId, clickEvent}) => {
     )
 }
 
-export default Sidebar;
+export default SidebarSecond;

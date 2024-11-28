@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import styles from '../assets/styles/css/Header.module.css';
+import axiosInstance from '../components/AxiosInstance.js';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from "react";
+import styles from '../assets/styles/css/Header.module.css';
 
 function Header() {
     const [accessToken, setAccessToken] = useState(null);
     const [user, setUser] = useState(null);
     const [userPath, setUserPath] = useState(null);  // path 저장할 변수
+    const [alarmListDTOs, setAlarmListDTOs] = useState([]);
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -26,6 +28,23 @@ function Header() {
             setUserPath(decodedUser.path); // path 값을 미리 저장
         } else {
             console.log("토큰이 없습니다");
+        }
+
+        // 로그인한 사용자의 스토리에 좋아요를 누른 유저의 리스트 불러오기
+        if (accessToken) {
+            const fetchAlarmListDTOs = async () => {
+                try {
+                    const response2 = await axiosInstance.get('/like/list/users', {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    setAlarmListDTOs(response2.data);
+                } catch (error) {
+                    console.error("오류가 발생했습니다!", error);
+                }
+            };
+            fetchAlarmListDTOs();
         }
     }, [accessToken]);
 
@@ -59,7 +78,7 @@ function Header() {
 
                 <div className={styles.header__bottom}>
                     <nav className={styles.nav__aside}>
-                        <div className={styles.nav__profile}>
+                        <div className={`${styles.nav__profile} ${alarmListDTOs.length > 0 ? styles.alarm__active : ``}`}>
                             <Link to="/my-page" className={styles.nav__profile__link}>
                                 <span className={`${styles.nav__profile__img__wrap} ${userPath || styles.nav__profile__img__name__wrap}`}>
                                     {

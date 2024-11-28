@@ -148,14 +148,14 @@
 
 .content {
     overflow: hidden;
-    flex: 1;
     display: -webkit-box;
-    font-size: var(--font-sub);
+    font-size: var(--font-size-sub);
     line-height: 1.25;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
+    white-space: pre-wrap;
 }
 
 .bottom__footer {

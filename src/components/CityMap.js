@@ -13,15 +13,22 @@ const CityMap = ({ storyPhotoList, eventClick, mapPaths, hovered }) => {
 
         setOldHovered(null);
         if (leaveElement) {
-            leaveElement.removeAttribute('stroke');
+            if (!leaveElement.parentElement.classList.contains('province')) {
+                leaveElement.setAttribute('filter', 'url(#shadow)');
+            } else {
+                leaveElement.removeAttribute('filter');
+            }
         }
 
         if (hovered !== null) {
             const gElement = document.getElementById(`p${hovered}`);
             setOldHovered(hovered);
             if (gElement) {
-                gElement.setAttribute('stroke', 'red');
-                // gElement.setAttribute('fill', 'red');
+                if (!gElement.parentElement.classList.contains('province')) {
+                    gElement.setAttribute('filter', 'dorp-shadow: (0)');
+                } else {
+                    gElement.setAttribute('filter', 'opacity(0.5)');
+                }
             }
         }
     }, [hovered]);

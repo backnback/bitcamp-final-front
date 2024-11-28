@@ -35,6 +35,7 @@ const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, se
 
 const ShareStoryList = () => {
     const [storyList, setStoryList] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState(null); // accessToken 상태 추가
     const navigate = useNavigate(); // navigate 함수를 사용하여 페이지 이동
     const { token } = localStorage.getItem('accessToken');
@@ -147,7 +148,7 @@ const ShareStoryList = () => {
 
     // 스토리 조회 모달
     const openStoryModal = (storyId) => {
-        const content = <ShareStoryView storyId={storyId} />
+        const content = <div className='modal__body'><ShareStoryView storyId={storyId} /></div>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('비지니스 로직 처리...2');

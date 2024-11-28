@@ -1,8 +1,9 @@
 import Map from '../components/Map';
-import mapStyles from '../assets/styles/css/Map.module.css';
 import { useEffect, useState } from "react";
 import axiosInstance from '../components/AxiosInstance';
 import Sidebar from "../components/Sidebar";
+import sidebarStyles from "../assets/styles/css/MapSidebar.module.css";
+import mapStyles from '../assets/styles/css/Map.module.css';
 
 function StoryMap() {
 
@@ -42,7 +43,9 @@ function StoryMap() {
 
     return (
         <div id='map' className={`${mapStyles.container}`}>
-            <Sidebar onHovered={sethHovered} />
+            <div className={`${sidebarStyles.container}`}>
+                <Sidebar onHovered={sethHovered} />
+            </div>
             <div className={`${mapStyles.map__container}`}>
                 <Map storyList={mapStoryList} hovered={hovered} />
             </div>

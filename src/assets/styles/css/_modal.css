@@ -35,6 +35,24 @@
     border-bottom: 1px solid var(--color-black-10)
 }
 
+.modal__headerContent {
+    display: flex;
+    align-items: center;
+}
+
+.modal__header__center {
+    flex: 1;
+    text-align: center;
+}
+
+.modal__header__button {
+    margin: 0 auto;
+}
+
+.modal__header__right .icon__35 {
+    width: 37px;
+}
+
 .modal__body {
     padding: 10px 30px 5px;
 }
@@ -54,4 +72,9 @@
 
 .modal__footer .button__item {
     flex: 1;
+}
+
+.modal__container__mapstorylist .modal__header {
+    border-bottom: 0;
+    padding: 30px;
 }

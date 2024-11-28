@@ -28,18 +28,17 @@ const ModalSidebarRight = ({ onSubmit, onClose, modalId, className, content, hea
             className={`modal modal-right ${modalId != null ? `modal__${modalId}` : ``}`}
             overlayClassName="modal-overlay">
             <div className={`modal__container ${modalId != null ? `modal__container__${modalId}` : ``}`}>
-                {
-                    headerContent == null ?
-                        <div className='modal__header'>
-                            <ButtonProvider width={'icon'}>
-                                <button type="button" className={`button button__icon`} onClick={handleClickCancel}>
-                                    <i data-button="icon" className={`icon icon__back__black`}></i>
-                                    <span className={`blind`}>닫기</span>
-                                </button>
-                            </ButtonProvider>
-                        </div> :
-                        headerContent
-                }
+
+                <div className={`modal__header ${headerContent != null ? `modal__headerContent` : ``}`}>
+                    <ButtonProvider width={'icon'}>
+                        <button type="button" className={`button button__icon`} onClick={handleClickCancel}>
+                            <i data-button="icon" className={`icon icon__back__black`}></i>
+                            <span className={`blind`}>닫기</span>
+                        </button>
+                    </ButtonProvider>
+
+                    {headerContent != null && headerContent}
+                </div>
 
                 <div className='modal__content'>
 
