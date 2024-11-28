@@ -3,13 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'; // useNavigate import 추�
 import axiosInstance from '../components/AxiosInstance.js';
 import StoryItemList from '../components/StoryItemList';
 import SearchProvider from "../components/SearchProvider";
-import StoryView from './StoryView.js';
 import useModals from '../useModals';
-import { modals } from '../components/Modals';
 import { StoryTitleProvider } from '../components/TitleProvider.js';
 import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
 import UseScrollAlert from './UseScrollAlert.js';
+import Swal from 'sweetalert2';
 
 const fetchStoryList = async (accessToken, sortByOption, searchQuery, setStoryList, limit, setHasMore) => {
     try {
@@ -137,29 +136,28 @@ const AllStoryList = () => {
             console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
             return;
         }
-    
-        try {
-            await axiosInstance.delete(`/story/admindelete/${storyId}`, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-            console.log("스토리가 성공적으로 삭제되었습니다.");
-            window.location.reload();
-        } catch (error) {
-            console.error("어드민 페이지에서 스토리 삭제 중 에러 발생:", error);
-        }
-    };
 
-    // 스토리 조회 모달
-    const openStoryModal = (storyId) => {
-        const content = <StoryView storyId={storyId} />
-        openModal(modals.modalSidebarRight, {
-            onSubmit: () => {
-                console.log('비지니스 로직 처리...2');
-            },
-            content
+        const result = await Swal.fire({
+            text: "삭제하시겠습니까?",
+            icon: "warning", // 경고 아이콘
+            showCancelButton: true, // 취소 버튼 표시
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
         });
+
+        if (result.isConfirmed) {
+            try {
+                await axiosInstance.delete(`/story/admindelete/${storyId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                console.log("스토리가 성공적으로 삭제되었습니다.");
+                window.location.reload();
+            } catch (error) {
+                console.error("어드민 페이지에서 스토리 삭제 중 에러 발생:", error);
+            }
+        }
     };
 
     useEffect(() => {
