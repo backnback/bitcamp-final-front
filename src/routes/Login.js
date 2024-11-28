@@ -118,16 +118,19 @@ function Login() {
                                 />
                             </InputProvider>
                         </div>
-                        <ButtonProvider className={styles.login__button}>
-                            <button type="submit" className={`button button__black`}>
-                                <span className={`button__text`}>로그인</span>
-                            </button>
-                        </ButtonProvider>
-                        <ButtonProvider className={styles.login__button}>
-                            <button type="button" onClick={handleGoogleLogin} aria-label="Login with Google">
-                                <img src="/images/google.svg" alt="Google logo" className="button__google" />
-                            </button>
-                        </ButtonProvider>
+                        <div className={`${styles.login__button__wrap}`}>
+                            <ButtonProvider className={`${styles.login__button}`}>
+                                <button type="submit" className={`button button__black`}>
+                                    <span className={`button__text`}>로그인</span>
+                                </button>
+                            </ButtonProvider>
+                            <ButtonProvider className={`${styles.login__button} ${styles.login__button__google}`}>
+                                <button type="button" onClick={handleGoogleLogin}>
+                                    <span className='blind'>구글 로그인</span>
+                                    <i className='icon icon-google'></i>
+                                </button>
+                            </ButtonProvider>
+                        </div>
                         <div className={styles.user__account}>
                             <Link to="/find-email" className={styles.user__account__link}>아이디 찾기</Link><Link to="/find-password" className={styles.user__account__link}>비밀번호 찾기</Link><Link to="/signup" className={styles.user__account__link}>회원가입</Link>
                         </div>

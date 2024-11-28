@@ -17,12 +17,16 @@
     margin: 0 auto;
 }
 
+.body__auth {
+    background-color: var(--color-skyblue);
+}
+
 .body__login {
     overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--color-loginBackColor);
+    background: var(--color-loginBackColor) no-repeat;
 }
 
 .body__login .layout__contents {
@@ -55,6 +59,15 @@
 
 .title__story__wrap .form__item {
     flex: 0 110px;
+}
+
+.title__auth__wrap {
+    margin-bottom: 50px;
+}
+
+.title__auth {
+    font-size: var(--font-size-authTitle);
+    font-weight: 600;
 }
 
 @media all and (max-width: 670px) {
