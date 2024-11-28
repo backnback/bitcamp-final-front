@@ -218,7 +218,7 @@ const StoryEdiModal = ({ provinceId, cityId, isModal }) => {
         content, setContent,
         checkedShare, handleCheckboxChange,
         files,
-        mainPhotoIndex, handleMainPhotoSelect, onAddPhoto,
+        mainPhotoIndex, handleMainPhotoSelect,
         handleButtonClick,
         handleSubmit
     }

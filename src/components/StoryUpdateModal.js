@@ -212,6 +212,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
         if (uploadedFiles.length > 0) {
             setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
 
+            console.log(files)
             // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
             if (uploadedFiles.length === 1) {
                 setMainPhotoIndex(0);
@@ -240,6 +241,15 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
         });
     };
 
+    const handleFileChange = (event) => {
+        const uploadedFiles = Array.from(event.target.files);
+        setFiles(uploadedFiles);
+
+        // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
+        if (uploadedFiles.length === 1) {
+            setMainPhotoIndex(0);
+        }
+    };
 
     const formValue = {
         title, setTitle,
@@ -248,7 +258,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
         selectedDay, setSelectedDay,
         selectedFirstName, setSelectedFirstName, firstNames,
         selectedSecondName, setSelectedSecondName, secondNames,
-        locationDetail, setLocationDetail,
+        locationDetail, setLocationDetail, handleFileChange,
         content, setContent,
         checkedShare, handleCheckboxChange,
         files, onAddPhoto, onDeletePhoto,

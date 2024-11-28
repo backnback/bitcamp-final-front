@@ -125,7 +125,8 @@ export const StoryForm = () => {
                 </div>
                 <div className={`${styles.photo__box} form__item__wrap`}>
                     <h5 className='form__label__title'>사진 등록</h5>
-                    {files.length === 0 ? (
+                    {
+                        files.length === 0 ? (
                         <InputProvider>
                             <label htmlFor="file01" className="form__label form__label__file">
                                 <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} />
