@@ -15,17 +15,23 @@ RUN npm run build
 # 5. Nginx 기반 이미지 사용
 FROM nginx:alpine
 
-# 6. 앱 빌드 결과물 복사
+# 6. 환경 변수 설정 (API URL 및 SERVER_NAME)
+ARG API_URL
+ARG SERVER_NAME
+ENV API_URL=${API_URL}
+ENV SERVER_NAME=${SERVER_NAME}
+
+# 7. 앱 빌드 결과물 복사
 COPY --from=build /app/build /usr/share/nginx/html
 
-# 7. 기존 Nginx 설정 제거
+# 8. 기존 Nginx 설정 파일 제거
 RUN rm /etc/nginx/conf.d/default.conf
 
-# 8. Nginx 설정 파일 복사
-COPY ./nginx.conf /etc/nginx/conf.d/
+# 9. Nginx 설정 파일 템플릿 복사
+COPY ./nginx.conf.template /etc/nginx/conf.d/default.conf.template
 
-# 9. Nginx 포트 오픈
+# 10. Nginx 설정 파일을 envsubst로 치환하여 기본 설정 파일로 복사
+CMD envsubst '${API_URL} ${SERVER_NAME}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+
+# 11. Nginx 포트 오픈
 EXPOSE 80
-
-# 10. Nginx 실행
-CMD ["nginx", "-g", "daemon off;"]
