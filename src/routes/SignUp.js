@@ -101,7 +101,6 @@ function SignUp() {
       Swal.fire({
         icon: 'error',
         title: '회원가입 중 오류 발생',
-        text: error.message,
       });
     }
   };
@@ -160,7 +159,6 @@ function SignUp() {
           Swal.fire({
             icon: 'error',
             title: '인증번호 요청 중 오류 발생',
-            text: authError.message,
           });
         }
       } else {
@@ -174,7 +172,6 @@ function SignUp() {
       Swal.fire({
         icon: 'error',
         title: '이메일 중복 확인 중 오류 발생',
-        text: error.message,
       });
     }
   };
