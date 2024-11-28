@@ -137,7 +137,7 @@ function Login() {
                             <Link to="/find-email" className={styles.user__account__link}>아이디 찾기</Link><Link to="/find-password" className={styles.user__account__link}>비밀번호 찾기</Link><Link to="/signup" className={styles.user__account__link}>회원가입</Link>
                         </div>
 
-                        <InputProvider>
+                        <InputProvider className={`${styles.save__check__item}`}>
                             <label htmlFor="save-id" className={`form__label form__label__checkbox`}>
                                 <input
                                     type='checkbox'

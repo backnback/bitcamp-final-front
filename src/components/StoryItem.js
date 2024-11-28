@@ -17,7 +17,7 @@ export const StoryAddContext = ({ children }) => {
     );
 }
 
-function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, currentLock, storyThum, currentLike, currentLikeCount, storyTitle, storyContent, storyLocation, storyDate, onLikeChange, onLockChange, onClick, onDelete}) {
+function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, currentLock, storyThum, currentLike, currentLikeCount, storyTitle, storyContent, storyLocation, storyDate, onLikeChange, onLockChange, onClick, onDelete }) {
     const [like, setLike] = useState(currentLike);
     const [lock, setLock] = useState(currentLock);
 
@@ -50,26 +50,14 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
             <div className={styles.top}>
                 <div className={styles.profile}>
                     <div className={styles.profile__link}>
-                        <span className={`${styles.profile__img__wrap} ${profileImg || styles.profile__img__name__wrap}`}>
-                            {
-                                profileImg != null ?
-                                    <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
-                                        alt={`${profileName}의 프로필 이미지`} className={`${styles.profile__img} line1`} />
-                                    :
-                                    <span className={`${styles.profile__img__name} line1`}>{profileName != '' ? profileName : "Guest"}</span>
-                            }
+                        <span className={`${styles.profile__img__wrap}`}>
+                            <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
+                                alt={`${profileName}의 프로필 이미지`} className={`${styles.profile__img} line1`} />
 
                         </span>
-                        {/* <span className={`${styles.profile__name} line1`}>제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토제펫토</span> */}
                         <span className={`${styles.profile__name} line1`}>{profileName}</span>
                     </div>
                 </div>
-                {/*
-                <div className={`${styles.right}`}>
-                    <span className="blind">{currentLock ? `비공개` : `공개`}</span>
-                    <i className={`icon ${currentLock ? `icon__lock__black` : `icon__unlock`}`}></i>
-                </div>
-                */}
                 {
                     storyPage == 'my-story' ?
                         <ButtonProvider width={'icon'} className={`${styles.button__item}`}>
@@ -81,18 +69,17 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
                         null
                 }
                 {
-                storyPage == 'all-story' ?
-                    <ButtonProvider width={'icon'}>
-                        <button type="button" className={`button button__icon`} onClick={deleteClick}>
-                            <i data-button="icon" className={`icon icon__trash__red`}></i>
-                        </button>
-                    </ButtonProvider> :
-                null
+                    storyPage == 'all-story' ?
+                        <ButtonProvider width={'icon'}>
+                            <button type="button" className={`button button__icon`} onClick={deleteClick}>
+                                <i data-button="icon" className={`icon icon__trash__red`}></i>
+                            </button>
+                        </ButtonProvider> :
+                        null
                 }
 
             </div>
             <div role="button" tabIndex={0} className={styles.middle} onClick={onClick}>
-                {/* <img src={"/images/sample.jpg"} alt={'story image'} className={`${styles.thumnail}`} /> */}
                 <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/story/${storyThum}`}
                     alt={'story image'} className={`${styles.thumbnail}`} />
             </div>
@@ -104,20 +91,15 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
                             <i className={`icon ${like ? `icon__heart__full` : `icon__heart`}`}></i>
                         </button>
                     </ButtonProvider>
-                    {/* <span className={`${styles.like__count}`}>999</span> */}
                     <span className={`${styles.like__count}`}>{like ? currentLikeCount + 1 : currentLikeCount}</span>
                 </div>
                 <button type="button" className={`${styles.view__button}`} onClick={onClick}>
                     <div className={`${styles.bottom__body}`}>
-                        {/* <strong className={`${styles.title} line1`}>카드 UI 짜는 중카드 UI 짜는 중카드 UI 짜는 중카드 UI 짜는 중</strong> */}
                         <strong className={`${styles.title} line1`}>{storyTitle}</strong>
-                        {/* <p className={`${styles.content}`}>국채를 모집하거나 예산외에 국가의 부담이 될 계약을 체결하려 할 때에는 정부는 미리 국회의 의결을 얻어야 한다.국채를 모집하거나 예산외에 국가의 부담이 될 계약을 체결하려 할 때에는 정부는 미리 국회의 의결을 얻어야 한다.국채를 모집하거나 예산외에 국가의 부담이 될 계약을 체결하려 할 때에는 정부는 미리 국회의 의결을 얻어야 한다.국채를 모집하거나 예산외에 국가의 부담이 될 계약을 체결하려 할 때에는 정부는 미리 국회의 의결을 얻어야 한다. </p> */}
                         <p className={`${styles.content}`}>{storyContent} </p>
                     </div>
                     <div className={`${styles.bottom__footer}`}>
-                        {/* <span className={`${styles.location}`}>부산광역시 흰여울마을</span> */}
                         <span className={`${styles.location}`}>{storyLocation}</span>
-                        {/* <span className={`${styles.date}`}>2024.09.13</span> */}
                         <span className={`${styles.date}`}>{storyDate}</span>
                     </div>
                 </button>

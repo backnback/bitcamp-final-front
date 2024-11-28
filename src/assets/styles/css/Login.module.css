@@ -123,6 +123,10 @@
     text-decoration: underline;
 }
 
+.save__check__item {
+    display: flex;
+}
+
 @media all and (max-width: 670px) {
     .container {
         overflow-x: hidden;

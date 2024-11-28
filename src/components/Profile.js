@@ -22,12 +22,8 @@ const Profile = ({ loginUser }) => {
 
   return (
     <div className={styles.box}>
-      <div className={`${styles.img__wrap} ${loginUser || styles.img__wrap__default}`}>
-        {
-          loginUser != null ?
-            <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${loginUser.path}`} alt='내 프로필 사진' className={`${styles.img}`} /> :
-            <span className={`${styles.img__default} line1`}>{loginUser ? loginUser.nickname : "Guest"}</span>
-        }
+      <div className={`${styles.img__wrap}`}>
+        <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${loginUser.path}`} alt='내 프로필 사진' className={`${styles.img}`} />
       </div>
       <div className={styles.info}>
         <p className={`${styles.name} ${styles.info__text}`}>닉네임 : {loginUser.nickname}</p>
