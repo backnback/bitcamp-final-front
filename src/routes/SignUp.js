@@ -120,10 +120,7 @@ function SignUp() {
     }
 
     try {
-      const response = await axiosInstance.post('/sign/findemail', { email }, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      });
+      const response = await axiosInstance.post('/sign/findemail', { email });
 
       if (!response.data) {
 
@@ -189,10 +186,7 @@ function SignUp() {
     }
 
     try {
-      const response = await axiosInstance.post('/sign/verificationcode', { authCode }, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      });
+      const response = await axiosInstance.post('/sign/verificationcode', { authCode });
 
       if (response.data) {
         Swal.fire({
