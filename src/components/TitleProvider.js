@@ -13,3 +13,17 @@ export const StoryTitleProvider = ({ title, selectChildren }) => {
         </div>
     );
 }
+
+const AuthTitle = createContext();
+
+export const useAuthTitleContext = () => useContext(AuthTitle);
+
+export const AuthTitleProvider = ({ title, children }) => {
+    return (
+        <div className='title__auth__wrap'>
+            <h2 className={`title__auth`}>{title}</h2>
+
+            {children}
+        </div>
+    );
+}

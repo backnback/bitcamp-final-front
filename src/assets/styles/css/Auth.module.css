@@ -1,0 +1,45 @@
+.auth__notice {
+    display: block;
+    margin-top: 5px;
+    font-size: var(--font-size-text);
+}
+
+.success {
+    color: var(--color-green);
+}
+
+.error {
+    color: var(--color-red);
+}
+
+.auth__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px var(--padding-xy);
+}
+
+.auth__wrap {
+    width: var(--auth-width);
+    padding: 30px;
+    box-shadow: var(--box-shadow);
+    background-color: var(--color-white);
+}
+
+.auth__input__wrap {
+    display: flex;
+    gap: 10px;
+}
+
+.auth__input__wrap [class*=form__input] {
+    flex: 1;
+}
+
+.auth__input__wrap [class*=button__item] {
+    flex: auto;
+    margin: 0;
+}
+
+.auth__item__center {
+    display: flex;
+}

@@ -3,6 +3,10 @@
     margin: 5px;
 }
 
+.button__item__120 {
+    max-width: 120px;
+}
+
 .button__item__130 {
     max-width: 130px;
 }
@@ -124,7 +128,4 @@
 }
 
 /* 구글 소셜 로그인 버튼 CSS 스타일 (구글 가이드라인 기준) */
-.button__google {
-}
-
-
+.button__google {}

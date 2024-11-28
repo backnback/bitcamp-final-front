@@ -69,18 +69,6 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                     <i className={`icon icon__profile__file ${styles.userEdit__profile__icon}`}></i>
                     <input type='file' className={`blind`} id="userEditFile" onChange={handleImageChange} />
                 </label>
-                {/* <img
-                    src={profileImage ? URL.createObjectURL(profileImage) : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${filename}`}
-                    onClick={handleImageClick} // 이미지 클릭 시 파일 선택창 열리도록 처리
-                    alt="프로필 사진"
-                /> */}
-                {/* <input
-                    type="file"
-                    className="blind"
-                    id="file01"
-                    onChange={handleImageChange}
-                    style={{ display: 'none' }}
-                /> */}
             </div>
             <div>
                 <InputProvider label={`닉네임`} inputId={`nickname01`} required={true}>
