@@ -147,7 +147,7 @@ function Login() {
                                     checked={rememberEmail}
                                     onChange={() => setRememberEmail(!rememberEmail)}
                                 />
-                                <span className={`input__text`}>자동로그인</span>
+                                <span className={`input__text`}>아이디 저장</span>
                             </label>
                         </InputProvider>
                     </form>
