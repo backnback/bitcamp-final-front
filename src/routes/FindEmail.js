@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../assets/styles/css/FindEmail.module.css';
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
 import axiosInstance from '../components/AxiosInstance';
 import Swal from 'sweetalert2';
+import { AuthTitleProvider } from '../components/TitleProvider';
+import styles from '../assets/styles/css/Auth.module.css';
 
 
 const FindEmail = () => {
@@ -69,13 +70,13 @@ const FindEmail = () => {
           withCredentials: true, // 쿠키 사용 시 설정
         });
         if (response.data) {
-          Swal.fire({
-            position: "top",
-            icon: "success",
-            title: "정상적으로 처리 되었습니다.",
-            showConfirmButton: false,
-            timer: 1500
-          });
+          // Swal.fire({
+          //   position: "top",
+          //   icon: "success",
+          //   title: "정상적으로 처리 되었습니다.",
+          //   showConfirmButton: false,
+          //   timer: 1500
+          // });
 
           const response = await axiosInstance.post('/sign/findemail', { email }, {
             headers: {
@@ -111,47 +112,52 @@ const FindEmail = () => {
   })
 
   return (
-    <div id='findemail' className={styles.container}>
-      <div className={styles.box}>
-        <div>
-          <h2>아이디 찾기</h2>
-          <div>
-            <InputProvider>
-              <input
-                type="email"
-                className="form__input"
-                id="email01"
-                name="이메일"
-                placeholder="이메일 입력"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} // 이메일 상태 업데이트
-                required
-              />
-            </InputProvider>
-            <ButtonProvider>
+    <div id='findemail' className={styles.auth__container}>
+      <section className={styles.auth__wrap}>
+        <AuthTitleProvider title={`아이디 찾기`} />
+        <InputProvider label={`이메일`} inputId={`email01`} required={true}>
+          <div className={`${styles.auth__input__wrap}`}>
+            <input
+              type="email"
+              className="form__input"
+              id="email01"
+              name="이메일"
+              value={email}
+              placeholder="이메일 입력"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <ButtonProvider width={`120`}>
               <button type="button" className="button button__primary" onClick={getUserEmail}>
                 <span className="button__text">인증번호 받기</span>
               </button>
             </ButtonProvider>
-            <InputProvider>
-              <input
-                type="text"
-                placeholder="인증번호"
-                value={authCode}
-                className="form__input"
-                onChange={(e) => setAuthCode(e.target.value)}
-                required
-              />
-            </InputProvider>
-            <ButtonProvider>
+          </div>
+        </InputProvider>
+
+        <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
+          <div className={`${styles.auth__input__wrap}`}>
+            <input
+              type="text"
+              className="form__input"
+              id="authNumber"
+              name="인증번호"
+              value={authCode}
+              placeholder="인증번호 입력"
+              onChange={(e) => setAuthCode(e.target.value)}
+              required
+            />
+            <ButtonProvider width={`120`}>
               <button type="button" className="button button__primary" onClick={emailVerification}>
-                <span className="button__text">확인</span>
+                <span className="button__text">인증확인</span>
               </button>
             </ButtonProvider>
           </div>
-          {message && <div className={styles.message}>{message}</div>} {/* 메시지를 화면에 표시 */}
-        </div>
-      </div>
+        </InputProvider>
+
+        {message && <div className={`${styles.auth__sub__message} ${styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
+      </section>
     </div>
   );
 };
