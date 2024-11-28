@@ -62,9 +62,8 @@ function Login() {
 
     const handleGoogleLogin = () => {
         // Google OAuth 로그인 엔드포인트로 리디렉트
-        window.location.href = 'http://go.remapber.p-e.kr/login/oauth2/code/google';
+        window.location.href = 'http://go.remapber.p-e.kr/oauth2/authorization/google';
     };
-
 
     useEffect(() => {
         document.body.className = 'body body__login body__auth';
