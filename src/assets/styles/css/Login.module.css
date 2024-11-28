@@ -70,13 +70,23 @@
     box-sizing: content-box;
 }
 
+.login__button__wrap {
+    display: flex;
+    gap: 10px;
+}
+
 .login__button {
+    flex: 1;
     margin: 10px 0;
 }
 
 .login__button [class=button__text] {
     font-weight: 400;
     font-size: var(--font-size);
+}
+
+.login__button__google {
+    flex: 0 40px;
 }
 
 .checkbox__save {

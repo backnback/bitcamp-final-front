@@ -44,7 +44,7 @@
     --color-gray-2c-34: rgba(44, 44, 44, 0.341);
 
     --color-red: #FF0000;
-    --color-green: #00ff22;
+    --color-green: #198754;
 
     --color-primaryGradient: linear-gradient(180deg, #4DA7FF 0%, #B1EDF8 100%);
     --color-loginBackColor: linear-gradient(to bottom, var(--color-primary), #B1EDF8);
@@ -56,6 +56,9 @@
     --color-profile-border: var(--color-blue-83-20);
     --color-textInput-label: var(--color-gray-1e);
     --color-mypage-box: #83CDFB12;
+
+    /* shadow */
+    --box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
     /* padding, margin */
     --padding-rl: 12px;
@@ -84,6 +87,8 @@
     --font-size-h5: 1.25rem;
     /* 24px */
     --font-size-h4: 1.5rem;
+    /* 36px */
+    --font-size-authTitle: 3rem;
     /* 40px */
     --font-size-storyTitle: 2.5rem;
 
@@ -103,4 +108,7 @@
 
     /* sidebar */
     --sidebar-width: 590px;
+
+    /* auth */
+    --auth-width: 590px;
 }
