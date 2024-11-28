@@ -214,14 +214,9 @@ function SignUp() {
       Swal.fire({
         icon: 'error',
         title: '인증번호 확인 중 오류 발생',
-        text: error.message,
       });
     }
   };
-
-  useEffect(() => {
-
-  }, [])
 
   return (
     <div id='signup' className={styles.auth__container}>
