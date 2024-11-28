@@ -100,6 +100,16 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
 
 
     useEffect(() => {
+        if (travelDate) {
+            const [year, month, day] = travelDate.split('-');
+            setSelectedYear(Number(year));
+            setSelectedMonth(Number(month));
+            setSelectedDay(Number(day));
+        }
+    }, [travelDate]);
+
+
+    useEffect(() => {
         // 연도, 월, 일이 변경될 때 travelDate 업데이트
         setTravelDate(`${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`);
     }, [selectedYear, selectedMonth, selectedDay]);
