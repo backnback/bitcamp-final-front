@@ -6,11 +6,16 @@ import Swal from 'sweetalert2';
 import { AuthTitleProvider } from '../components/TitleProvider';
 import styles from '../assets/styles/css/Auth.module.css';
 
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
 const FindEmail = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(''); // 가입 여부 메시지를 저장할 상태 추가
   const [authCode, setAuthCode] = useState('');
+  const [duplication, setDuplication] = useState('');
 
   const getUserEmail = async (e) => {
     e.preventDefault();
@@ -23,6 +28,14 @@ const FindEmail = () => {
       });
       return;
     }
+
+    if (!isValidEmail(email)) {
+      setDuplication('해당 이메일은 이메일 형식이 아닙니다');
+      return;
+    } else {
+      setDuplication("");
+    }
+
     try {
       const response = await axiosInstance.post('/sign/emailverification', { email }, {
         headers: {
@@ -134,6 +147,7 @@ const FindEmail = () => {
               </button>
             </ButtonProvider>
           </div>
+          <span className={`${styles.auth__sub__notice} ${duplication.includes(" ") ? styles.error : styles.success}`}>{`${duplication}`}</span>
         </InputProvider>
 
         <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
@@ -156,7 +170,7 @@ const FindEmail = () => {
           </div>
         </InputProvider>
 
-        {message && <div className={`${styles.auth__sub__message} ${styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
+        {message && <div className={`${styles.auth__message} ${message.includes("가입되어있는 아이디") ? styles.success : styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
       </section>
     </div>
   );

@@ -50,7 +50,12 @@ function SignUp() {
     }
   }, []);
 
+  const handleDeleteProfile = () => {
+    setProfileImage(null);
+  };
+
   const handleFileChange = (e) => {
+    console.log(e)
     setProfileImage(e.target.files[0]);
   };
 
@@ -104,6 +109,8 @@ function SignUp() {
   const getUserAuthCode = async (e) => {
     e.preventDefault();
 
+
+
     if (!email) {
       Swal.fire({
         icon: 'error',
@@ -121,7 +128,7 @@ function SignUp() {
 
       if (!response.data) {
 
-        if(!isValidEmail(email)){
+        if (!isValidEmail(email)) {
           setDuplication('해당 이메일은 이메일 형식이 아닙니다');
           return;
         }
@@ -215,6 +222,10 @@ function SignUp() {
     }
   };
 
+  useEffect(() => {
+
+  }, [])
+
   return (
     <div id='signup' className={styles.auth__container}>
       <section className={styles.auth__wrap}>
@@ -241,7 +252,7 @@ function SignUp() {
                 </ButtonProvider>
               )}
             </div>
-            <span className={`${styles.auth__notice} ${duplication.includes("사용가능한 이메일") ? styles.error : styles.success}`}>{`${duplication}`}</span>
+            <span className={`${styles.auth__sub__notice} ${duplication.includes("사용 가능한 이메일") ? styles.success : styles.error}`}>{`${duplication}`}</span>
           </InputProvider>
 
           <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
@@ -292,33 +303,57 @@ function SignUp() {
 
           <div className={`${styles.auth__form__item}`}>
             <h5 className='form__label__title'>프로필 사진 등록</h5>
+            {profileImage == null ?
+              <InputProvider>
+                <label htmlFor="file01" className="form__label form__label__file">
+                  <input type="file" className="blind" id="file01" onChange={handleFileChange} />
+                  <FormFileIcon />
+                </label>
+              </InputProvider> :
+
+              <div className={`${styles.profile__img__wrap}`}>
+                <label htmlFor="profileImage" className={`${styles.profile__img__label}`}>
+                  <img
+                    src={`${URL.createObjectURL(profileImage)}`}
+                    alt="프로필 사진"
+                    className={`${styles.profile__img}`}
+                  />
+                  <i className={`icon icon__profile__file ${styles.profile__icon}`}></i>
+                  <input type='file' className={`blind`} id="profileImage" onChange={handleFileChange} />
+                </label>
+                <ButtonProvider width={'icon'} className={`button__item__x ${styles.profile__delete__button}`}>
+                  <button type="button" className={`button button__icon button__icon__x`} onClick={handleDeleteProfile}>
+                    <span className={`blind`}>삭제</span>
+                    <i className={`icon icon__x__black`}></i>
+                  </button>
+                </ButtonProvider>
+              </div>
+            }
+          </div>
+
+          <div className={`${styles.auth__item__center} ${styles.auth__item__agree}`}>
             <InputProvider>
-              <label htmlFor="file01" className="form__label form__label__file">
-                <input type="file" className="blind" id="file01" onChange={handleFileChange} />
-                <FormFileIcon />
+              <label htmlFor="checkbox02" className={`form__label form__label__checkbox`}>
+                <input
+                  type='checkbox'
+                  className={`form__input`}
+                  onChange={(e) => setAgree(e.target.checked)}
+                  id='checkbox02'
+                  checked={agree}
+                  name="개인정보 동의"
+                  required />
+                <span className={`input__text`}>개인 정보 이용 동의</span>
               </label>
             </InputProvider>
           </div>
 
-          <InputProvider className={`${styles.auth__item__center}`}>
-            <label htmlFor="checkbox02" className={`form__label form__label__checkbox`}>
-              <input
-                type='checkbox'
-                className={`form__input`}
-                onChange={(e) => setAgree(e.target.checked)}
-                id='checkbox02'
-                checked={agree}
-                name="개인정보 동의"
-                required />
-              <span className={`input__text`}>개인 정보 이용 동의</span>
-            </label>
-          </InputProvider>
-
-          <ButtonProvider className={`${styles.auth__item__center}`}>
-            <button type="submit" className="button button__primary">
-              <span className="button__text">회원가입</span>
-            </button>
-          </ButtonProvider>
+          <div className={`${styles.auth__item__center}`}>
+            <ButtonProvider>
+              <button type="submit" className="button button__primary">
+                <span className="button__text">회원가입</span>
+              </button>
+            </ButtonProvider>
+          </div>
         </form>
       </section>
     </div>
