@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from './components/AxiosInstance.js';
 
 import Header from "./components/Header";
@@ -34,6 +34,7 @@ function App() {
     const [user, setUser] = useState(null);
     const [role, setRole] = useState(null);
     const currentLocation = useLocation();
+    const [bodyClassNames, setBodyClassNames] = useState(['body']);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,7 +43,7 @@ function App() {
 
         if (!token) {
             console.log("토큰 없음");
-            const allowedPaths = ['/signup', '/find-email', '/find-password' ,'/newPassword'];
+            const allowedPaths = ['/signup', '/find-email', '/find-password', '/newPassword'];
             if (allowedPaths.includes(currentLocation.pathname)) {
                 console.log("토큰 없이 접근 허용");
                 return;
@@ -61,7 +62,7 @@ function App() {
             const refreshExpirationTime = decodedEfreshToken.exp * 1000;
             const remainTime = expirationTime - Date.now();
 
-            if(remainTime < 0 || refreshExpirationTime < 0){
+            if (remainTime < 0 || refreshExpirationTime < 0) {
                 localStorage.clear();
                 navigate("/");
                 window.location.reload();
@@ -77,19 +78,19 @@ function App() {
                             'Content-Type': 'application/json'
                         },
                     });
-                
+
                     // 새로 갱신된 토큰 처리
                     const newAccessToken = response.data.accessToken;
                     localStorage.setItem('accessToken', newAccessToken);
                     setAccessToken(newAccessToken);
                     setUser(jwtDecode(newAccessToken));
                     console.log("토큰 갱신 성공");
-                
+
                 } catch (error) {
                     // 서버에서 받은 오류 메시지를 확인
                     if (error.response && error.response.data.error) {
                         const errorMessage = error.response.data.error;
-                        
+
                         // "Refresh Token이 만료되었습니다." 오류가 발생했을 경우
                         if (errorMessage === "Refresh Token이 만료되었습니다.") {
                             console.log("토큰 만료: 다시 로그인 해주세요.");
@@ -106,7 +107,7 @@ function App() {
                         navigate('/login');
                     }
                 }
-                
+
             } else {
                 setAccessToken(token);
                 setUser(decodedToken);
@@ -117,27 +118,11 @@ function App() {
         };
 
         checkTokenExpiration();
+
+        document.body.className = 'body';
     }, [currentLocation.pathname, navigate]);
 
     useEffect(() => {
-        const locationNames = document.body.classList;
-        for (const locationName of locationNames) {
-            document.body.classList.remove(locationName);
-        }
-        const [firstName, secondName] = currentLocation.pathname.split('/').filter((item) => item !== '');
-
-        document.body.classList.add('body');
-        if (firstName) {
-            document.body.classList.add(`body__${firstName}`);
-        }
-        if (secondName) {
-            document.body.classList.add(`body__${firstName}`, `body__${firstName}__${secondName}`);
-        } else {
-            const pageLogin = document.getElementById('login');
-            if (pageLogin) {
-                pageLogin.ownerDocument.body.classList.add(`body__${pageLogin.id}`);
-            }
-        }
     }, [currentLocation]);
 
     return (
@@ -166,12 +151,12 @@ function App() {
                     {/* 로그인 했을 때 */}
                     <div className={`layout__wrapper layout__wrapper__header`}>
 
-                    {/* accessToken을 디코딩하여 역할 확인 */}
-                    {role === 'ROLE_ADMIN' ? (
-                        <AdminHeader />
-                    ) : (
-                        <Header />
-                    )}
+                        {/* accessToken을 디코딩하여 역할 확인 */}
+                        {role === 'ROLE_ADMIN' ? (
+                            <AdminHeader />
+                        ) : (
+                            <Header />
+                        )}
 
                         <div className={`layout__content__wrapper`}>
                             <div className={`layout__contents`}>
@@ -185,23 +170,6 @@ function App() {
                                     <Route path="/slide/test" element={<SlideTest />} />
                                     {/* 라우터 경로 설정 */}
                                     <Route path="map/story/:locationId" element={<MapLocation />} />
-                                    {/*<Route path="/map/story/seoul" element={<MapSeoul />} />*/}
-                                    {/*<Route path="/map/story/busan" element={<MapBusan />} />*/}
-                                    {/*<Route path="/map/story/daegu" element={<MapDaegu />} />*/}
-                                    {/*<Route path="/map/story/daejeon" element={<MapDaejeon />} />*/}
-                                    {/*<Route path="/map/story/gwangju" element={<MapGwangju />} />*/}
-                                    {/*<Route path="/map/story/gwangwon" element={<MapGwangwon />} />*/}
-                                    {/*<Route path="/map/story/gyeonggi" element={<MapGyeonggi />} />*/}
-                                    {/*<Route path="/map/story/incheon" element={<MapIncheon />} />*/}
-                                    {/*<Route path="/map/story/jeju" element={<MapJeju />} />*/}
-                                    {/*<Route path="/map/story/northChungcheoung" element={<MapNorthChungcheoung />} />*/}
-                                    {/*<Route path="/map/story/northGyeongsang" element={<MapNorthGyeongsang />} />*/}
-                                    {/*<Route path="/map/story/northJeolla" element={<MapNorthJeolla />} />*/}
-                                    {/*<Route path="/map/story/sejong" element={<MapSejong />} />*/}
-                                    {/*<Route path="/map/story/southChungcheong" element={<MapSouthChungcheong />} />*/}
-                                    {/*<Route path="/map/story/southGyeongsan" element={<MapSouthGyeongsan />} />*/}
-                                    {/*<Route path="/map/story/southJeolla" element={<MapSouthJeolla />} />*/}
-                                    {/*<Route path="/map/story/ulsan" element={<MapUlsan />} />*/}
 
                                     <Route path="/viewuser/:id" element={<ViewUser />} /> {/* 특정 사용자 보기 */}
                                     <Route path="/share-story/list" element={<ShareStoryList />} /> {/* 스토리 목록 페이지 */}

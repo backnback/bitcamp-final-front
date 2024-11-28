@@ -2,24 +2,28 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../components/AxiosInstance';
 import { FormProvider, StoryForm } from '../components/FormProvider';
 import Swal from 'sweetalert2';
+import { ButtonProvider } from './ButtonProvider';
 
 
-const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
+const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
+    const [accessToken, setAccessToken] = useState(null);
+
     const [title, setTitle] = useState('');
     const [travelDate, setTravelDate] = useState('');
     const [content, setContent] = useState('');
-    const [locationDetail, setLocationDetail] = useState(''); // 사용자가 입력할 위치 상세 필드
+    const [locationDetail, setLocationDetail] = useState('');
     const [files, setFiles] = useState([]);
     const [firstNames, setFirstNames] = useState([]);
     const [secondNames, setSecondNames] = useState([]);
     const [selectedFirstName, setSelectedFirstName] = useState('');
     const [selectedSecondName, setSelectedSecondName] = useState('');
-    const [accessToken, setAccessToken] = useState(null);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 월은 0부터 시작
     const [selectedDay, setSelectedDay] = useState(new Date().getDate());
     const [checkedShare, setCheckedShare] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [mainPhotoIndex, setMainPhotoIndex] = useState('');
+
 
 
     // 로컬 스토리지에서 accessToken을 가져오는 함수
@@ -30,21 +34,43 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
         } else {
             console.warn("Access token이 없습니다.");
         }
+    }, []);
 
-        if (provinceId !== undefined && cityId !== undefined) {
-            const setLocation = async () => {
+
+
+    useEffect(() => {
+        if (accessToken) {
+            const fetchStoryViewDTO = async () => {
                 try {
-                    const locationId = provinceId + cityId;
-                    const response = await axiosInstance.get(`/location/${locationId}`);
-                    setSelectedFirstName(response.data.firstName)
-                    setSelectedSecondName(response.data.secondName)
+                    const response = await axiosInstance.get(`/story/view/${storyId}`, {
+                        params: {
+                            share: false
+                        },
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    const story = response.data;
+                    setTitle(story.title);
+                    setTravelDate(story.travelDate);
+                    setContent(story.content);
+                    setLocationDetail(story.locationDetail);
+                    setSelectedFirstName(story.locationFirstName);
+                    setSelectedSecondName(story.locationSecondName);
+                    setCheckedShare(story.share);
+                    setMainPhotoIndex(story.mainPhotoIndex);
+                    setFiles(story.photos || []);
+                    setLoading(false);  // 데이터를 불러온 후 로딩 상태를 false로 설정
                 } catch (error) {
-                    console.error("LocationID 가져오는 중 오류", error);
+                    console.error("스토리를 가져오는 중 오류가 발생했습니다!", error);
                 }
             };
-            setLocation();
+            fetchStoryViewDTO();
         }
+    }, [accessToken, storyId]);
 
+
+    useEffect(() => {
         const fetchFirstNames = async () => {
             try {
                 const response = await axiosInstance.get('/location/list');
@@ -54,9 +80,7 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
             }
         };
         fetchFirstNames();
-        console.log(mainPhotoIndex);
     }, []);
-
 
     useEffect(() => {
         const fetchSecondNames = async () => {
@@ -71,10 +95,9 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
                 setSecondNames([]);
             }
         };
-
-
         fetchSecondNames();
     }, [selectedFirstName]);
+
 
     useEffect(() => {
         // 연도, 월, 일이 변경될 때 travelDate 업데이트
@@ -82,16 +105,10 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
     }, [selectedYear, selectedMonth, selectedDay]);
 
 
+    useEffect(() => {
 
-    const handleFileChange = (event) => {
-        const uploadedFiles = Array.from(event.target.files);
-        setFiles(uploadedFiles);
+    }, [title, travelDate, content, locationDetail, selectedFirstName, selectedSecondName, selectedYear, selectedMonth, selectedDay, files]);
 
-        // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
-        if (uploadedFiles.length === 1) {
-            setMainPhotoIndex(0);
-        }
-    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -110,60 +127,72 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('travelDate', travelDate);
-        formData.append('locationDetail', locationDetail); // 사용자가 입력한 위치 상세
+        formData.append('locationDetail', locationDetail);
         formData.append('content', content);
         formData.append('firstName', selectedFirstName);
         formData.append('secondName', selectedSecondName);
+        formData.append('oldStoryId', storyId);
         formData.append('share', checkedShare);
         formData.append('mainPhotoIndex', mainPhotoIndex);
 
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]);
-        }
-
-        // mainPhoto 값 확인
-        console.log("전송할 mainPhoto 인덱스:", mainPhotoIndex);
+        let photos = [];
+        files.forEach(file => {
+            if (file instanceof File) {
+                formData.append('files', file);
+            } else if (file.path) {  // photo 객체인 경우
+                photos.push(file);
+            }
+        });
+        formData.append('photosJson', JSON.stringify(photos));
 
 
         try {
-            await axiosInstance.post('/my-story/add', formData, {
+            formData.forEach((value, key) => {
+                console.log(`${key}:`, value);
+            });
+            const response = await axiosInstance.post('/my-story/update', formData, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
+
+            console.log(formData.getAll('files'));
+
             Swal.fire({
                 position: "top",
                 icon: "success",
-                title: "스토리가 추가되었습니다!",
+                title: "스토리가 업데이트되었습니다!",
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
                 // 3초 후 페이지 이동
-                if (provinceId === undefined && cityId === undefined) {
-                    window.location.href = '/my-story/list';
+                if (mapId) {
+                    window.location.href = `/map/story/${mapId}`
                 } else {
-                    window.location.href = `/map/story/${provinceId}`
+                    window.location.href = '/my-story/list';
                 }
             });
         } catch (error) {
-            console.error("스토리 추가 중 오류가 발생했습니다!", error);
+            console.error("스토리 업데이트 중 오류가 발생했습니다!", error);
         }
     };
 
+
     const handleButtonClick = () => {
+        console.log("제출버튼 실행됨");
         handleSubmit(new Event('submit', { cancelable: true }));
+    };
+
+
+    const handleMainPhotoSelect = (index) => {
+        setMainPhotoIndex(index); // Main 이미지
     };
 
     const handleCheckboxChange = (event) => {
         const checked = event.target.checked;
         setCheckedShare(checked);
         console.log("Checkbox is checked:", checked);
-    };
-
-
-    const handleMainPhotoSelect = (index) => {
-        setMainPhotoIndex(index); // Main 이미지
     };
 
 
@@ -176,6 +205,7 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
     }, [files]);
 
 
+    // 파일 추가 로직을 변경하여 File 객체만 유지
     const onAddPhoto = (files) => {
         const uploadedFiles = Array.from(files);
 
@@ -196,7 +226,13 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
             console.log("삭제하려는 파일:", photo);
 
             const updatedFiles = prevFiles.filter((file) => {
-                return file !== photo;
+                // File 객체일 경우
+                if (photo instanceof File) {
+                    return file !== photo;
+                }
+
+                // Photo 객체일 경우
+                return file.id !== photo.id;
             });
 
             console.log("삭제 후 파일 리스트:", updatedFiles);
@@ -213,32 +249,41 @@ const MyStoryAddForm = ({ provinceId, cityId, isModal }) => {
         selectedFirstName, setSelectedFirstName, firstNames,
         selectedSecondName, setSelectedSecondName, secondNames,
         locationDetail, setLocationDetail,
-        handleFileChange, onAddPhoto, onDeletePhoto,
         content, setContent,
         checkedShare, handleCheckboxChange,
-        files,
-        mainPhotoIndex, handleMainPhotoSelect, onAddPhoto,
+        files, onAddPhoto, onDeletePhoto,
+        mainPhotoIndex, handleMainPhotoSelect,
         handleButtonClick,
         handleSubmit
     }
 
 
+    if (loading) {
+        return <div>로딩 중...</div>;
+    }
+
+
     return (
         <>
-            {
-                isModal ?
-                    <div>
-                        <FormProvider value={formValue}>
-                            <StoryForm />
-                        </FormProvider>
-                    </div>
-                    :
-                    <FormProvider value={formValue}>
-                        <StoryForm />
-                    </FormProvider>
-            }
+            <div className='modal__body'>
+                <FormProvider value={formValue}>
+                    <StoryForm />
+                </FormProvider>
+            </div>
+
+            <div className='modal__footer'>
+                <div className={`modal__content__item__center`}>
+
+                </div>
+                <ButtonProvider>
+                    <button type="button" id="submit-button" className={`button button__primary`}
+                        onClick={handleButtonClick}>
+                        <span className={`button__text`}>수정</span>
+                    </button>
+                </ButtonProvider>
+            </div>
         </>
     );
 };
 
-export default MyStoryAddForm;
+export default StoryUpdateModal;

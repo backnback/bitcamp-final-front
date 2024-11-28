@@ -4,7 +4,7 @@ import { FormProvider, StoryForm } from '../components/FormProvider';
 import Swal from 'sweetalert2';
 
 
-const MyStoryUpdateForm = ({ storyId, mapId }) => {
+const MyStoryUpdateForm = ({ storyId, mapId, isModal }) => {
     const [accessToken, setAccessToken] = useState(null);
 
     const [title, setTitle] = useState('');
@@ -168,7 +168,7 @@ const MyStoryUpdateForm = ({ storyId, mapId }) => {
                 // 3초 후 페이지 이동
                 if (mapId) {
                     window.location.href = `/map/story/${mapId}`
-                }else {
+                } else {
                     window.location.href = '/my-story/list';
                 }
             });
@@ -263,9 +263,20 @@ const MyStoryUpdateForm = ({ storyId, mapId }) => {
 
 
     return (
-        <FormProvider value={formValue}>
-            <StoryForm />
-        </FormProvider>
+        <>
+            {
+                isModal ?
+                    <div>
+                        <FormProvider value={formValue}>
+                            <StoryForm />
+                        </FormProvider>
+                    </div>
+                    :
+                    <FormProvider value={formValue}>
+                        <StoryForm />
+                    </FormProvider>
+            }
+        </>
     );
 };
 
