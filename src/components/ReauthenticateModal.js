@@ -134,7 +134,7 @@ const ReauthenticateModal = () => {
             Swal.fire({
                 text: "삭제를 취소합니다",
                 toast: true,
-                position: 'top', 
+                position: 'top',
                 showConfirmButton: false,
                 timer: 2000, // 3초 후 자동 닫힘
             });
@@ -159,7 +159,8 @@ const ReauthenticateModal = () => {
                             <UserEdit password={password} setPassword={setPassword}
                                 nickname={nickname} setNickname={setNickname}
                                 profileImage={profileImage}
-                                setProfileImage={setProfileImage} accessToken={accessToken} />
+                                setProfileImage={setProfileImage} accessToken={accessToken}
+                            />
                         </form>
                     </div>
 

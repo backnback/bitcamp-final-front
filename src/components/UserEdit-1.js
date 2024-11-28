@@ -3,7 +3,6 @@ import { InputProvider } from "./InputProvider";
 import axiosInstance from './AxiosInstance';
 import styles from '../assets/styles/css/MyPage.module.css';
 import Swal from 'sweetalert2';
-import { ButtonProvider } from './ButtonProvider';
 
 const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, setProfileImage, accessToken }) => {
     const [filename, setFilename] = useState('');
@@ -47,10 +46,6 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
         setProfileImage(e.target.files[0]);
     };
 
-    const handleDeleteProfile = () => {
-        setFilename('default.png');
-    };
-
     const handleImageClick = () => {
         document.getElementById('file01').click(); // 파일 선택 input을 클릭
     };
@@ -58,21 +53,22 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
     return (
         <div className={`${styles.userEdit__wrap}`}>
             <div className={`${styles.userEdit__profile__wrap}`}>
-                <label htmlFor="userEditFile" className={`${styles.userEdit__profile__img__wrap}`}>
-                    <img
-                        src={profileImage ? URL.createObjectURL(profileImage) : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${filename}`}
-                        alt="프로필 사진"
-                        className={`${styles.userEdit__profile__img}`}
-                    />
+                <label htmlFor="userEditFile" className={`${styles.userEdit__profile__img__wrap} ${filename == '' ? styles.userEdit__profile__img__name__wrap : ``}`}>
+                    {
+                        filename != '' ?
+                            <img
+                                src={profileImage ? URL.createObjectURL(profileImage) : `https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${filename}`}
+                                // onClick={handleImageClick} // 이미지 클릭 시 파일 선택창 열리도록 처리
+                                alt="프로필 사진"
+                                className={`${styles.userEdit__profile__img}`}
+                            />
+                            :
+                            <span className={`${styles.userEdit__profile__img__name} line1`}>{nickname != null ? nickname : "Guest"}</span>
+
+                    }
                     <i className={`icon icon__profile__file ${styles.userEdit__profile__icon}`}></i>
                     <input type='file' className={`blind`} id="userEditFile" onChange={handleImageChange} />
                 </label>
-                <ButtonProvider width={'icon'} className={`button__item__x ${styles.profile__delete__button}`}>
-                    <button type="button" className={`button button__icon button__icon__x`} onClick={handleDeleteProfile}>
-                        <span className={`blind`}>삭제</span>
-                        <i className={`icon icon__x__black`}></i>
-                    </button>
-                </ButtonProvider>
             </div>
             <div>
                 <InputProvider label={`닉네임`} inputId={`nickname01`} required={true}>
