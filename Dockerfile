@@ -1,28 +1,21 @@
-# 1. Node.js 기반의 Alpine 이미지를 사용
-FROM node:18-alpine
+# 1. Nginx 기반 이미지 사용
+FROM nginx:alpine
 
-# 2. 작업 디렉토리 설정
-WORKDIR /app
+# 2. 앱 빌드 결과물 디렉토리 생성
+WORKDIR /usr/share/nginx/html
 
-# 3. 빌드 시점에 사용할 환경 변수 설정
-# ARG는 빌드 시점에만 사용할 수 있는 변수입니다.
-ARG REACT_APP_API_URL
+# 3. 빌드 결과물 복사
+# `build` 폴더의 파일을 Nginx가 서빙할 `/usr/share/nginx/html`에 복사
+COPY ./build/ .
 
-# 4. 환경 변수 설정 (컨테이너 내에서 사용)
-# ENV는 애플리케이션이 실행되는 동안 사용할 수 있는 변수입니다.
-ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+# 4. 기존 Nginx의 기본 설정 파일을 제거
+RUN rm /etc/nginx/conf.d/default.conf
 
-# 5. package.json과 package-lock.json을 먼저 복사
-COPY package*.json ./
+# 5. Nginx 설정 파일을 복사 (이 후 설명할 nginx.conf 사용)
+COPY ./nginx.conf /etc/nginx/conf.d/
 
-# 6. 의존성 설치 (npm 사용)
-RUN npm install
+# 6. Nginx가 기본적으로 사용하는 80번 포트를 오픈
+EXPOSE 80
 
-# 7. 애플리케이션 소스 코드 복사
-COPY . .
-
-# 8. 포트 설정
-EXPOSE 3000
-
-# 9. 앱 실행 (npm start)
-CMD ["npm", "start"]
+# 7. Nginx 실행 명령
+CMD ["nginx", "-g", "daemon off;"]
