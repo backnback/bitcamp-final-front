@@ -7,6 +7,11 @@ import FormFileIcon from '../components/FormFileIcon';
 import styles from '../assets/styles/css/SignUp.module.css';
 import Swal from 'sweetalert2';
 
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 function SignUp() {
   const navigate = useNavigate();
 
@@ -114,6 +119,12 @@ function SignUp() {
       });
 
       if (!response.data) {
+
+        if(!isValidEmail(email)){
+          setDuplication('해당 이메일은 이메일 형식이 아닙니다');
+          return;
+        }
+
         setDuplication('사용 가능한 이메일입니다');
 
         try {
@@ -146,6 +157,10 @@ function SignUp() {
         }
       } else {
         setDuplication('중복된 이메일입니다');
+        Swal.fire({
+          icon: 'error',
+          title: '중복된 이메일입니다',
+        });
       }
     } catch (error) {
       Swal.fire({
