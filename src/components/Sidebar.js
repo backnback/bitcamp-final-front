@@ -5,9 +5,10 @@ import styles from '../assets/styles/css/MapSidebar.module.css'; // 스타일 �
 import axiosInstance from "./AxiosInstance";
 import { Link } from "react-router-dom";
 
-const Sidebar = ({ onHovered, provinceId }) => {
+const Sidebar = ({ onHovered, provinceId, mapHovered}) => {
 
     const [provinces, setProvinces] = useState(null);
+    const [oldHover, setOldHover] = useState(null);
 
     useEffect(() => {
         const mapProvince = async () => {
@@ -34,15 +35,30 @@ const Sidebar = ({ onHovered, provinceId }) => {
     }, []);
 
     useEffect(() => {
+        // 새로운 hovered 요소에 filter 추가
+        const leaveElement = document.getElementById(`${oldHover}`);
 
-    }, [provinces]);
+        setOldHover(null);
+        if (leaveElement) {
+            leaveElement.removeAttribute('style');
+        }
+
+        if (mapHovered !== null) {
+            const gElement = document.getElementById(`${mapHovered}`);
+            setOldHover(mapHovered);
+            if (gElement) {
+                // gElement.setAttribute('border-opacity', '0%');
+                gElement.setAttribute("style", "background-color: rgba(176, 236, 248, 0.5);");
+            }
+        }
+    }, [mapHovered]);
 
     return (
         <div className={styles.side__wrap}>
             <ul className={styles.side__list}>
                 {
                     provinces && provinces.map(province => (
-                        <li key={province.id} className={styles.side__item}>
+                        <li key={province.id} className={styles.side__item} id={province.id}>
                             <a
                                 href={`/map/story/${province.id}`}
                                 className={`${styles.side__link} ${province.id.toString() === provinceId ? styles.select : ``}`}

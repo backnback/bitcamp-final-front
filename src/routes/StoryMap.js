@@ -9,7 +9,8 @@ function StoryMap() {
 
     const [accessToken, setAccessToken] = useState(null);
     const [mapStoryList, setMapStoryList] = useState(null);
-    const [hovered, sethHovered] = useState(null);
+    const [sideHovered, setSideHovered] = useState(null);
+    const [mapHovered, setMapHovered] = useState(null);
 
     useEffect(() => {
         document.body.className = 'body body__map';
@@ -44,10 +45,10 @@ function StoryMap() {
     return (
         <div id='map' className={`${mapStyles.container}`}>
             <div className={`${sidebarStyles.container}`}>
-                <Sidebar onHovered={sethHovered} />
+                <Sidebar onHovered={setSideHovered} mapHovered={mapHovered}/>
             </div>
             <div className={`${mapStyles.map__container}`}>
-                <Map storyList={mapStoryList} hovered={hovered} />
+                <Map storyList={mapStoryList} hovered={sideHovered} setMapHovered={setMapHovered}/>
             </div>
         </div>
     )

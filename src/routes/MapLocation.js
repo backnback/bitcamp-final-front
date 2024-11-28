@@ -27,8 +27,10 @@ function MapLocation() {
     const [storyPhotoList, setStoryPhotoList] = useState(null);
     const [id, setId] = useState(null);
     const [storyList, setStoryList] = useState(null);
+    const [sideHovered, setSideHovered] = useState(null);
+    const [provinceHovered, setProvinceHovered] = useState(null);
     const [cityHovered, setCityHovered] = useState(null);
-    const [proviceHovered, setProviceHovered] = useState(null);
+
     const { openModal } = useModals();
 
     // const RenderComponent = <CityMap />;
@@ -120,15 +122,16 @@ function MapLocation() {
     return (
         <div id='maplocation' className={`${mapStyles.container}`}>
             <div className={`${sidebarStyles.container}`}>
-                <Sidebar provinceId={locationId} onHovered={setProviceHovered} />
-                <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setCityHovered} />
+                <Sidebar provinceId={locationId} onHovered={setProvinceHovered} />
+                <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setSideHovered} mapHovered={cityHovered}/>
             </div>
             <div className={`${mapStyles.map__container}`}>
                 <CityMap
+                    setMapHovered={setCityHovered}
                     storyPhotoList={storyPhotoList}
                     eventClick={handleClick}
                     mapPaths={mapPathJson[locationId]}
-                    hovered={cityHovered} />
+                    hovered={sideHovered} />
             </div>
         </div>
     )

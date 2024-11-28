@@ -3,7 +3,7 @@ import LocationActiveSvg from "./LocationActiveSvg";
 import LocationMapSvg from "./LocationMapSvg";
 import mapStyles from "../assets/styles/css/Map.module.css";
 
-const CityMap = ({ storyPhotoList, eventClick, mapPaths, hovered }) => {
+const CityMap = ({ storyPhotoList, eventClick, mapPaths, hovered, setMapHovered }) => {
 
     const [oldHovered, setOldHovered] = useState();
 
@@ -33,11 +33,22 @@ const CityMap = ({ storyPhotoList, eventClick, mapPaths, hovered }) => {
         }
     }, [hovered]);
 
+    const handleMouseOver = (event) => {
+        const target = event.target.closest("g"); // 가장 가까운 g 태그 찾기
+        if (target && target.id) {
+            setMapHovered(target.id); // g 태그의 ID 값을 상태로 저장
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setMapHovered(null); // 마우스가 떠나면 ID 초기화
+    };
+
     return (
         <div className={`${mapStyles.city__wrap}`}>
             <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width={mapPaths.width} viewBox={mapPaths.viewBox}
                 strokeLinecap="round" strokeLinejoin="round" id={mapPaths.id} className={`${mapStyles.city__list}`}>
-                <g id={mapPaths.id + "경계"} stroke="white" strokeWidth="5">
+                <g id={mapPaths.id + "경계"} stroke="white" strokeWidth="5" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
                     {
                         storyPhotoList && storyPhotoList.length > 0 ? (
                             storyPhotoList.map((item) => {

@@ -4,8 +4,9 @@ import axiosInstance from "./AxiosInstance";
 
 import styles from "../assets/styles/css/MapSidebar.module.css"
 
-const SidebarSecond = ({ onHovered, provinceId, clickEvent }) => {
+const SidebarSecond = ({ onHovered, provinceId, clickEvent, mapHovered }) => {
     const [cities, setCities] = useState(null);
+    const [oldHover, setOldHover] = useState(null);
 
     useEffect(() => {
         const mapProvince = async () => {
@@ -19,6 +20,25 @@ const SidebarSecond = ({ onHovered, provinceId, clickEvent }) => {
         };
         mapProvince()
     }, []);
+
+    useEffect(() => {
+        // 새로운 hovered 요소에 filter 추가
+        const leaveElement = document.getElementById(`${oldHover}`);
+
+        setOldHover(null);
+        if (leaveElement) {
+            leaveElement.removeAttribute('style');
+        }
+
+        if (mapHovered !== null) {
+            const gElement = document.getElementById(`${mapHovered}`);
+            setOldHover(mapHovered);
+            if (gElement) {
+                // gElement.setAttribute('border-opacity', '0%');
+                gElement.setAttribute("style", "background-color: rgba(176, 236, 248, 0.5);");
+            }
+        }
+    }, [mapHovered]);
 
     return (
         <div className={styles.secondside__wrap}>
