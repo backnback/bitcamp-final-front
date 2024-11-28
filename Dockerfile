@@ -17,9 +17,7 @@ FROM nginx:alpine
 
 # 6. 환경 변수 설정 (API URL 및 SERVER_NAME)
 ARG API_URL
-ARG SERVER_NAME
 ENV API_URL=${API_URL}
-ENV SERVER_NAME=${SERVER_NAME}
 
 # 7. 앱 빌드 결과물 복사
 COPY --from=build /app/build /usr/share/nginx/html
@@ -31,7 +29,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx.conf.template /etc/nginx/conf.d/default.conf.template
 
 # 10. Nginx 설정 파일을 envsubst로 치환하여 기본 설정 파일로 복사
-CMD envsubst '${API_URL} ${SERVER_NAME}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+CMD envsubst '${API_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
 
 # 11. Nginx 포트 오픈
 EXPOSE 80
