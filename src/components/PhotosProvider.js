@@ -50,7 +50,6 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
         if (files && files.length > 0) {
             onAddPhoto(files); // 부모 컴포넌트로 파일 목록 전달
         }
-
     };
 
     const handleClickSlide = (event) => {
@@ -197,8 +196,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                             {!viewMode && <div className={`${styles.slide__item} ${styles.slide__photo__add}`}>
                                 <InputProvider>
                                     <label htmlFor="file01" className="form__label form__label__file">
-                                        <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} onClick={(e) => setDeleteClick(false)} />
-                                        <span className='blind'>사진등록</span>
+                                        <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} onClick={(e) => { setDeleteClick(false); }} />
                                         <FormFileIcon />
                                     </label>
                                 </InputProvider>
@@ -219,8 +217,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
                 </div>
             ) : (
                 <p>사진이 없습니다.</p>
-            )
-            }
+            )}
         </div >
     );
 };

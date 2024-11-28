@@ -162,7 +162,7 @@ const MyStoryList = () => {
 
     // 스토리 조회 모달
     const openStoryModal = (storyId) => {
-        const content = <StoryView storyId={storyId} />
+        const content = <div className='modal__body'><StoryView storyId={storyId} /></div>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('비지니스 로직 처리...2');

@@ -1,3 +1,7 @@
+.userEdit__wrap {
+    padding-top: 20px;
+}
+
 .box__wrap {
     position: relative;
     border-radius: var(--border-radius);

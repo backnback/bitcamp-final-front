@@ -6,12 +6,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import StoryAddForm from "./StoryAddForm";
 import useModals from "../useModals";
 import { modals } from "../components/Modals";
-import MapStoryList from "../components/MapStoryList";
+import MapStoryList, { HeaderContent } from "../components/MapStoryList";
 import { mapPathJson } from "../mapPath.js";
 import CityMap from "../components/CityMap";
 import Sidebar from "../components/Sidebar";
 import SidebarSecond from "../components/SidebarSecond";
-import styles from '../assets/styles/css/MapLocation.module.css';
+import mapStyles from '../assets/styles/css/Map.module.css';
+import sidebarStyles from "../assets/styles/css/MapSidebar.module.css";
+import StoryEdiModal from '../components/StoryEditModal.js';
+import { ButtonProvider } from '../components/ButtonProvider.js';
 
 function MapLocation() {
     useEffect(() => {
@@ -24,13 +27,16 @@ function MapLocation() {
     const [storyPhotoList, setStoryPhotoList] = useState(null);
     const [id, setId] = useState(null);
     const [storyList, setStoryList] = useState(null);
-    const [hovered, setHovered] = useState(null);
+    const [cityHovered, setCityHovered] = useState(null);
+    const [proviceHovered, setProviceHovered] = useState(null);
     const { openModal } = useModals();
 
-    const RenderComponent = <CityMap />;
+    // const RenderComponent = <CityMap />;
     // console.log(RenderComponent)
 
     useEffect(() => {
+        console.log('maplocation', locationId);
+
         const token = localStorage.getItem('accessToken');
         if (token) {
             setAccessToken(token);
@@ -86,21 +92,24 @@ function MapLocation() {
     }, [storyList])
 
     const openAddModal = () => {
-        const content = <StoryAddForm provinceId={locationId} cityId={id} />
-        openModal(modals.storyEditModal, {
+        const content = <StoryEdiModal provinceId={locationId} cityId={id} />
+        openModal(modals.modalSidebarRight, {
             content
         });
     };
 
     const openListModal = () => {
-        const content = <MapStoryList
+        const headerContent = <HeaderContent value={`스토리 등록 버튼`} onSubmit={openAddModal} />;
+        const content = <div className='modal__body'><MapStoryList
             storyList={storyList}
             onAddStory={openAddModal}
             locationId={locationId}
             cityId={id}
-        />
-        openModal(modals.storyEditModal, {
-            content
+        /></div>
+        openModal(modals.modalSidebarRight, {
+            content,
+            headerContent,
+            modalId: 'mapstorylist'
         });
     }
 
@@ -109,20 +118,17 @@ function MapLocation() {
     };
 
     return (
-        <div id='maplocation' className={`${styles.container}`}>
-            <Sidebar provinceId={locationId} />
-            <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setHovered} />
-            <div>
-                {RenderComponent ? (
-                    React.cloneElement(RenderComponent, {
-                        storyPhotoList: storyPhotoList,
-                        eventClick: handleClick,
-                        mapPaths: mapPathJson[locationId],
-                        hovered: hovered
-                    })
-                ) : (
-                    <div>Loading...</div>
-                )}
+        <div id='maplocation' className={`${mapStyles.container}`}>
+            <div className={`${sidebarStyles.container}`}>
+                <Sidebar provinceId={locationId} onHovered={setProviceHovered} />
+                <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setCityHovered} />
+            </div>
+            <div className={`${mapStyles.map__container}`}>
+                <CityMap
+                    storyPhotoList={storyPhotoList}
+                    eventClick={handleClick}
+                    mapPaths={mapPathJson[locationId]}
+                    hovered={cityHovered} />
             </div>
         </div>
     )

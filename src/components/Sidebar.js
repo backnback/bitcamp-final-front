@@ -24,7 +24,7 @@ const Sidebar = ({ onHovered, provinceId }) => {
                             return { ...province }
                         }
                     })
-                // console.log(update)
+                console.log(update)
                 setProvinces(update)
             } catch (error) {
                 console.error("There was an error", error);
@@ -42,29 +42,25 @@ const Sidebar = ({ onHovered, provinceId }) => {
             <ul className={styles.side__list}>
                 {
                     provinces && provinces.map(province => (
-                        provinceId ?
-                            (
-                                <li key={province.id} className={styles.side__item}>
-                                    <Link
-                                        className={province.id.toString() === provinceId ? styles.select : styles.side__link}
-                                        to={`/map/story/${province.id}`}>
-                                        {province.firstName}
-                                    </Link>
-                                </li>
-                            )
-                            :
-                            (
-                                <li key={province.id} className={styles.side__item}>
-                                    <Link
-                                        to={`/map/story/${province.id}`}
-                                        className={styles.side__link}
-                                        onMouseOver={() => onHovered(province.firstName)}
-                                        onMouseLeave={() => onHovered(null)}
-                                    >
-                                        {province.firstName}
-                                    </Link>
-                                </li>
-                            )
+                        <li key={province.id} className={styles.side__item}>
+                            <a
+                                href={`/map/story/${province.id}`}
+                                className={`${styles.side__link} ${province.id.toString() === provinceId ? styles.select : ``}`}
+                                onMouseOver={
+                                    () => {
+                                        if (!provinceId) {
+                                            onHovered(province.firstName)
+                                        }
+                                    }}
+                                onMouseLeave={() => {
+                                    if (!provinceId) {
+                                        onHovered(null)
+                                    }
+                                }}
+                            >
+                                <span className={`${styles.side__link__text}`}>{province.firstName}</span>
+                            </a>
+                        </li>
                     ))}
             </ul>
         </div>

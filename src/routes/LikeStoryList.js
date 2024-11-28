@@ -67,7 +67,7 @@ const MyPage = () => {
 
     // 스토리 조회 모달
     const openStoryModal = (storyId) => {
-        const content = <ShareStoryView storyId={storyId} />
+        const content = <div className='modal__body'><ShareStoryView storyId={storyId} /></div>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
                 console.log('비지니스 로직 처리...2');

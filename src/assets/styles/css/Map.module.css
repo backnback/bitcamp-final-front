@@ -56,3 +56,17 @@
 .city__list {
     max-width: 100%;
 }
+
+.province__g:hover {
+    filter: opacity(0.5);
+    transition: .2s;
+}
+
+.city__list [role=button] {
+    outline: none;
+}
+
+.province__active__filter__p:hover {
+    filter: none;
+    transition: .2s;
+}
