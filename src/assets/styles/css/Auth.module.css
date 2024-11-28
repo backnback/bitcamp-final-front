@@ -1,7 +1,12 @@
-.auth__sub__message {
+.auth__sub__notice {
     display: block;
     margin-top: 5px;
     font-size: var(--font-size-text);
+}
+
+.auth__message {
+    display: block;
+    margin: 20px auto;
 }
 
 .success {
@@ -22,8 +27,9 @@
 .auth__wrap {
     width: var(--auth-width);
     padding: 30px;
-    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
     background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
 }
 
 .auth__input__wrap {
@@ -42,4 +48,61 @@
 
 .auth__item__center {
     display: flex;
+    justify-content: center;
+}
+
+.auth__item__center [class*=form__item] {
+    flex: initial;
+}
+
+.auth__item__center [class*=button__item] {
+    flex: 1;
+}
+
+.auth__item__agree {
+    margin: 30px auto;
+}
+
+.profile__img__wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 166px;
+    height: 166px;
+    margin: 0 auto;
+    border: 1px solid var(--color-profile-border);
+    border-radius: 100%;
+    text-align: center;
+    transition: .2s;
+}
+
+.profile__img__label {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile__img__label:hover .profile__img {
+    filter: invert(0.05);
+}
+
+.profile__img {
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+}
+
+.profile__icon {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.profile__delete__button {
+    position: absolute;
+    top: -13px;
+    right: -13px;
+}
+
+.profile__delete__button:hover {
+    filter: invert(0.5);
 }
