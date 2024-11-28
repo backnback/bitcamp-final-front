@@ -4,9 +4,9 @@ import axiosInstance from '../components/AxiosInstance';
 import { InputProvider } from '../components/InputProvider';
 import { ButtonProvider } from '../components/ButtonProvider';
 import FormFileIcon from '../components/FormFileIcon';
-import styles from '../assets/styles/css/Auth.module.css';
 import Swal from 'sweetalert2';
 import { AuthTitleProvider } from '../components/TitleProvider';
+import styles from '../assets/styles/css/Auth.module.css';
 
 function SignUp() {
   const navigate = useNavigate();
