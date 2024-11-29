@@ -223,6 +223,8 @@ function SignUp() {
                 placeholder="이메일 입력"
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isOAuthSignUp} // OAuth 회원가입일 경우 입력 불가능
+                readOnly={isOAuthSignUp} // 읽기 전용
               />
 
               {!isOAuthSignUp && (
