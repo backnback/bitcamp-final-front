@@ -81,26 +81,11 @@ const MyStoryList = () => {
         }
 
         setSortBy(sortByOption);
-
-        if (accessToken) {
-            fetchStoryList(accessToken, sortByOption, searchOption, searchQuery, setStoryList);
-        }
     }
 
-
     // 검색 옵션 변경
-    const handleOptionChange = (event) => {
-
-        let option = "";
-
-        if (event.target.value === "0") {
-            option = "title";
-        } else if (event.target.value === "2") {
-            option = "locationSearch";
-        }
-
-        console.log(option)
-        setSearchOption(option);
+    const handleSearchOption = (searchOption) => {
+        setSearchOption(searchOption);
     }
 
 
@@ -118,18 +103,17 @@ const MyStoryList = () => {
             setHasMore(true);
         }
         event.preventDefault();
+
         if (accessToken) {
-            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
         }
     };
 
 
 
-
-
     const handleSearchDelete = (event) => {
         setSearchQuery((value) => value = '');
-        fetchStoryList(accessToken, sortBy, '', setStoryList, limit, setHasMore);
+        fetchStoryList(accessToken, sortBy, searchOption, '', setStoryList, limit, setHasMore);
     }
 
 
@@ -227,14 +211,14 @@ const MyStoryList = () => {
         if (accessToken) {
             fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
         }
-    }, [accessToken, limit]); // limit 변경 시 fetch 호출
+    }, [accessToken, sortBy, limit]); // limit 변경 시 fetch 호출
 
 
     return (
         <div className={styles.list__content__wrap}>
             <SearchProvider
                 handleSearchSubmit={handleSearchSubmit}
-                handleOptionChange={handleOptionChange}
+                handleSearchOption={handleSearchOption}
                 searchQuery={searchQuery}
                 handleSearchChange={handleSearchChange}
                 handleSearchDelete={handleSearchDelete}
