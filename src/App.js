@@ -131,7 +131,7 @@ function App() {
                                 <Routes>
                                     <Route path="/" element={<Login />} />
                                     <Route path="/login" element={<Login />} /> {/* 로그인 페이지 */}
-                                    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+                                    <Route path="/social/redirect" element={<OAuth2RedirectHandler />} />
                                     <Route path="/signup" element={<SignUp />} /> {/* 회원가입 페이지 */}
                                     <Route path="/find-email" element={<FindEmail />} /> {/* 이메일 찾기 페이지 */}
                                     <Route path="/find-password" element={<FindPassword />} /> {/* 비번 찾기 페이지 */}
