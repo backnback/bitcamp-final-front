@@ -236,6 +236,7 @@ function SignUp() {
             <span className={`${styles.auth__sub__notice} ${duplication.includes("사용 가능한 이메일") ? styles.success : styles.error}`}>{`${duplication}`}</span>
           </InputProvider>
 
+        {!isOAuthSignUp &&
           <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
             <div className={`${styles.auth__input__wrap}`}>
               <input
@@ -255,6 +256,7 @@ function SignUp() {
               </ButtonProvider>
             </div>
           </InputProvider>
+          )}
 
           <InputProvider label={`비밀번호`} inputId={`password01`} required={true}>
             <input
