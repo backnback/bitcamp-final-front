@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import styles from "../assets/styles/css/AlarmCard.module.css";
-import Bin from "../components/Bin";
 import { ButtonProvider } from "./ButtonProvider";
 
 const AlarmCard = ({ userImg, userName, content, toggleBin }) => {
@@ -26,7 +24,6 @@ const AlarmCard = ({ userImg, userName, content, toggleBin }) => {
                     <span className={`blind`}>닫기</span>
                 </button>
             </ButtonProvider>
-            {/* <Bin onClick={toggleBin} /> */}
         </div>
     );
 };
