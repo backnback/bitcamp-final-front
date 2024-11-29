@@ -45,7 +45,7 @@ const ShareStoryList = () => {
     const [searchOption, setSearchOption] = useState("title");
     const [sortBy, setSortBy] = useState("");
     const [limit, setLimit] = useState(6);
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMore, setHasMore] = useState(false);
 
     const handleScrollEnd = () => {
         if (hasMore) {

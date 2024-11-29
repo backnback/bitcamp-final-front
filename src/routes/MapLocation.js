@@ -1,9 +1,7 @@
 import axiosInstance from '../components/AxiosInstance';
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-
-import StoryAddForm from "./StoryAddForm";
 import useModals from "../useModals";
 import { modals } from "../components/Modals";
 import MapStoryList, { HeaderContent } from "../components/MapStoryList";
@@ -14,7 +12,6 @@ import SidebarSecond from "../components/SidebarSecond";
 import mapStyles from '../assets/styles/css/Map.module.css';
 import sidebarStyles from "../assets/styles/css/MapSidebar.module.css";
 import StoryEdiModal from '../components/StoryEditModal.js';
-import { ButtonProvider } from '../components/ButtonProvider.js';
 
 function MapLocation() {
     useEffect(() => {
@@ -123,7 +120,7 @@ function MapLocation() {
         <div id='maplocation' className={`${mapStyles.container}`}>
             <div className={`${sidebarStyles.container}`}>
                 <Sidebar provinceId={locationId} onHovered={setProvinceHovered} />
-                <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setSideHovered} mapHovered={cityHovered}/>
+                <SidebarSecond provinceId={locationId} clickEvent={handleClick} onHovered={setSideHovered} mapHovered={cityHovered} />
             </div>
             <div className={`${mapStyles.map__container}`}>
                 <CityMap

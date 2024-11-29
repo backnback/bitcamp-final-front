@@ -23,7 +23,7 @@ const ModalsProvider = ({ children }) => {
     const dispatch = useMemo(() => ({ open, close }), []);
 
     useEffect(() => {
-        console.log("openedModals 상태 변경:", openedModals);
+        // console.log("openedModals 상태 변경:", openedModals);
     }, [openedModals]);
 
     return (

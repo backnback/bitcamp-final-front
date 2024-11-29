@@ -5,7 +5,6 @@ import axiosInstance from './components/AxiosInstance.js';
 import Header from "./components/Header";
 import AdminHeader from "./components/AdminHeader";
 import SignUp from "./routes/SignUp";
-import ViewUser from "./routes/ViewUser"; // ViewUser 컴포넌트 import
 import Login from "./routes/Login"; // Login 컴포넌트 import
 import StoryMap from "./routes/StoryMap";
 import StoryList from "./routes/StoryList"; // StoryList 컴포넌트 import
@@ -13,9 +12,6 @@ import ShareStoryList from "./routes/ShareStoryList"; // ShareStoryList 컴포�
 import AllStoryList from "./routes/AllStoryList";
 import MyPage from "./routes/MyPage";
 import FaqBoard from "./routes/FaqBoard";
-import StoryAddForm from "./routes/StoryAddForm";
-import StoryUpdateForm from "./routes/StoryUpdateForm";
-import FormStyles from "./routes/FormStyles";
 import FindEmail from "./routes/FindEmail";
 import FindPassword from "./routes/FindPassword";
 import NewPassword from "./routes/NewPassword";
@@ -25,7 +21,6 @@ import OAuth2RedirectHandler from './components/OAuth2RedirectHandler';
 
 import { jwtDecode } from 'jwt-decode';
 import MapLocation from "./routes/MapLocation";
-import SlideTest from "./routes/SlideTest";
 import LikeStoryList from "./routes/LikeStoryList.js";
 
 function App() {
@@ -42,10 +37,10 @@ function App() {
         const refreshToken = localStorage.getItem('refreshToken');
 
         if (!token) {
-            console.log("토큰 없음");
+            // console.log("토큰 없음");
             const allowedPaths = ['/signup', '/find-email', '/find-password', '/newPassword'];
             if (allowedPaths.includes(currentLocation.pathname)) {
-                console.log("토큰 없이 접근 허용");
+                // console.log("토큰 없이 접근 허용");
                 return;
             }
             navigate('/login');
@@ -166,20 +161,14 @@ function App() {
 
                                     <Route path="/admin" element={<AdminPage />} />
 
-                                    <Route path="/form/test" element={<FormStyles />} />
-                                    <Route path="/slide/test" element={<SlideTest />} />
                                     {/* 라우터 경로 설정 */}
                                     <Route path="map/story/:locationId" element={<MapLocation />} />
 
-                                    <Route path="/viewuser/:id" element={<ViewUser />} /> {/* 특정 사용자 보기 */}
                                     <Route path="/share-story/list" element={<ShareStoryList />} /> {/* 스토리 목록 페이지 */}
                                     <Route path="/all-story/list" element={<AllStoryList />} /> {/* 어드민이 관리하는 스토리 목록 페이지 */}
                                     <Route path="/like-story/list" element={<LikeStoryList />} /> {/* 좋아요한 스토리 목록 페이지 */}
                                     <Route path="/my-story/list" element={<StoryList />} /> {/* 스토리 목록 페이지 */}
                                     <Route path="/my-page" element={<MyPage />} /> {/* 마이 페이지 */}
-                                    <Route path="/my-story/form/add" element={<StoryAddForm />} /> {/* 스토리 추가 */}
-                                    <Route path="/my-story/form/update/:storyId"
-                                        element={<StoryUpdateForm />} /> {/* 스토리 수정 */}
                                     <Route path="/faqs" element={<FaqBoard />} /> {/* FAQ 목록 페이지 */}
                                 </Routes>
                             </div>
