@@ -6,13 +6,9 @@ function OAuth2RedirectHandler() {
   useEffect(() => {
     try {
       // 현재 URL에서 쿼리 파라미터 추출
-      console.log("1");
       const urlParams = new URLSearchParams(window.location.search);
-      console.log("2");
       const accessToken = urlParams.get('accessToken');
-      console.log("3");
       const refreshToken = urlParams.get('refreshToken');
-      console.log("4");
 
       if (accessToken && refreshToken) {
         // 토큰 저장

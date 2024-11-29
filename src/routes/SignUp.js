@@ -33,7 +33,6 @@ function SignUp() {
     const params = new URLSearchParams(window.location.search);
     const emailParam = params.get('email');
     const nameParam = params.get('name');
-    const pictureParam = params.get('picture');
 
     if (emailParam) {
       setEmail(emailParam);
@@ -43,10 +42,6 @@ function SignUp() {
 
     if (nameParam) {
       setNickname(nameParam);
-    }
-
-    if (pictureParam) {
-      setProfileImage(pictureParam); // 프로필 이미지 URL 저장
     }
   }, []);
 
