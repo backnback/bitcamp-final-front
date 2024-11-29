@@ -64,9 +64,8 @@ function Login() {
     };
 
     const handleGoogleLogin = () => {
-        // Google OAuth 로그인 엔드포인트로 리디렉트
-//        window.location.href = 'http://go.remapber.p-e.kr/oauth2/authorization/google';
-          window.location.href = 'https:/www.github.com';
+//         Google OAuth 로그인 엔드포인트로 리디렉트
+        window.location.href = 'http://go.remapber.p-e.kr/oauth2/authorization/google';
 
     };
 
