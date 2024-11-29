@@ -7,7 +7,6 @@ server {
         root /usr/share/nginx/html;  # React 앱 빌드 폴더 위치
         index index.html;
         try_files $uri $uri/ /index.html;  # SPA (Single Page Application) 설정
-        proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
     }
 
     # /api 경로로 시작하는 요청을 Spring Boot 서버로 프록시
@@ -17,7 +16,6 @@ server {
         proxy_set_header X-Real-IP $remote_addr;  # 실제 클라이언트 IP 전달
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # X-Forwarded-For 헤더 전달
         proxy_set_header X-Forwarded-Proto $scheme;  # 프로토콜 헤더 (http/https) 전달
-        proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
     }
 
     # OAuth 경로 명시적 설정
@@ -29,9 +27,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
-        proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
     }
-
 
     location /login/oauth2 {
         proxy_pass ${API_URL};  # Spring Boot API 서버 주소
@@ -41,7 +37,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
-        proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
     }
 
     location /map {
@@ -52,7 +47,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
-        proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
     }
 
     location /signup {
@@ -63,7 +57,6 @@ server {
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Host $host;
             proxy_set_header X-Forwarded-Port $server_port;
-            proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
         }
 
 }
