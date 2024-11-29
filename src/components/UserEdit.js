@@ -5,8 +5,7 @@ import styles from '../assets/styles/css/MyPage.module.css';
 import Swal from 'sweetalert2';
 import { ButtonProvider } from './ButtonProvider';
 
-const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, setProfileImage, accessToken }) => {
-    const [filename, setFilename] = useState('');
+const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, setProfileImage, accessToken, filename, setFilename }) => {
 
     useEffect(() => {
         const authenticateUser = async () => {
@@ -23,6 +22,9 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
 
                     // 파일이 있을 경우에만 설정
                     if (response.data.file) {
+                        setFilename(response.data.filename);
+                        setProfileImage(null);
+                    } else if (response.data.filename === 'default.png') {
                         setFilename(response.data.filename);
                         setProfileImage(null);
                     }
@@ -44,15 +46,31 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
     }, [accessToken, setNickname, setProfileImage]);
 
     const handleImageChange = (e) => {
-        setProfileImage(e.target.files[0]);
+        if (e.target.files && e.target.files[0]) {
+            setProfileImage(e.target.files[0]);
+            setFilename(null);
+            e.target.value = ''; // 파일 입력 초기화
+        }
     };
 
     const handleDeleteProfile = () => {
         setFilename('default.png');
+        setProfileImage(null);
+        document.getElementById('userEditFile').value = ''; // 파일 입력 초기화
     };
 
+    useEffect(() => {
+        if (profileImage) {
+            const objectUrl = URL.createObjectURL(profileImage);
+
+            return () => {
+                URL.revokeObjectURL(objectUrl); // 기존 URL 해제
+            };
+        }
+    }, [profileImage]);
+
     const handleImageClick = () => {
-        document.getElementById('file01').click(); // 파일 선택 input을 클릭
+        document.getElementById('userEditFile').click(); // 파일 선택 input을 클릭
     };
 
     return (
@@ -65,12 +83,12 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                         className={`${styles.userEdit__profile__img}`}
                     />
                     <i className={`icon icon__profile__file ${styles.userEdit__profile__icon}`}></i>
-                    <input type='file' className={`blind`} id="userEditFile" onChange={handleImageChange} />
+                    <input type="file" className="blind" id="userEditFile" onChange={handleImageChange} />
                 </label>
                 <ButtonProvider width={'icon'} className={`button__item__x ${styles.profile__delete__button}`}>
-                    <button type="button" className={`button button__icon button__icon__x`} onClick={handleDeleteProfile}>
-                        <span className={`blind`}>삭제</span>
-                        <i className={`icon icon__x__black`}></i>
+                    <button type="button" className="button button__icon button__icon__x" onClick={handleDeleteProfile}>
+                        <span className="blind">삭제</span>
+                        <i className="icon icon__x__black"></i>
                     </button>
                 </ButtonProvider>
             </div>
@@ -78,9 +96,9 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                 <InputProvider label={`닉네임`} inputId={`nickname01`} required={true}>
                     <input
                         value={nickname}
-                        id='nickname01'
-                        className={`form__input`}
-                        placeholder='닉네임을 입력해주세요.'
+                        id="nickname01"
+                        className="form__input"
+                        placeholder="닉네임을 입력해주세요."
                         onChange={(e) => setNickname(e.target.value)}
                         required
                     />
@@ -100,6 +118,6 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
             </div>
         </div>
     );
-}
+};
 
 export default UserEdit;

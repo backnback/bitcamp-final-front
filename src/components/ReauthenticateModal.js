@@ -14,6 +14,7 @@ const ReauthenticateModal = () => {
     const [accessToken, setAccessToken] = useState(null);
     const [currentUser, setCurrentUser] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
+    const [filename, setFilename] = useState('');
     const navigate = useNavigate();
 
 
@@ -58,6 +59,7 @@ const ReauthenticateModal = () => {
         formData.append('password', password);
         formData.append('nickname', nickname);
         formData.append('profileImage', profileImage);
+        formData.append('filename', filename)
         try {
             const response = await axiosInstance.post('/user/update', formData, {
                 headers: {
@@ -160,6 +162,7 @@ const ReauthenticateModal = () => {
                                 nickname={nickname} setNickname={setNickname}
                                 profileImage={profileImage}
                                 setProfileImage={setProfileImage} accessToken={accessToken}
+                                filename={filename} setFilename={setFilename}
                             />
                         </form>
                     </div>
