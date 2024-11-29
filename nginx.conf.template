@@ -6,7 +6,7 @@ server {
     location / {
         root /usr/share/nginx/html;  # React 앱 빌드 폴더 위치
         index index.html;
-        try_files $uri$request_uri $uri$request_uri/ /index.html$request_uri;  # SPA (Single Page Application) 설정
+        try_files $uri $uri/ /index.html;  # SPA (Single Page Application) 설정
     }
 
     # /api 경로로 시작하는 요청을 Spring Boot 서버로 프록시
