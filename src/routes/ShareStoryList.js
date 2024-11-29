@@ -13,11 +13,11 @@ import axiosInstance from '../components/AxiosInstance.js';
 import UseScrollAlert from './UseScrollAlert.js';
 
 
-const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList, limit, setHasMore) => {
+const fetchStoryList = async (accessToken, sortByOption, searchOption, searchQuery, setStoryList, limit, setHasMore) => {
     try {
         const response = await axiosInstance.get('/story/list', {
             params: {
-                [option]: searchQuery,
+                [searchOption]: searchQuery,
                 share: true,
                 sortBy: sortByOption,
                 limit
@@ -82,7 +82,7 @@ const ShareStoryList = () => {
         setSortBy(sortByOption);
 
         if (accessToken) {
-            fetchStoryList(accessToken, sortByOption, searchOption, searchQuery, setStoryList);
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
         }
     };
 
@@ -90,7 +90,17 @@ const ShareStoryList = () => {
 
     // 검색 옵션 변경
     const handleOptionChange = (event) => {
-        const option = event.target.value === "0" ? "title" : "userNickname";
+
+        let option = "";
+
+        if (event.target.value === "0") {
+            option = "title";
+        } else if (event.target.value === "1") {
+            option = "userNickname";
+        } else if (event.target.value === "2") {
+            option = "locationSearch";
+        }
+
         setSearchOption(option);
     }
 

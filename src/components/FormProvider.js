@@ -126,23 +126,23 @@ export const StoryForm = () => {
                     <h5 className='form__label__title'>사진 등록</h5>
                     {
                         files.length === 0 ? (
-                        <InputProvider>
-                            <label htmlFor="file01" className="form__label form__label__file">
-                                <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} />
-                                <FormFileIcon />
-                            </label>
-                        </InputProvider>
-                    ) : (
-                        <PhotosProvider
-                            photos={files}
-                            viewMode={false}
-                            className="custom-photo-container"
-                            mainPhotoIndex={mainPhotoIndex}
-                            onSelectMainPhoto={handleMainPhotoSelect}
-                            onAddPhoto={onAddPhoto}
-                            onDeletePhoto={onDeletePhoto}
-                        />
-                    )}
+                            <InputProvider>
+                                <label htmlFor="file01" className="form__label form__label__file">
+                                    <input type="file" className="blind" id="file01" multiple onChange={handleFileChange} />
+                                    <FormFileIcon />
+                                </label>
+                            </InputProvider>
+                        ) : (
+                            <PhotosProvider
+                                photos={files}
+                                viewMode={false}
+                                className="custom-photo-container"
+                                mainPhotoIndex={mainPhotoIndex}
+                                onSelectMainPhoto={handleMainPhotoSelect}
+                                onAddPhoto={onAddPhoto}
+                                onDeletePhoto={onDeletePhoto}
+                            />
+                        )}
                 </div>
                 <InputProvider label={`내용`} htmlFor='storyContent'>
                     <textarea

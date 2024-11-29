@@ -17,6 +17,7 @@ export const SearchProvider = (
                                 title='검색' onChange={handleOptionChange}>
                                 <option value={'0'}>제목</option>
                                 <option value={'1'}>닉네임</option>
+                                <option value={'2'}>지역</option>
                             </select>
                         </SelectProvider>
                     </div>
