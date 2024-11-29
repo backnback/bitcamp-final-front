@@ -18,8 +18,8 @@ function OAuth2RedirectHandler() {
         console.log("AccessToken 저장 완료:", accessToken);
         console.log("RefreshToken 저장 완료:", refreshToken);
 
-//        // 브라우저 리디렉션
-//        window.location.href = '/map'; // 원하는 경로로 이동
+        // 브라우저 리디렉션
+        window.location.href = '/map'; // 원하는 경로로 이동
       } else {
         console.error('OAuth2 로그인 오류: 토큰이 없습니다.');
         window.location.href = '/login'; // 토큰이 없으면 로그인 페이지로 이동

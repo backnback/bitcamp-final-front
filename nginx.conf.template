@@ -48,6 +48,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
+        proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
     }
 
     location /signup {
@@ -58,6 +59,7 @@ server {
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Host $host;
             proxy_set_header X-Forwarded-Port $server_port;
+            proxy_pass_request_headers on;  # 모든 요청 헤더를 프록시로 전달
         }
 
 }
