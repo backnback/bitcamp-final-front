@@ -29,6 +29,7 @@ server {
         proxy_set_header X-Forwarded-Port $server_port;
     }
 
+
     location /login/oauth2 {
         proxy_pass ${API_URL};  # Spring Boot API 서버 주소
         proxy_set_header Host $host;
@@ -38,4 +39,25 @@ server {
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
     }
+
+    location /map {
+        proxy_pass ${API_URL};  # Spring Boot API 서버 주소
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+    }
+
+    location /signup {
+            proxy_pass ${API_URL};  # Spring Boot API 서버 주소
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Port $server_port;
+        }
+
 }
