@@ -33,7 +33,6 @@ function SignUp() {
     const params = new URLSearchParams(window.location.search);
     const emailParam = params.get('email');
     const nameParam = params.get('name');
-    const pictureParam = params.get('picture');
 
     if (emailParam) {
       setEmail(emailParam);
@@ -43,10 +42,6 @@ function SignUp() {
 
     if (nameParam) {
       setNickname(nameParam);
-    }
-
-    if (pictureParam) {
-      setProfileImage(pictureParam); // 프로필 이미지 URL 저장
     }
   }, []);
 
@@ -228,6 +223,8 @@ function SignUp() {
                 placeholder="이메일 입력"
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isOAuthSignUp} // OAuth 회원가입일 경우 입력 불가능
+                readOnly={isOAuthSignUp} // 읽기 전용
               />
 
               {!isOAuthSignUp && (
@@ -241,6 +238,7 @@ function SignUp() {
             <span className={`${styles.auth__sub__notice} ${duplication.includes("사용 가능한 이메일") ? styles.success : styles.error}`}>{`${duplication}`}</span>
           </InputProvider>
 
+        {!isOAuthSignUp && (
           <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
             <div className={`${styles.auth__input__wrap}`}>
               <input
@@ -260,6 +258,7 @@ function SignUp() {
               </ButtonProvider>
             </div>
           </InputProvider>
+          )}
 
           <InputProvider label={`비밀번호`} inputId={`password01`} required={true}>
             <input

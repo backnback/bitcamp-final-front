@@ -5,7 +5,25 @@ import { SelectProvider } from '../components/SelectProvider.js';
 
 
 export const SearchProvider = (
-    { handleSearchSubmit, handleOptionChange, searchQuery, handleSearchChange, handleSearchDelete }) => {
+    { handleSearchSubmit, handleSearchOption, searchQuery, handleSearchChange, handleSearchDelete }) => {
+
+
+    // 검색 옵션 변경
+    const handleOptionChange = (event) => {
+
+        let option = "";
+
+        if (event.target.value === "0") {
+            option = "title";
+        } else if (event.target.value === "1") {
+            option = "userNickname";
+        } else if (event.target.value === "2") {
+            option = "locationSearch";
+        }
+
+        handleSearchOption(option);
+    }
+
 
     return (
         <div className='search__wrap'>
@@ -17,6 +35,7 @@ export const SearchProvider = (
                                 title='검색' onChange={handleOptionChange}>
                                 <option value={'0'}>제목</option>
                                 <option value={'1'}>닉네임</option>
+                                <option value={'2'}>지역</option>
                             </select>
                         </SelectProvider>
                     </div>

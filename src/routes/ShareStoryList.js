@@ -13,13 +13,13 @@ import axiosInstance from '../components/AxiosInstance.js';
 import UseScrollAlert from './UseScrollAlert.js';
 
 
-const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, setStoryList, limit, setHasMore) => {
+const fetchStoryList = async (accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore) => {
     try {
         const response = await axiosInstance.get('/story/list', {
             params: {
-                [option]: searchQuery,
+                [searchOption]: searchQuery,
                 share: true,
-                sortBy: sortByOption,
+                sortBy: sortBy,
                 limit
             },
             headers: {
@@ -28,6 +28,9 @@ const fetchStoryList = async (accessToken, sortByOption, option, searchQuery, se
         });
         setStoryList(response.data.stories);
         setHasMore(response.data.hasMore);
+        console.log("정렬 : ", sortBy)
+        console.log("검색종류 : ", searchOption)
+        console.log("리스트 fetch함")
     } catch (error) {
         console.error("There was an error", error);
     }
@@ -67,6 +70,7 @@ const ShareStoryList = () => {
 
     // 정렬 옵션 변경
     const handleSortByChange = (event) => {
+        console.log("hasMore : ", hasMore)
         if (hasMore === false) {
             setHasMore(true);
         }
@@ -80,20 +84,13 @@ const ShareStoryList = () => {
         }
 
         setSortBy(sortByOption);
-
-        if (accessToken) {
-            fetchStoryList(accessToken, sortByOption, searchOption, searchQuery, setStoryList);
-        }
     };
 
 
-
     // 검색 옵션 변경
-    const handleOptionChange = (event) => {
-        const option = event.target.value === "0" ? "title" : "userNickname";
-        setSearchOption(option);
+    const handleSearchOption = (searchOption) => {
+        setSearchOption(searchOption);
     }
-
 
     // 검색 값 변경
     const handleSearchChange = (event) => {
@@ -114,6 +111,7 @@ const ShareStoryList = () => {
         }
     };
 
+    // 검색어 삭제 버튼
     const handleSearchDelete = (event) => {
         setSearchQuery((value) => value = '');
         fetchStoryList(accessToken, sortBy, searchOption, '', setStoryList, limit, setHasMore);
@@ -168,24 +166,17 @@ const ShareStoryList = () => {
         }
 
         if (accessToken) {
-            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList);
-        }
-
-    }, [accessToken]);
-
-
-    useEffect(() => {
-        if (accessToken) {
             fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
         }
-    }, [accessToken, limit]); // limit 변경 시 fetch 호출
+
+    }, [accessToken, limit, sortBy]);
 
 
     return (
         <div className={styles.list__content__wrap}>
             <SearchProvider
                 handleSearchSubmit={handleSearchSubmit}
-                handleOptionChange={handleOptionChange}
+                handleSearchOption={handleSearchOption}
                 searchQuery={searchQuery}
                 handleSearchChange={handleSearchChange}
                 handleSearchDelete={handleSearchDelete}

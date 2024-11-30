@@ -15,11 +15,11 @@ import { SelectProvider } from '../components/SelectProvider.js';
 import styles from '../assets/styles/css/StoryItemList.module.css';
 import UseScrollAlert from './UseScrollAlert.js';
 
-const fetchStoryList = async (accessToken, sortByOption, searchQuery, setStoryList, limit, setHasMore) => {
+const fetchStoryList = async (accessToken, sortByOption, searchOption, searchQuery, setStoryList, limit, setHasMore) => {
     try {
         const response = await axiosInstance.get('/story/list', {
             params: {
-                title: searchQuery,
+                [searchOption]: searchQuery,
                 share: false,
                 sortBy: sortByOption,
                 limit
@@ -28,6 +28,7 @@ const fetchStoryList = async (accessToken, sortByOption, searchQuery, setStoryLi
                 'Authorization': `Bearer ${accessToken}`
             }
         });
+        console.log("이거 검색함", searchOption)
         setStoryList(response.data.stories);
         setHasMore(response.data.hasMore);
     } catch (error) {
@@ -42,6 +43,7 @@ const MyStoryList = () => {
     const [isThrottled, setIsThrottled] = useState(false);
     const { openModal } = useModals();
     const [searchQuery, setSearchQuery] = useState("");
+    const [searchOption, setSearchOption] = useState("title");
     const [sortBy, setSortBy] = useState("");
     const [limit, setLimit] = useState(6);
     const [hasMore, setHasMore] = useState(true);
@@ -79,10 +81,11 @@ const MyStoryList = () => {
         }
 
         setSortBy(sortByOption);
+    }
 
-        if (accessToken) {
-            fetchStoryList(accessToken, sortByOption, searchQuery, setStoryList);
-        }
+    // 검색 옵션 변경
+    const handleSearchOption = (searchOption) => {
+        setSearchOption(searchOption);
     }
 
 
@@ -90,7 +93,7 @@ const MyStoryList = () => {
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
         if (event.target.value == '') {
-            fetchStoryList(accessToken, sortBy, '', setStoryList, limit, setHasMore);
+            fetchStoryList(accessToken, sortBy, searchOption, '', setStoryList, limit, setHasMore);
         }
     };
 
@@ -100,14 +103,17 @@ const MyStoryList = () => {
             setHasMore(true);
         }
         event.preventDefault();
+
         if (accessToken) {
-            fetchStoryList(accessToken, sortBy, searchQuery, setStoryList);
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
         }
     };
 
+
+
     const handleSearchDelete = (event) => {
         setSearchQuery((value) => value = '');
-        fetchStoryList(accessToken, sortBy, '', setStoryList, limit, setHasMore);
+        fetchStoryList(accessToken, sortBy, searchOption, '', setStoryList, limit, setHasMore);
     }
 
 
@@ -188,7 +194,7 @@ const MyStoryList = () => {
             if (token) {
                 setAccessToken(token);
                 try {
-                    await fetchStoryList(token, sortBy, searchQuery, setStoryList, limit, setHasMore);
+                    await fetchStoryList(token, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
                 } catch (error) {
                     console.error("Error fetching story list:", error);
                 }
@@ -203,15 +209,16 @@ const MyStoryList = () => {
 
     useEffect(() => {
         if (accessToken) {
-            fetchStoryList(accessToken, sortBy, searchQuery, setStoryList, limit, setHasMore);
+            fetchStoryList(accessToken, sortBy, searchOption, searchQuery, setStoryList, limit, setHasMore);
         }
-    }, [accessToken, limit]); // limit 변경 시 fetch 호출
+    }, [accessToken, sortBy, limit]); // limit 변경 시 fetch 호출
 
 
     return (
         <div className={styles.list__content__wrap}>
             <SearchProvider
                 handleSearchSubmit={handleSearchSubmit}
+                handleSearchOption={handleSearchOption}
                 searchQuery={searchQuery}
                 handleSearchChange={handleSearchChange}
                 handleSearchDelete={handleSearchDelete}

@@ -33,5 +33,4 @@ function OAuth2RedirectHandler() {
   return <div>OAuth2 로그인 처리 중...</div>;
 }
 
-
 export default OAuth2RedirectHandler;
