@@ -28,7 +28,7 @@ const fetchStoryList = async (accessToken, sortByOption, searchOption, searchQue
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-        console.log("이거 검색함", searchOption)
+        // console.log("이거 검색함", searchOption)
         setStoryList(response.data.stories);
         setHasMore(response.data.hasMore);
     } catch (error) {
@@ -132,9 +132,9 @@ const MyStoryList = () => {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-            console.log('좋아요 상태 변경 성공');
+            // console.log('좋아요 상태 변경 성공');
         } catch (error) {
-            console.error("좋아요 변경 사항 전송 중 에러 발생", error);
+            // console.error("좋아요 변경 사항 전송 중 에러 발생", error);
         } finally {
             // 500ms 이후 클릭 활성화
             setTimeout(() => setIsThrottled(false), 500);
@@ -145,7 +145,7 @@ const MyStoryList = () => {
     // 공유 처리
     const handleLockChange = async (storyId, action) => {
         if (isThrottled) {
-            console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
+            // console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
             return;
         }
 
@@ -171,7 +171,7 @@ const MyStoryList = () => {
         const content = <div className='modal__body'><StoryView storyId={storyId} /></div>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
-                console.log('비지니스 로직 처리...2');
+                // console.log('비지니스 로직 처리...2');
             },
             content
         });
@@ -182,7 +182,7 @@ const MyStoryList = () => {
         const content = <StoryEditModal />
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
-                console.log('비지니스 로직 처리...2');
+                // console.log('비지니스 로직 처리...2');
             },
             content
         });

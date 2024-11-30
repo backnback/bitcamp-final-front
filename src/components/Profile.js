@@ -1,8 +1,28 @@
-import styles from "../assets/styles/css/Profile.module.css";
 import useModals from '../useModals';
 import { modals } from '../components/Modals';
 import { ButtonProvider } from '../components/ButtonProvider';
 import ReauthenticateModal from './ReauthenticateModal';
+import { createContext, useContext } from "react";
+import styles from "../assets/styles/css/Profile.module.css";
+
+const smallProfile = createContext();
+
+export const useSContext = () => useContext(smallProfile);
+
+export const SmallProfileProvider = ({ profileImg, profileName, className }) => {
+  return (
+    <div className={`${styles.small__wrap} ${className}`}>
+      <div className={styles.small__link}>
+        <span className={`${styles.small__img__wrap}`}>
+          <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
+            alt={`${profileName}의 프로필 이미지`} className={`${styles.small__img}`} />
+
+        </span>
+        <span className={`${styles.small__name} line1`}>{profileName}</span>
+      </div>
+    </div>
+  );
+}
 
 const Profile = ({ loginUser }) => {
 

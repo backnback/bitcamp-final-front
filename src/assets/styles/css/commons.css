@@ -27,6 +27,16 @@
     line-height: 1.3;
 }
 
+.sub__notice {
+    display: block;
+    margin-top: 5px;
+    font-size: var(--font-size-sub);
+}
+
+.sub__notice__danger {
+    color: var(--color-red);
+}
+
 .required__red {
     color: var(--color-red);
 }

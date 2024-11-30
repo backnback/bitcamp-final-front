@@ -49,7 +49,7 @@ const ReauthenticateModal = () => {
             }
         } catch (error) {
             console.error("마이페이지 회원인증 요청 중 오류 발생:", error);
-            console.log("마이페이지 회원인증 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+            // console.log("마이페이지 회원인증 오류가 발생했습니다. 나중에 다시 시도해주세요.");
         }
     };
 
@@ -76,7 +76,9 @@ const ReauthenticateModal = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                window.location.reload(); // 헤더 정보 업데이트
+                setTimeout(() => {
+                    window.location.reload(); // 헤더 정보 업데이트
+                }, 1500);
             } else {
                 Swal.fire({
                     icon: "error",
