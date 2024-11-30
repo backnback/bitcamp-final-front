@@ -43,7 +43,10 @@ const FindEmail = () => {
         },
         withCredentials: true,
       });
-      if (response.data) {
+
+      const result = response.data;
+
+      if (result === "성공") {
         Swal.fire({
           position: "top",
           icon: "success",
@@ -51,7 +54,13 @@ const FindEmail = () => {
           showConfirmButton: false,
           timer: 1500
         });
-      } else {
+      } else if(result === "가입되지않은이메일"){
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "가입되어 있지 않는 이메일 입니다.",
+        });
+      }else{
         Swal.fire({
           icon: "error",
           title: "Oops...",
