@@ -2,6 +2,7 @@ import React from 'react';
 import { ButtonProvider } from '../components/ButtonProvider';
 import { PhotosProvider } from '../components/PhotosProvider';
 import styles from "../assets/styles/css/StoryView.module.css"
+import { SmallProfileProvider } from './Profile';
 
 function StoryItemView({ storyViewDTO, handleEdit, handleDelete, share }) {
 
@@ -23,6 +24,7 @@ function StoryItemView({ storyViewDTO, handleEdit, handleDelete, share }) {
                 <h3 className={styles.title__text}>{storyViewDTO.title}</h3>
             </div>
             <div className={styles.location__date__box}>
+                {/* <SmallProfileProvider profileName={profileName} profileImg={profileImg} /> */}
                 <p className={`${styles.location__date__text}`}>
                     <span className={styles.date__text}>
                         {storyViewDTO.travelDate}

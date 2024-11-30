@@ -3,6 +3,7 @@ import { ButtonProvider } from "./ButtonProvider";
 import styles from "../assets/styles/css/StoryItem.module.css";
 
 import { createContext, useContext } from 'react';
+import { SmallProfileProvider } from "./Profile";
 
 const StoryAdd = createContext();
 
@@ -47,16 +48,7 @@ function StoryItem({ storyId, storyPage = 'my-story', profileImg, profileName, c
     return (
         <div className={styles.item}>
             <div className={styles.top}>
-                <div className={styles.profile}>
-                    <div className={styles.profile__link}>
-                        <span className={`${styles.profile__img__wrap}`}>
-                            <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
-                                alt={`${profileName}의 프로필 이미지`} className={`${styles.profile__img} line1`} />
-
-                        </span>
-                        <span className={`${styles.profile__name} line1`}>{profileName}</span>
-                    </div>
-                </div>
+                <SmallProfileProvider profileName={profileName} profileImg={profileImg} />
                 {
                     storyPage == 'my-story' ?
                         <ButtonProvider width={'icon'} className={`${styles.button__item}`}>

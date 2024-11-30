@@ -18,6 +18,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter future={{
+      // React Router Future Flag Warning 경고창 없애기
       v7_relativeSplatPath: true,
       // v7_fetcherPersist: true,
       // v7_normalizeFormMethod: true,
