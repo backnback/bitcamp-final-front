@@ -23,7 +23,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
 
 
     const handleDeletePhoto = (photo, index) => {
-        console.log("삭제하려는 파일:", photo);
+        // console.log("삭제하려는 파일:", photo);
         onDeletePhoto(photo);  // 상위 컴포넌트에게 삭제할 사진을 전달
         setDeleteClick(true);
         setSlideIndex(index);
@@ -31,7 +31,7 @@ export const PhotosProvider = ({ photos, viewMode, mainPhotoIndex, className, it
 
     const handleSelectMainPhoto = (index) => {
         if (onSelectMainPhoto) {
-            console.log("선택된 사진 index : ", index);
+            // console.log("선택된 사진 index : ", index);
             onSelectMainPhoto(index); // 상위 컴포넌트로 선택한 대표 이미지 ID 전달
         }
         setMainPhotoIdx(index);

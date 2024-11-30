@@ -129,7 +129,6 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
                 icon: "error",
                 title: "Oops...",
                 text: "모든 필수 항목을 입력해주세요!",
-                footer: '<a href="#">왜 이 문제가 발생했나요?</a>'
             });
             return;
         }
@@ -190,7 +189,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
                 },
             });
 
-            console.log(formData.getAll('files'));
+            // console.log(formData.getAll('files'));
 
             Swal.fire({
                 position: "top",
@@ -245,7 +244,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
         if (uploadedFiles.length > 0) {
             setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
 
-            console.log(files)
+            // console.log(files)
             // 사진이 한 장만 업로드된 경우 mainPhotoIndex를 0으로 설정
             if (uploadedFiles.length === 1) {
                 setMainPhotoIndex(0);

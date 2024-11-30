@@ -26,7 +26,7 @@ const StoryView = ({ storyId, mapId }) => {
 
     useEffect(() => {
         if (storyViewDTO) {
-            console.log("Updated storyViewDTO:", storyViewDTO);
+            // console.log("Updated storyViewDTO:", storyViewDTO);
         }
     }, [storyViewDTO]);
 

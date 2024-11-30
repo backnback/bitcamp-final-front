@@ -80,7 +80,7 @@ const MyPage = () => {
         const content = <div className='modal__body'><ShareStoryView storyId={storyId} /></div>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
-                console.log('비지니스 로직 처리...2');
+                // console.log('비지니스 로직 처리...2');
             },
             content
         });

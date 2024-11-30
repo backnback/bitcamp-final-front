@@ -55,6 +55,29 @@ const ReauthenticateModal = () => {
 
     const handleClickEditSubmit = async (e) => {
         e.preventDefault();
+
+        if (!nickname) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "모든 필수 항목을 입력해주세요!",
+            });
+            return;
+        }
+
+        switch (true) {
+            case (nickname.length >= 15): Swal.fire({
+                icon: "error",
+                text: "닉네임을 15자 이하로 입력해주세요.",
+                toast: true,
+                position: 'top',
+                width: 380,
+                showConfirmButton: false,
+                timer: 2000, // 2초 후 자동 닫힘
+            });
+                return;
+        }
+
         const formData = new FormData();
         formData.append('password', password);
         formData.append('nickname', nickname);

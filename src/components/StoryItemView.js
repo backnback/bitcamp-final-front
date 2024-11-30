@@ -10,8 +10,6 @@ function StoryItemView({ storyViewDTO, handleEdit, handleDelete, share }) {
         return <div>로딩 중...</div>;
     }
 
-    console.log('viewview', storyViewDTO)
-
     return (
         <div className={styles.container}>
             <div className={styles.title__box}>
