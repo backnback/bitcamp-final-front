@@ -69,10 +69,6 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
         }
     }, [profileImage]);
 
-    const handleImageClick = () => {
-        document.getElementById('userEditFile').click(); // 파일 선택 input을 클릭
-    };
-
     return (
         <div className={`${styles.userEdit__wrap}`}>
             <div className={`${styles.userEdit__profile__wrap}`}>

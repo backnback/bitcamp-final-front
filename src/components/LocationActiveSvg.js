@@ -28,7 +28,7 @@ const LocationActiveSvg = ({
                 width: image.width,  // 원본 이미지의 width
                 height: image.height,  // 원본 이미지의 height
             });
-            console.log(imgId, "imgWidth", image.width, "imgHeight", image.height)
+            // console.log(imgId, "imgWidth", image.width, "imgHeight", image.height)
 
         };
         // 이미지 소스를 설정하여 로드 시작

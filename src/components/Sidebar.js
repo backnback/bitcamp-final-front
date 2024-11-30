@@ -5,7 +5,7 @@ import styles from '../assets/styles/css/MapSidebar.module.css'; // 스타일 �
 import axiosInstance from "./AxiosInstance";
 import { Link } from "react-router-dom";
 
-const Sidebar = ({ onHovered, provinceId, mapHovered}) => {
+const Sidebar = ({ onHovered, provinceId, mapHovered }) => {
 
     const [provinces, setProvinces] = useState(null);
     const [oldHover, setOldHover] = useState(null);
@@ -25,7 +25,7 @@ const Sidebar = ({ onHovered, provinceId, mapHovered}) => {
                             return { ...province }
                         }
                     })
-                console.log(update)
+                // console.log(update)
                 setProvinces(update)
             } catch (error) {
                 console.error("There was an error", error);

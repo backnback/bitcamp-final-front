@@ -50,12 +50,21 @@ function SignUp() {
   };
 
   const handleFileChange = (e) => {
-    console.log(e)
+    // console.log(e)
     setProfileImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // if (!nickname || !password || !email || !authCode) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "모든 필수 항목을 입력해주세요!",
+    //   });
+    //   return;
+    // }
 
     if (!isVerified) {
       Swal.fire({
@@ -64,6 +73,19 @@ function SignUp() {
         text: '인증이 완료되지 않은 이메일입니다.',
       });
       return;
+    }
+
+    switch (true) {
+      case (nickname.length >= 15): Swal.fire({
+        icon: "error",
+        text: "닉네임을 15자 이하로 입력해주세요.",
+        toast: true,
+        position: 'top',
+        width: 380,
+        showConfirmButton: false,
+        timer: 2000, // 2초 후 자동 닫힘
+      });
+        return;
     }
 
     const formData = new FormData();
@@ -238,26 +260,26 @@ function SignUp() {
             <span className={`${styles.auth__sub__notice} ${duplication.includes("사용 가능한 이메일") ? styles.success : styles.error}`}>{`${duplication}`}</span>
           </InputProvider>
 
-        {!isOAuthSignUp && (
-          <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
-            <div className={`${styles.auth__input__wrap}`}>
-              <input
-                type="text"
-                className="form__input"
-                id="authNumber"
-                name="인증번호"
-                value={authCode}
-                placeholder="인증번호 입력"
-                onChange={(e) => setAuthCode(e.target.value)}
-                required
-              />
-              <ButtonProvider width={`120`}>
-                <button type="button" className="button button__primary" onClick={setUserAuthCode}>
-                  <span className="button__text">인증확인</span>
-                </button>
-              </ButtonProvider>
-            </div>
-          </InputProvider>
+          {!isOAuthSignUp && (
+            <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
+              <div className={`${styles.auth__input__wrap}`}>
+                <input
+                  type="text"
+                  className="form__input"
+                  id="authNumber"
+                  name="인증번호"
+                  value={authCode}
+                  placeholder="인증번호 입력"
+                  onChange={(e) => setAuthCode(e.target.value)}
+                  required
+                />
+                <ButtonProvider width={`120`}>
+                  <button type="button" className="button button__primary" onClick={setUserAuthCode}>
+                    <span className="button__text">인증확인</span>
+                  </button>
+                </ButtonProvider>
+              </div>
+            </InputProvider>
           )}
 
           <InputProvider label={`비밀번호`} inputId={`password01`} required={true}>
@@ -284,6 +306,7 @@ function SignUp() {
               onChange={(e) => setNickname(e.target.value)}
               required
             />
+            {nickname.length >= 15 && <span className={`sub__notice sub__notice__danger`}>{`닉네임을 15자 이하로 입력해주세요.`}</span>}
           </InputProvider>
 
           <div className={`${styles.auth__form__item}`}>

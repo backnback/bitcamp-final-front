@@ -34,7 +34,7 @@ function MapLocation() {
     // console.log(RenderComponent)
 
     useEffect(() => {
-        console.log('maplocation', locationId);
+        // console.log('maplocation', locationId);
 
         const token = localStorage.getItem('accessToken');
         if (token) {

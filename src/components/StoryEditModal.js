@@ -103,7 +103,6 @@ const StoryEdiModal = ({ provinceId, cityId, isModal }) => {
                 icon: "error",
                 title: "Oops...",
                 text: "모든 필수 항목을 입력해주세요!",
-                footer: '<a href="#">왜 이 문제가 발생했나요?</a>'
             });
             return;
         }

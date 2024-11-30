@@ -28,9 +28,9 @@ const fetchStoryList = async (accessToken, sortBy, searchOption, searchQuery, se
         });
         setStoryList(response.data.stories);
         setHasMore(response.data.hasMore);
-        console.log("정렬 : ", sortBy)
-        console.log("검색종류 : ", searchOption)
-        console.log("리스트 fetch함")
+        // console.log("정렬 : ", sortBy)
+        // console.log("검색종류 : ", searchOption)
+        // console.log("리스트 fetch함")
     } catch (error) {
         console.error("There was an error", error);
     }
@@ -70,7 +70,7 @@ const ShareStoryList = () => {
 
     // 정렬 옵션 변경
     const handleSortByChange = (event) => {
-        console.log("hasMore : ", hasMore)
+        // console.log("hasMore : ", hasMore)
         if (hasMore === false) {
             setHasMore(true);
         }
@@ -121,7 +121,7 @@ const ShareStoryList = () => {
     // 좋아요 처리
     const handleLikeChange = async (storyId, action) => {
         if (isThrottled) {
-            console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
+            // console.log("너무 빠른 요청입니다. 잠시 후 다시 시도해주세요.");
             return;
         }
 
@@ -133,7 +133,7 @@ const ShareStoryList = () => {
                     'Authorization': `Bearer ${accessToken}`
                 }
             });
-            console.log('좋아요 상태 변경 성공');
+            // console.log('좋아요 상태 변경 성공');
         } catch (error) {
             console.error("좋아요 변경 사항 전송 중 에러 발생", error);
         } finally {
@@ -149,7 +149,7 @@ const ShareStoryList = () => {
         const content = <div className='modal__body'><ShareStoryView storyId={storyId} /></div>
         openModal(modals.modalSidebarRight, {
             onSubmit: () => {
-                console.log('비지니스 로직 처리...2');
+                // console.log('비지니스 로직 처리...2');
             },
             content
         });
