@@ -39,7 +39,7 @@ const FindPassword = () => {
     }
 
     try {
-      const response = await axiosInstance.post('/sign/emailverification', { email }, {
+      const response = await axiosInstance.post('/sign/passwordEmailverification', { email }, {
         headers: {
           'Content-Type': 'application/json',
         },
