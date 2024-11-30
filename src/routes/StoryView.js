@@ -61,13 +61,15 @@ const StoryView = ({ storyId, mapId }) => {
     // 삭제 버튼 처리
     const handleDelete = async () => {
         Swal.fire({
+            icon: 'warning',
             title: "정말 삭제하시겠습니까?",
             text: "삭제한 스토리는 복원할 수 없습니다!",
-            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Delete !"
+            confirmButtonText: '삭제하기',
+            cancelButtonText: '취소하기',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#808080'
+
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
