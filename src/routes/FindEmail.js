@@ -43,10 +43,7 @@ const FindEmail = () => {
         },
         withCredentials: true,
       });
-
-      const result = response.data;
-
-      if (result === "성공") {
+      if (response.data) {
         Swal.fire({
           position: "top",
           icon: "success",
@@ -54,13 +51,7 @@ const FindEmail = () => {
           showConfirmButton: false,
           timer: 1500
         });
-      } else if(result === "가입되지않은이메일"){
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "가입되어 있지 않는 이메일 입니다.",
-        });
-      }else{
+      } else {
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -91,15 +82,8 @@ const FindEmail = () => {
           },
           withCredentials: true, // 쿠키 사용 시 설정
         });
-        if (response.data) {
-          // Swal.fire({
-          //   position: "top",
-          //   icon: "success",
-          //   title: "정상적으로 처리 되었습니다.",
-          //   showConfirmButton: false,
-          //   timer: 1500
-          // });
 
+        if (response.data) {
           const response = await axiosInstance.post('/sign/findemail', { email }, {
             headers: {
               'Content-Type': 'application/json',
@@ -134,54 +118,54 @@ const FindEmail = () => {
   })
 
   return (
-    <div id='findemail' className={styles.auth__container}>
-      <section className={styles.auth__wrap}>
-        <AuthTitleProvider title={`아이디 찾기`} />
-        <InputProvider label={`이메일`} inputId={`email01`} required={true}>
-          <div className={`${styles.auth__input__wrap}`}>
-            <input
-              type="email"
-              className="form__input"
-              id="email01"
-              name="이메일"
-              value={email}
-              placeholder="이메일 입력"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+      <div id='findemail' className={styles.auth__container}>
+        <section className={styles.auth__wrap}>
+          <AuthTitleProvider title={`아이디 찾기`} />
+          <InputProvider label={`이메일`} inputId={`email01`} required={true}>
+            <div className={`${styles.auth__input__wrap}`}>
+              <input
+                  type="email"
+                  className="form__input"
+                  id="email01"
+                  name="이메일"
+                  value={email}
+                  placeholder="이메일 입력"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+              />
 
-            <ButtonProvider width={`120`}>
-              <button type="button" className="button button__primary" onClick={getUserEmail}>
-                <span className="button__text">인증번호 받기</span>
-              </button>
-            </ButtonProvider>
-          </div>
-          <span className={`${styles.auth__sub__notice} ${duplication.includes(" ") ? styles.error : styles.success}`}>{`${duplication}`}</span>
-        </InputProvider>
+              <ButtonProvider width={`120`}>
+                <button type="button" className="button button__primary" onClick={getUserEmail}>
+                  <span className="button__text">인증번호 받기</span>
+                </button>
+              </ButtonProvider>
+            </div>
+            <span className={`${styles.auth__sub__notice} ${duplication.includes(" ") ? styles.error : styles.success}`}>{`${duplication}`}</span>
+          </InputProvider>
 
-        <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
-          <div className={`${styles.auth__input__wrap}`}>
-            <input
-              type="text"
-              className="form__input"
-              id="authNumber"
-              name="인증번호"
-              value={authCode}
-              placeholder="인증번호 입력"
-              onChange={(e) => setAuthCode(e.target.value)}
-              required
-            />
-            <ButtonProvider width={`120`}>
-              <button type="button" className="button button__primary" onClick={emailVerification}>
-                <span className="button__text">인증확인</span>
-              </button>
-            </ButtonProvider>
-          </div>
-        </InputProvider>
+          <InputProvider label={`인증번호`} inputId={`authNumber`} required={true}>
+            <div className={`${styles.auth__input__wrap}`}>
+              <input
+                  type="text"
+                  className="form__input"
+                  id="authNumber"
+                  name="인증번호"
+                  value={authCode}
+                  placeholder="인증번호 입력"
+                  onChange={(e) => setAuthCode(e.target.value)}
+                  required
+              />
+              <ButtonProvider width={`120`}>
+                <button type="button" className="button button__primary" onClick={emailVerification}>
+                  <span className="button__text">인증확인</span>
+                </button>
+              </ButtonProvider>
+            </div>
+          </InputProvider>
 
-        {message && <div className={`${styles.auth__message} ${message.includes("가입되어있는 아이디") ? styles.success : styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
-      </section>
-    </div>
+          {message && <div className={`${styles.auth__message} ${message.includes("가입되어있는 아이디") ? styles.success : styles.error}`}>{message}</div>} {/* 메시지를 화면에 표시 */}
+        </section>
+      </div>
   );
 };
 

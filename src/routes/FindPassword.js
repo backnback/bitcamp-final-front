@@ -45,11 +45,19 @@ const FindPassword = () => {
         },
         withCredentials: true,
       });
-      if (response.data) {
+      if (response.data === "성공") {
         Swal.fire({
           position: "top",
           icon: "success",
           title: "인증번호가 이메일로 발송되었습니다.",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else if (response.data === "가입되지않은이메일"){
+        Swal.fire({
+          toast: true,
+          icon: "error",
+          title: "가입되지 않은 이메일입니다.",
           showConfirmButton: false,
           timer: 1500
         });
@@ -62,7 +70,6 @@ const FindPassword = () => {
       }
     } catch (error) {
       console.error("이메일 찾는중 오류 발생", error);
-
     }
   };
 
@@ -85,6 +92,7 @@ const FindPassword = () => {
         },
         withCredentials: true, // 쿠키 사용 시 설정
       });
+
       if (response.data) {
         Swal.fire({
           position: "top",
