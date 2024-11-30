@@ -79,7 +79,7 @@ function App() {
                     localStorage.setItem('accessToken', newAccessToken);
                     setAccessToken(newAccessToken);
                     setUser(jwtDecode(newAccessToken));
-                    console.log("토큰 갱신 성공");
+                    // console.log("토큰 갱신 성공");
 
                 } catch (error) {
                     // 서버에서 받은 오류 메시지를 확인
@@ -88,11 +88,11 @@ function App() {
 
                         // "Refresh Token이 만료되었습니다." 오류가 발생했을 경우
                         if (errorMessage === "Refresh Token이 만료되었습니다.") {
-                            console.log("토큰 만료: 다시 로그인 해주세요.");
+                            // console.log("토큰 만료: 다시 로그인 해주세요.");
                             localStorage.clear(); // 로컬스토리지 초기화
                             navigate('/login'); // 로그인 페이지로 리다이렉트
                         } else {
-                            console.log("토큰 갱신 실패:", errorMessage);
+                            // console.log("토큰 갱신 실패:", errorMessage);
                             localStorage.clear();
                             navigate('/login');
                         }
@@ -106,7 +106,7 @@ function App() {
             } else {
                 setAccessToken(token);
                 setUser(decodedToken);
-                console.log("토큰 유효");
+                // console.log("토큰 유효");
             }
 
             setTimeout(checkTokenExpiration, remainTime - 1000 * 60 * 5);

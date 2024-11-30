@@ -124,7 +124,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
         event.preventDefault();
 
         // 유효성 검사
-        if (!title || !travelDate || !content || !locationDetail) {
+        if (!title || !travelDate || !content) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -132,6 +132,29 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
                 footer: '<a href="#">왜 이 문제가 발생했나요?</a>'
             });
             return;
+        }
+
+        switch (true) {
+            case (title.length >= 30): Swal.fire({
+                icon: "error",
+                text: "제목을 30자 이하로 입력해주세요.",
+                toast: true,
+                position: 'top',
+                width: 380,
+                showConfirmButton: false,
+                timer: 2000, // 3초 후 자동 닫힘
+            });
+                return;
+            case (locationDetail.length > 30): Swal.fire({
+                icon: "error",
+                text: "지역 상제정보를 30자 이하로 입력해주세요.",
+                toast: true,
+                position: 'top',
+                width: 380,
+                showConfirmButton: false,
+                timer: 2000, // 3초 후 자동 닫힘
+            });
+                return;
         }
 
         const formData = new FormData();
@@ -202,13 +225,13 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
     const handleCheckboxChange = (event) => {
         const checked = event.target.checked;
         setCheckedShare(checked);
-        console.log("Checkbox is checked:", checked);
+        // console.log("Checkbox is checked:", checked);
     };
 
 
     useEffect(() => {
         if (files.length > 0) {
-            console.log("업로드된 파일들:", files);
+            // console.log("업로드된 파일들:", files);
         }
 
 
@@ -234,7 +257,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
 
     const onDeletePhoto = (photo) => {
         setFiles((prevFiles) => {
-            console.log("삭제하려는 파일:", photo);
+            // console.log("삭제하려는 파일:", photo);
 
             const updatedFiles = prevFiles.filter((file) => {
                 // File 객체일 경우
@@ -246,7 +269,7 @@ const StoryUpdateModal = ({ storyId, mapId, isModal }) => {
                 return file.id !== photo.id;
             });
 
-            console.log("삭제 후 파일 리스트:", updatedFiles);
+            // console.log("삭제 후 파일 리스트:", updatedFiles);
             return updatedFiles;
         });
     };

@@ -5,12 +5,12 @@ import { StoryAddContext } from '../components/StoryItem';
 function StoryItemList({ storyPage, storyList, onAddStory, onLikeChange, onLockChange, handleModal, onDelete }) {
 
     const handleLikeChange = (storyId, action) => {
-        console.log(`Story ID: ${storyId}, Action: ${action}`);
+        // console.log(`Story ID: ${storyId}, Action: ${action}`);
         onLikeChange(storyId, action);
     };
 
     const handleLockChange = (storyId, action) => {
-        console.log(`Story ID: ${storyId}, Action: ${action}`);
+        // console.log(`Story ID: ${storyId}, Action: ${action}`);
         onLockChange(storyId, action);  // 즉시 변경 사항 전달
     };
 

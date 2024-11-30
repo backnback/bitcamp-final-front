@@ -9,13 +9,13 @@ const smallProfile = createContext();
 
 export const useSContext = () => useContext(smallProfile);
 
-export const SmallProfileProvider = ({ value, profileImg, profileName }) => {
+export const SmallProfileProvider = ({ profileImg, profileName, className }) => {
   return (
-    <div className={styles.small__wrap} value={value}>
+    <div className={`${styles.small__wrap} ${className}`}>
       <div className={styles.small__link}>
         <span className={`${styles.small__img__wrap}`}>
           <img src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-final/user/${profileImg}`}
-            alt={`${profileName}의 프로필 이미지`} className={`${styles.small__img} line1`} />
+            alt={`${profileName}의 프로필 이미지`} className={`${styles.small__img}`} />
 
         </span>
         <span className={`${styles.small__name} line1`}>{profileName}</span>

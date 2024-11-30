@@ -98,10 +98,11 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                         value={nickname}
                         id="nickname01"
                         className="form__input"
-                        placeholder="닉네임을 입력해주세요."
+                        placeholder="닉네임을 입력"
                         onChange={(e) => setNickname(e.target.value)}
                         required
                     />
+                    {nickname.length >= 15 && <span className={`sub__notice sub__notice__danger`}>{`닉네임을 15자 이하로 입력해주세요.`}</span>}
                 </InputProvider>
 
                 <InputProvider label={`비밀번호`} inputId={`pwd01`}>
@@ -111,7 +112,7 @@ const UserEdit = ({ password, setPassword, nickname, setNickname, profileImage, 
                         id="pwd01"
                         name="비밀번호"
                         value={password}
-                        placeholder="비밀번호를 입력해주세요."
+                        placeholder="비밀번호를 입력"
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </InputProvider>

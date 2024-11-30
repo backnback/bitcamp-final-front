@@ -52,6 +52,7 @@ export const StoryForm = () => {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                     />
+                    {title.length >= 30 && <span className={`sub__notice sub__notice__danger`}>{`제목을 30자 이하로 입력해주세요.`}</span>}
                 </InputProvider>
 
                 <SelectProvider label={`날짜`} required={true}>
@@ -116,14 +117,14 @@ export const StoryForm = () => {
                             className={`form__input`}
                             value={locationDetail}
                             onChange={(e) => setLocationDetail(e.target.value)}
-                            required
                             id='locationName01'
                             name='locationName'
                             placeholder="지역 상세정보 입력" />
+                        {locationDetail.length >= 30 && <span className={`sub__notice sub__notice__danger`}>{`지역 상세정보를 30자 이하로 입력해주세요.`}</span>}
                     </InputProvider>
                 </div>
                 <div className={`${styles.photo__box} form__item__wrap`}>
-                    <h5 className='form__label__title'>사진 등록</h5>
+                    <h5 className='form__label__title'>사진 등록<span className='required__red'>*</span></h5>
                     {
                         files.length === 0 ? (
                             <InputProvider>
@@ -144,7 +145,7 @@ export const StoryForm = () => {
                             />
                         )}
                 </div>
-                <InputProvider label={`내용`} htmlFor='storyContent'>
+                <InputProvider label={`내용`} htmlFor='storyContent' required={true}>
                     <textarea
                         id='storyContent'
                         placeholder='내용 입력'
